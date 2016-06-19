@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Weather</string>
     <string name="title_city_detail">City Detail</string>
+
+    <array name="default_cities">
+        <item>Sankt-Peterburg</item>
+        <item>Moscow</item>
+        <item>Kazan</item>
+    </array>
 </resources>
