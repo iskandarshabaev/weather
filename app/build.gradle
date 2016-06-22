@@ -31,4 +31,5 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
     compile 'org.greenrobot:greendao:2.2.0'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
 }

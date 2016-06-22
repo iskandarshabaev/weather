@@ -4,26 +4,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.citydetail.CityDetailActivity;
 import com.ishabaev.weather.citydetail.CityDetailFragment;
+import com.ishabaev.weather.dao.City;
+import com.ishabaev.weather.data.CityWithWeather;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-public class CitiesActivity extends AppCompatActivity {
+public class CitiesActivity extends AppCompatActivity implements CitiesContract.View{
 
     private boolean mTwoPane;
+    private CitiesPresenter mPresenter;
+    private CitiesRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,89 +44,56 @@ public class CitiesActivity extends AppCompatActivity {
             }
         });
 
-        View recyclerView = findViewById(R.id.city_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        setupRecyclerView(recyclerView);
 
         if (findViewById(R.id.city_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        mPresenter = new CitiesPresenter(this);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-
-        String[] array = getResources().getStringArray(R.array.default_cities);
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(Arrays.asList(array)));
+        mAdapter = new CitiesRecyclerViewAdapter(new ArrayList<CityWithWeather>());
+        mAdapter.setListener(listener);
+        recyclerView.setAdapter(mAdapter);
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<String> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<String> items) {
-            mValues = items;
-        }
-
+    CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener listener = new CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener() {
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.city_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mContentView.setText(mValues.get(position));
-            //holder.mContentView.setText(mValues.get(position).content);
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(CityDetailFragment.ARG_ITEM_ID, holder.mContentView.getText().toString());
-                        CityDetailFragment fragment = new CityDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.city_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, CityDetailActivity.class);
-                        intent.putExtra(CityDetailFragment.ARG_ITEM_ID, holder.mContentView.getText().toString());
-
-                        context.startActivity(intent);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mContentView;
-            public final TextView mTemperatureView;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mContentView = (TextView) view.findViewById(R.id.city_name);
-                mTemperatureView = (TextView) view.findViewById(R.id.temperature);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+        public void onItemClick(CityWithWeather city) {
+            if (mTwoPane) {
+                Bundle arguments = new Bundle();
+                arguments.putLong(CityDetailFragment.ARG_ITEM_ID, city.getCity().get_id());
+                arguments.putString(CityDetailFragment.ARG_ITEM_NAME, city.getCity().getCity_name());
+                CityDetailFragment fragment = new CityDetailFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.city_detail_container, fragment)
+                        .commit();
+            } else {
+                Intent intent = new Intent(CitiesActivity.this, CityDetailActivity.class);
+                Bundle args = new Bundle();
+                args.putLong(CityDetailFragment.ARG_ITEM_ID, city.getCity().get_id());
+                args.putString(CityDetailFragment.ARG_ITEM_NAME, city.getCity().getCity_name());
+                intent.putExtras(args);
+                startActivity(intent);
             }
         }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.initDao(this);
+        mAdapter.clear();
+        mPresenter.loadCities();
+    }
+
+    @Override
+    public void addCitiesToList(List<CityWithWeather> cities) {
+        mAdapter.addCities(cities);
     }
 }
