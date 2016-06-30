@@ -1,7 +1,9 @@
 package com.ishabaev.weather.citydetail;
 
-import android.content.Context;
+import android.graphics.drawable.Drawable;
 
+import com.ishabaev.weather.BasePresenter;
+import com.ishabaev.weather.BaseView;
 import com.ishabaev.weather.data.Day;
 
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
  */
 public interface CityDetailContract {
 
-    interface View{
+    interface View extends BaseView<Presenter>{
 
         void showProgressBar(boolean show);
 
@@ -21,15 +23,21 @@ public interface CityDetailContract {
 
         void setWindSpeed(String windSpeed);
 
+        void setPressure(String pressure);
+
         void setDate(String date);
 
+        void setImage(Drawable drawable);
+
+        void setImage(String assetName);
+
         void addDays(List<Day> days);
+
+        boolean isNetworkAvailable();
     }
 
-    interface UserActionsListener{
+    interface Presenter extends BasePresenter {
 
         void openCity(int cityId);
-
-        void initDao(Context context);
     }
 }

@@ -1,38 +1,38 @@
 package com.ishabaev.weather.data;
 
-import com.ishabaev.weather.dao.Weather;
-import com.ishabaev.weather.dao.City;
+import com.ishabaev.weather.dao.OrmCity;
+import com.ishabaev.weather.dao.OrmWeather;
 
 /**
  * Created by ishabaev on 22.06.16.
  */
 public class CityWithWeather {
 
-    private City mCity;
-    private Weather mWeather;
+    private OrmCity mCity;
+    private OrmWeather mWeather;
 
     public CityWithWeather(){
 
     }
 
-    public CityWithWeather(City city, Weather weather){
+    public CityWithWeather(OrmCity city, OrmWeather weather){
         mCity = city;
         mWeather = weather;
     }
 
-    public City getCity() {
+    public OrmCity getCity() {
         return mCity;
     }
 
-    public void setCity(City city) {
+    public void setCity(OrmCity city) {
         this.mCity = city;
     }
 
-    public Weather getWeather() {
+    public OrmWeather getWeather() {
         return mWeather;
     }
 
-    public void setWeather(Weather weather) {
+    public void setWeather(OrmWeather weather) {
         this.mWeather = weather;
     }
 }

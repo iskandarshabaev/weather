@@ -1,8 +1,11 @@
 package com.ishabaev.weather.citydetail;
 
-import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,25 +13,30 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.data.Day;
+import com.ishabaev.weather.util.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CityDetailFragment extends Fragment implements CityDetailContract.View{
+public class CityDetailFragment extends Fragment implements CityDetailContract.View {
 
     public static final String ARG_ITEM_ID = "item_id";
     public static final String ARG_ITEM_NAME = "item_name";
-    private CityDetailContract.UserActionsListener mUserActionsListener;
+    private CityDetailContract.Presenter mPresenter;
     private DaysViewPagerAdapter mViewPagerAdapter;
+    private ImageUtils mImageUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -36,14 +44,15 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
                 appBarLayout.setTitle(getArguments().getString(ARG_ITEM_NAME));
             }
         }
-        mUserActionsListener = new CityDetailPresenter(this);
-        mUserActionsListener.initDao(getContext());
+        */
+        mPresenter = new CityDetailPresenter(this, Injection.provideTasksRepository(getContext()));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.city_detail, container, false);
+        mImageUtils = new ImageUtils(rootView.getContext());
         return rootView;
     }
 
@@ -82,8 +91,21 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void onResume() {
         super.onResume();
+        mPresenter.subscribe();
         long cityId = getArguments().getLong(ARG_ITEM_ID);
-        mUserActionsListener.openCity((int)cityId);
+        mViewPagerAdapter.clear();
+        mPresenter.openCity((int) cityId);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
+    }
+
+    @Override
+    public void setPresenter(CityDetailContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 
     @Override
@@ -100,7 +122,7 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void setTemp(String temperature) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_temp);
-        if(view != null) {
+        if (view != null) {
             view.setText(temperature);
         }
     }
@@ -108,7 +130,7 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void setHummidity(String hummidity) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_hummidity);
-        if(view != null) {
+        if (view != null) {
             view.setText(hummidity);
         }
     }
@@ -116,17 +138,65 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void setWindSpeed(String windSpeed) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_wind);
-        if(view != null) {
+        if (view != null) {
             view.setText(windSpeed);
+        }
+    }
+
+    @Override
+    public void setPressure(String pressure) {
+        TextView view = (TextView) getActivity().findViewById(R.id.header_pressure);
+        if (view != null) {
+            view.setText(pressure);
         }
     }
 
     @Override
     public void setDate(String date) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_date);
-        if(view != null) {
+        if (view != null) {
             view.setText(date);
         }
+    }
+
+    @Override
+    public void setImage(Drawable drawable) {
+        ImageView view = (ImageView) getActivity().findViewById(R.id.backdrop);
+        if (view != null) {
+            view.setImageDrawable(drawable);
+        }
+    }
+
+    @Override
+    public void setImage(String assetName) {
+        ImageView view = (ImageView) getActivity().findViewById(R.id.backdrop);
+        if (view != null) {
+
+            Bitmap bitmap = mImageUtils.decodeSampledBitmapFromAssets(assetName, 500, 500);
+            if(bitmap != null){
+                view.setImageBitmap(bitmap);
+            }
+
+            /*
+            try {
+                InputStream ims = getContext().getAssets().open(assetName);
+                Drawable image = Drawable.createFromStream(ims, null);
+                if (image != null) {
+                    view.setImageDrawable(image);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            */
+        }
+    }
+
+    @Override
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

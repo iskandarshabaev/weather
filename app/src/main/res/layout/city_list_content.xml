@@ -4,13 +4,15 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="@dimen/app_bar_height"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="2dp"
+    android:layout_marginTop="2dp"
     android:clickable="true"
-    android:elevation="12dp"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardCornerRadius="4dp">
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="6dp"
+    card_view:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,21 +20,11 @@
 
 
         <ImageView
+            android:id="@+id/state_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/clouds" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_more_vert_black_24dp"
-            android:tint="@color/cardview_dark_background"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" />
+            android:scaleType="centerCrop" />
 
         <RelativeLayout
             android:id="@+id/container"

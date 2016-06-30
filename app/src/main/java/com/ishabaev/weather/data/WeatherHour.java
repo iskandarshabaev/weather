@@ -1,6 +1,7 @@
 package com.ishabaev.weather.data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ishabaev on 20.06.16.
@@ -15,6 +16,7 @@ public class WeatherHour {
     private Rain rain;
     private Snow snow;
     private String dt_txt;
+    private List<Weather> weather;
 
     public long getDt() {
         return dt;
@@ -82,5 +84,13 @@ public class WeatherHour {
 
     public void setDt_txt(String dt_txt) {
         this.dt_txt = dt_txt;
+    }
+
+    public List<Weather> getWeather() {
+        return weather;
+    }
+
+    public void setWeather(List<Weather> weather) {
+        this.weather = weather;
     }
 }

@@ -1,91 +1,167 @@
 package com.ishabaev.weather.cities;
 
-import android.content.Context;
-
-import com.ishabaev.weather.dao.City;
-import com.ishabaev.weather.dao.CityDao;
-import com.ishabaev.weather.dao.DaoMaster;
-import com.ishabaev.weather.dao.DaoSession;
-import com.ishabaev.weather.dao.Weather;
-import com.ishabaev.weather.dao.WeatherDao;
+import com.ishabaev.weather.dao.OrmCity;
+import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.data.CityWithWeather;
+import com.ishabaev.weather.data.source.DataSource;
+import com.ishabaev.weather.data.source.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.functions.Func2;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by ishabaev on 19.06.16.
  */
-public class CitiesPresenter implements CitiesContract.UserActionsListener {
+public class CitiesPresenter implements CitiesContract.Presenter {
 
-    private CityDao mCityDao;
-    private WeatherDao mWeatherDao;
     private CitiesContract.View mView;
+    private Repository mRepository;
+    private CompositeSubscription mSubscriptions;
 
-    public CitiesPresenter(CitiesContract.View view) {
+    public CitiesPresenter(CitiesContract.View view, Repository repository) {
         mView = view;
+        mRepository = repository;
+        mSubscriptions = new CompositeSubscription();
+        mView.setPresenter(this);
     }
 
-    public void initDao(Context context) {
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(context, "db", null);
-        DaoMaster daoMaster = new DaoMaster(devOpenHelper.getWritableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        daoSession.clear();
-        mCityDao = daoSession.getCityDao();
-        mWeatherDao = daoSession.getWeatherDao();
+    @Override
+    public void subscribe() {
+
+    }
+
+
+    private Observable<CityWithWeather> getCityWithWeather(final OrmCity city){
+        return mRepository.getForecast(city.get_id().intValue(), mView.isNetworkAvailable())
+                .flatMap(new Func1<List<OrmWeather>, Observable<CityWithWeather>>() {
+                    @Override
+                    public Observable<CityWithWeather> call(List<OrmWeather> ormWeathers) {
+                        CityWithWeather cityWithWeather = new CityWithWeather();
+                        cityWithWeather.setCity(city);
+                        cityWithWeather.setWeather(ormWeathers.get(0));//TODO must be fixed
+                        return Observable.just(cityWithWeather);
+                    }
+                });
+    }
+
+    @Override
+    public void unsubscribe() {
+        mSubscriptions.clear();
     }
 
     @Override
     public void loadCities() {
-        List<City> cities = mCityDao.loadAll();
-        if (cities.size() == 0) {
-            cities = initDefaultCities();
-        }
-
-        List<Long> cityIds = new ArrayList<>(cities.size());
-        for (City city : cities) {
-            cityIds.add(city.get_id());
-        }
-
-        List<Weather> weatherList = mWeatherDao.queryBuilder()
-                .where(WeatherDao.Properties.City_id.in(cityIds))
-                .build()
-                .list();
-
-        List<CityWithWeather> cityWithWeatherList = new ArrayList<>();
-
-        for (City city : cities) {
-            cityWithWeatherList.add(new CityWithWeather(city,findCityWeather(city, weatherList)));
-        }
-
-        mView.addCitiesToList(cityWithWeatherList);
-    }
-
-    private Weather findCityWeather(City city, List<Weather> weatherList) {
-        for (Weather weather : weatherList) {
-            if (city.get_id().equals(weather.getCity_id())) {
-                return weather;
+        /*
+        mRepository.getCityList(new DataSource.LoadCitiesCallback() {
+            @Override
+            public void onCitiesLoaded(List<OrmCity> cities) {
+                loadCitiesWithWeather(cities);
             }
+
+            @Override
+            public void onDataNotAvailable(Throwable t) {
+
+            }
+        });
+        */
+        mView.setRefreshing(true);
+        mSubscriptions.clear();
+        Subscription subscription = mRepository
+                .getCityList()
+                .flatMap(new Func1<List<OrmCity>, Observable<OrmCity>>() {
+                    @Override
+                    public Observable<OrmCity> call(List<OrmCity> city) {
+                        return Observable.from(city);
+                    }
+                })
+                .toSortedList(new Func2<OrmCity, OrmCity, Integer>() {
+                    @Override
+                    public Integer call(OrmCity city1, OrmCity city2) {
+                        return city1.getCity_name().compareTo(city2.getCity_name());
+                    }
+                })
+                .flatMap(new Func1<List<OrmCity>, Observable<OrmCity>>() {
+                    @Override
+                    public Observable<OrmCity> call(List<OrmCity> tasks) {
+                        return Observable.from(tasks);
+                    }
+                })
+                .flatMap(new Func1<OrmCity, Observable<CityWithWeather>>() {
+                    @Override
+                    public Observable<CityWithWeather> call(OrmCity city) {
+                        return getCityWithWeather(city);
+                    }
+                })
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<CityWithWeather>>() {
+                    @Override
+                    public void onCompleted() {
+                        mView.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(List<CityWithWeather> cities) {
+                        mView.setCities(cities);
+                    }
+                });
+        mSubscriptions.add(subscription);
+    }
+
+    private void loadCitiesWithWeather(List<OrmCity> cities) {
+        if (mView.isNetworkAvailable()) {
+
+        } else {
+
         }
-        return null;
-    }
 
-    public List<City> initDefaultCities() {
-        List<City> cities = new ArrayList<>();
-        cities.add(new City((long) 536203, "St Petersburg", "RU", 59.916668, 30.25));
-        cities.add(new City((long) 524901, "Moscow", "RU", 55.75222, 37.615555));
-        cities.add(new City((long) 551487, "Kazan", "RU", 55.788738, 49.122139));
-        mCityDao.insertInTx(cities);
-        return cities;
+        for (OrmCity city : cities) {
+            mRepository.getCityWithWeather(city, mView.isNetworkAvailable(),
+                    new DataSource.LoadCityWithWeatherCallback() {
+                        @Override
+                        public void onCityLoaded(CityWithWeather cityWithWeather) {
+                            mView.addCityToList(cityWithWeather);
+                        }
+
+                        @Override
+                        public void onDataNotAvailable(Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+        }
     }
 
     @Override
-    public void saveCities(List<City> cities) {
-        mCityDao.insertInTx(cities);
+    public void saveCities(List<OrmCity> cities) {
+        mRepository.saveCities(cities);
     }
 
     @Override
-    public void saveCity(City city) {
-        mCityDao.insert(city);
+    public void saveCity(OrmCity city) {
+        mRepository.saveCity(city);
+    }
+
+    @Override
+    public void removeCity(OrmCity city) {
+        mRepository.deleteCity(city);
+    }
+
+    @Override
+    public void removeWeaher(int cityId) {
+        mRepository.deleteForecast(cityId);
     }
 }

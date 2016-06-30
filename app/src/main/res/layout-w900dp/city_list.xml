@@ -14,7 +14,12 @@
     master/detail flow.
 
     -->
-
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_to_refresh"
+        android:layout_width="@dimen/item_width"
+        android:layout_height="wrap_content">
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/city_list"
@@ -24,6 +29,7 @@
         app:layoutManager="LinearLayoutManager"
         tools:context=".cities.CitiesActivity"
         tools:listitem="@layout/city_list_content" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <FrameLayout
         android:id="@+id/city_detail_container"

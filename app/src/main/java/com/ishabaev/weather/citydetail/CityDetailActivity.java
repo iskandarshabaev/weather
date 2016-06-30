@@ -1,5 +1,6 @@
 package com.ishabaev.weather.citydetail;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -34,6 +35,7 @@ public class CityDetailActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
@@ -51,8 +53,17 @@ public class CityDetailActivity extends AppCompatActivity {
         //CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         //appBarLayout.setTitle(getIntent().getStringExtra(CityDetailFragment.ARG_ITEM_ID));
 
+        String cityName = getIntent().getStringExtra(CityDetailFragment.ARG_ITEM_NAME);
+        if (cityName != null) {
+            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+            if (appBarLayout != null) {
+                appBarLayout.setTitle(cityName);
+            }
+        }
+
     }
 
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -61,5 +72,11 @@ public class CityDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    */
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return false;
     }
 }

@@ -79,6 +79,20 @@
                     android:layout_alignParentRight="true" />
 
                 <TextView
+                    android:id="@+id/header_pressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Давление: 768"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/subtext_size"
+                    android:layout_marginLeft="@dimen/primary_text_margin"
+                    android:layout_marginRight="@dimen/primary_text_margin"
+                    android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+                    android:layout_below="@+id/header_hummidity"
+                    android:layout_alignParentRight="true" />
+
+                <TextView
                     android:id="@+id/header_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

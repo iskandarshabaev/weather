@@ -3,6 +3,7 @@
     package="com.ishabaev.weather">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -29,6 +30,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".cities.CitiesActivity" />
         </activity>
+
+        <activity
+            android:name=".addcity.AddCityActivity"
+            android:label="@string/title_city_detail"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+
     </application>
 
 </manifest>

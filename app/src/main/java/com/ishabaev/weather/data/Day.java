@@ -1,6 +1,6 @@
 package com.ishabaev.weather.data;
 
-import com.ishabaev.weather.dao.Weather;
+import com.ishabaev.weather.dao.OrmWeather;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class Day {
 
-    private List<Weather> hours;
+    private List<OrmWeather> hours;
 
-    public List<Weather> getHours() {
+    public List<OrmWeather> getHours() {
         return hours;
     }
 
-    public void setHours(List<Weather> hours) {
+    public void setHours(List<OrmWeather> hours) {
         this.hours = hours;
     }
 }

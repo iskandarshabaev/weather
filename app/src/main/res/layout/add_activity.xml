@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:id="@+id/progressBar"
+            android:layout_height="4dp"
+            android:layout_below="@+id/toolbar"
+            android:indeterminate="false" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:layout_margin="@dimen/primary_text_margin"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:singleLine="true" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/city_search_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/editText">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <ImageView
+            android:layout_width="418dp"
+            android:layout_height="102dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/landscape"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/subtext_size"
+            android:text="Начните вводить название города"
+            android:id="@+id/textView"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/imageView" />
+
+    </RelativeLayout>
+
+    <!--
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_done_black_24dp"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/colorPrimary"
+        app:elevation="6dp"/>
+        !-->
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
 package com.ishabaev.weather.citydetail;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -37,13 +38,23 @@ public class DaysViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        TabFragment tabFragment = new TabFragment();
-        tabFragment.setHours(mDays.get(position).getHours());
+        Bundle args = new Bundle();
+        args.putInt(DayWeatherFragment.CITY_ID,
+                mDays.get(position).getHours().get(0).getCity_id().intValue());
+        args.putLong(DayWeatherFragment.DATE,
+                mDays.get(position).getHours().get(0).getDt().getTime());
+        DayWeatherFragment tabFragment = new DayWeatherFragment();
+        tabFragment.setArguments(args);
         return tabFragment;
     }
 
     @Override
     public int getCount() {
         return mDays.size();
+    }
+
+    public void clear(){
+        mDays.clear();
+        notifyDataSetChanged();
     }
 }

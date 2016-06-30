@@ -14,9 +14,24 @@
     android:layout_height="wrap_content">
 
 
+    <TextView
+        android:id="@+id/city_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="false"
+        android:text="@string/app_name"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="@dimen/primary_text_size"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_marginTop="@dimen/primary_text_top_padding"
+        android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+        android:layout_alignParentTop="true" />
+
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/image"
+        android:id="@+id/state_image"
         android:layout_width="46dp"
         android:layout_height="46dp"
         android:layout_marginLeft="6dp"
@@ -26,28 +41,46 @@
         android:src="@drawable/clouds"
         app:civ_border_width="2dp"
         app:civ_border_color="@color/colorPrimary"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:id="@+id/city_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="6dp"
-        android:text="@string/app_name"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:layout_toRightOf="@+id/image" />
+        android:layout_alignParentLeft="false"
+        android:layout_below="@+id/city_name" />
 
     <TextView
         android:id="@+id/temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginBottom="6dp"
-        android:text="+18 °C"
+        android:text="Температура: +18 °C"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:layout_toRightOf="@+id/image"
+        android:textSize="@dimen/subtext_size"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+        android:layout_toRightOf="@+id/state_image"
         android:layout_below="@+id/city_name" />
+
+    <TextView
+        android:id="@+id/wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сильный: 15км/час"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="@dimen/subtext_size"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+        android:layout_below="@+id/temperature"
+        android:layout_toRightOf="@+id/state_image" />
+
+    <TextView
+        android:id="@+id/hummidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Влажность: 48%"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="@dimen/subtext_size"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+        android:layout_below="@+id/wind"
+        android:layout_toRightOf="@+id/state_image" />
 </RelativeLayout>
 </android.support.v7.widget.CardView>

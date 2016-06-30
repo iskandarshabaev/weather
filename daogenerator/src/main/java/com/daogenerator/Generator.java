@@ -7,7 +7,7 @@ import de.greenrobot.daogenerator.Schema;
 public class Generator {
 
     public static void main(String[] args){
-        Schema schema = new Schema(8, "com.ishabaev.weather.dao");
+        Schema schema = new Schema(10, "com.ishabaev.weather.dao");
         initCityTable(schema);
         initWeatherTable(schema);
 
@@ -19,7 +19,7 @@ public class Generator {
     }
 
     public static void initCityTable(Schema schema){
-        Entity note= schema.addEntity("City");
+        Entity note= schema.addEntity("OrmCity");
         note.addLongProperty("_id").primaryKey();
         note.addStringProperty("city_name");
         note.addStringProperty("country");
@@ -28,7 +28,7 @@ public class Generator {
     }
 
     public static void initWeatherTable(Schema schema){
-        Entity note= schema.addEntity("Weather");
+        Entity note= schema.addEntity("OrmWeather");
         note.addIdProperty();
         note.addLongProperty("city_id");
         note.addStringProperty("city_name");
@@ -43,6 +43,6 @@ public class Generator {
         note.addDoubleProperty("wind_deg");
         note.addDoubleProperty("rain");
         note.addDoubleProperty("snow");
-
+        note.addStringProperty("icon");
     }
 }
