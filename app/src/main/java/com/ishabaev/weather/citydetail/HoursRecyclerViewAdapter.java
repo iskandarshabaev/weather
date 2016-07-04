@@ -1,5 +1,6 @@
 package com.ishabaev.weather.citydetail;
 
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -23,12 +24,11 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
 
 
     private final List<OrmWeather> mHours;
-    private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+    private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm");
 
     public HoursRecyclerViewAdapter(List<OrmWeather> hours) {
         mHours = hours;
     }
-
 
     public void addElement(OrmWeather Weather) {
         mHours.add(mHours.size(), Weather);
@@ -54,33 +54,30 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-       // holder.contentView.setText(mHours.get(position).getCity_name());
-        //holder.city = mHours.get(position);
-        //holder.mContentView.setText(mValues.get(position).content);
-        holder.time.setText(format.format(mHours.get(position).getDt()));
-
+        Resources res = holder.view.getResources();
+        holder.time.setText(mFormat.format(mHours.get(position).getDt()));
         String temperature = mHours.get(position).getTemp() > 0 ? "+" +
                 Integer.toString(mHours.get(position).getTemp().intValue()) :
                 Integer.toString(mHours.get(position).getTemp().intValue());
-
         temperature += " °C";
-
         holder.temperature.setText(temperature);
 
-        String wind = "Ветер: ";
+        String wind = res.getString(R.string.wind) + ": ";
         wind += mHours.get(position).getWind_speed() == null ? "" :
-                mHours.get(position).getWind_speed().toString() + " km/h";
+                mHours.get(position).getWind_speed().toString() + " " +
+                        res.getString(R.string.km_h);
         holder.wind.setText(wind);
 
-        String hummidity = "Влажность: ";
+        String hummidity = res.getString(R.string.humidity) + ": ";
         hummidity += mHours.get(position).getHumidity() == null ? "" :
                 mHours.get(position).getHumidity().toString() + "%";
         holder.hummidity.setText(hummidity);
 
-        String pressure = "Давление: ";
+        String pressure = res.getString(R.string.pressure) + ": ";
         pressure += mHours.get(position).getPressure() == null ? "" :
                 mHours.get(position).getPressure().toString();
         holder.pressure.setText(pressure);
+
         Drawable img = ContextCompat.getDrawable(holder.view.getContext(),
                 getIcon(mHours.get(position).getIcon()));
         holder.weatherState.setImageDrawable(img);
@@ -153,7 +150,7 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
 
         @Override
         public String toString() {
-            return super.toString();// + " '" + contentView.getText() + "'";
+            return super.toString();
         }
     }
 }

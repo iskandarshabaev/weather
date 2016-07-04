@@ -27,9 +27,8 @@ import com.ishabaev.weather.dao.OrmCity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddCityActivity extends AppCompatActivity implements AddCityContract.View{
+public class AddCityActivity extends AppCompatActivity implements AddCityContract.View {
 
-    //private FloatingActionButton mFabDone;
     private AddCityViewAdapter mAdapter;
     private TextView mTextView;
     private Handler mHandler;
@@ -37,43 +36,42 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
     private RecyclerView mRecyclerView;
     private TextView mSearchState;
     private ImageView mImageView;
-    private AddCityContract.UserActionsListener mPresenter;
+    private AddCityContract.Presenter mPresenter;
+    private final static int LINE_SIZE = 74062;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_activity);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-
         mPresenter = new AddCityPresenter(this, Injection.provideTasksRepository(this));
-
         mRecyclerView = (RecyclerView) findViewById(R.id.city_search_list);
         setupRecyclerView(mRecyclerView);
-
-
-
         mSearchState = (TextView) findViewById(R.id.textView);
         mImageView = (ImageView) findViewById(R.id.imageView);
-
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mProgressBar.setMax(74062);
+        mProgressBar.setMax(LINE_SIZE);
         mProgressBar.setVisibility(View.GONE);
-
         mHandler = new Handler();
         mTextView = (TextView) findViewById(R.id.editText);
         mTextView.addTextChangedListener(
                 new TextWatcher() {
-                    @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                    }
 
                     @Override
-                    public void afterTextChanged(final Editable s) {
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
                         mPresenter.textChanged(s);
                     }
                 }
@@ -85,10 +83,8 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
-
         mAdapter = new AddCityViewAdapter(new ArrayList<OrmCity>());
         recyclerView.setAdapter(mAdapter);
-
         mAdapter.setListener(new AddCityViewAdapter.AddCityRecyclerViewItemListener() {
             @Override
             public void onItemClick(OrmCity city) {
@@ -101,8 +97,8 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         });
     }
 
-    private void hideKeyboard(){
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mTextView.getWindowToken(), 0);
     }
 

@@ -1,7 +1,6 @@
 package com.ishabaev.weather.data.source.local;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.ishabaev.weather.dao.DaoMaster;
 import com.ishabaev.weather.dao.DaoSession;
@@ -12,7 +11,6 @@ import com.ishabaev.weather.dao.OrmWeatherDao;
 import com.ishabaev.weather.data.source.DataSource;
 import com.ishabaev.weather.util.DataSort;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -42,32 +40,6 @@ public class LocalDataSource implements DataSource {
     }
 
     @Override
-    public void getForecast(int cityId,  boolean isNetworkAvailable, LoadWeatherCallback callback) {
-        /*
-        WeatherDao weatherDao = mDaoSession.getWeatherDao();
-        List<Weather> forecast = weatherDao.queryBuilder()
-                .where(WeatherDao.Properties.City_id.eq(cityId))
-                .build()
-                .list();
-
-        if (forecast.size() != 0) {
-            DataSort.sortWeatherHour(forecast);
-            Calendar currenTime = Calendar.getInstance();
-            currenTime.set(Calendar.HOUR_OF_DAY, currenTime.get(Calendar.HOUR_OF_DAY) - 6);
-            if (forecast.get(0).getDt().before(currenTime.getTime())) {
-                callback.onDataNotAvailable(new Exception());
-                return;
-            }
-            callback.onWeatherLoaded(forecast);
-        } else {
-            callback.onDataNotAvailable(new Exception("Blah Blah Blah"));
-        }
-        */
-        LoadWeatherAsync loadWeatherAsync = new LoadWeatherAsync(callback, isNetworkAvailable);
-        loadWeatherAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cityId);
-    }
-
-    @Override
     public Observable<List<OrmWeather>> getForecast(final int cityId, boolean isNetworkAvailable) {
         Observable<List<OrmWeather>> observable = Observable.create(
                 new Observable.OnSubscribe<List<OrmWeather>>() {
@@ -78,9 +50,28 @@ public class LocalDataSource implements DataSource {
                                 .where(OrmWeatherDao.Properties.City_id.eq(cityId))
                                 .build()
                                 .list();
-                        if (forecast.size() > 0) {
-                            sub.onNext(forecast);
-                        }
+                        sub.onNext(forecast);
+                        sub.onCompleted();
+                    }
+                }
+        );
+        return observable;
+    }
+
+    @Override
+    public Observable<List<OrmWeather>> getForecast(final int cityId, final Date date, boolean isNetworkAvailable) {
+        Observable<List<OrmWeather>> observable = Observable.create(
+                new Observable.OnSubscribe<List<OrmWeather>>() {
+                    @Override
+                    public void call(Subscriber<? super List<OrmWeather>> sub) {
+                        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+                        List<OrmWeather> forecast = weatherDao.queryBuilder()
+                                .where(OrmWeatherDao.Properties.Dt.between(getStartOfDayInMillis(date),
+                                        getEndOfDayInMillis(date)),
+                                        OrmWeatherDao.Properties.City_id.eq(cityId))
+                                .build().list();
+                        DataSort.sortWeatherHour(forecast);
+                        sub.onNext(forecast);
                         sub.onCompleted();
                     }
                 }
@@ -115,124 +106,6 @@ public class LocalDataSource implements DataSource {
         return observable;
     }
 
-    private class LoadWeatherAsync extends AsyncTask<Integer, Void, List<OrmWeather>>{
-
-        private LoadWeatherCallback mCallback;
-        private boolean mNetworkAvailable;
-
-        LoadWeatherAsync(LoadWeatherCallback callback, boolean isNetworkAvailable){
-            mCallback = callback;
-            mNetworkAvailable = isNetworkAvailable;
-        }
-
-        @Override
-        protected List<OrmWeather> doInBackground(Integer... params) {
-            int cityId = params[0];
-            OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
-            List<OrmWeather> forecast = weatherDao.queryBuilder()
-                    .where(OrmWeatherDao.Properties.City_id.eq(cityId))
-                    .build()
-                    .list();
-
-            if (forecast.size() != 0) {
-                DataSort.sortWeatherHour(forecast);
-                Calendar currenTime = Calendar.getInstance();
-                currenTime.set(Calendar.HOUR_OF_DAY, currenTime.get(Calendar.HOUR_OF_DAY) - 6);
-                if (mNetworkAvailable && forecast.get(0).getDt().before(currenTime.getTime())) {
-                    //mCallback.onDataNotAvailable(new Exception());
-                    this.cancel(false);
-                    return null;
-                }
-                //mCallback.onWeatherLoaded(forecast);
-                return forecast;
-            } else {
-                //mCallback.onDataNotAvailable(new Exception("Blah Blah Blah"));
-                this.cancel(false);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<OrmWeather> forecast) {
-            super.onPostExecute(forecast);
-            mCallback.onWeatherLoaded(forecast);
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            mCallback.onDataNotAvailable(new Exception());
-        }
-    }
-
-    @Override
-    public void getForecast(int cityId,  boolean isNetworkAvailable,
-                            Date date, LoadWeatherCallback callback) {
-        LoadWeatherAsync2 loadWeatherAsync2 = new LoadWeatherAsync2(callback, date);
-        loadWeatherAsync2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cityId);
-    }
-
-    private class LoadWeatherAsync2 extends AsyncTask<Integer, Void, List<OrmWeather>>{
-
-        private LoadWeatherCallback mCallback;
-        private Date mDate;
-
-        LoadWeatherAsync2(LoadWeatherCallback callback, Date date){
-            mCallback = callback;
-            mDate = date;
-        }
-
-        @Override
-        protected List<OrmWeather> doInBackground(Integer... params) {
-            int cityId = params[0];
-            Calendar c1 = Calendar.getInstance();
-            c1.setTime(mDate);
-            c1.set(Calendar.HOUR_OF_DAY, 0);
-            Calendar c2 = Calendar.getInstance();
-            c2.setTime(mDate);
-            c1.set(Calendar.HOUR_OF_DAY, 0);
-
-            OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
-            List<OrmWeather> weatherList = weatherDao.queryBuilder()
-                    .where(OrmWeatherDao.Properties.Dt.between(getStartOfDayInMillis(mDate),
-                            getEndOfDayInMillis(mDate)),
-                            OrmWeatherDao.Properties.City_id.eq(cityId))
-                    .build().list();
-
-
-            DataSort.sortWeatherHour(weatherList);
-
-            Calendar dayTime = Calendar.getInstance();
-            dayTime.setTime(mDate);
-            dayTime.set(Calendar.HOUR_OF_DAY, dayTime.get(Calendar.HOUR_OF_DAY) - 6);
-
-            if (weatherList.get(0).getDt().before(dayTime.getTime())) {
-                //callback.onDataNotAvailable(new Exception());
-                this.cancel(false);
-                return null;
-            }
-
-
-            //callback.onWeatherLoaded(weatherList);
-
-
-            return weatherList;
-        }
-
-        @Override
-        protected void onPostExecute(List<OrmWeather> forecast) {
-            super.onPostExecute(forecast);
-            mCallback.onWeatherLoaded(forecast);
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            mCallback.onDataNotAvailable(new Exception());
-        }
-    }
-
-
     public Date getStartOfDayInMillis(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -251,23 +124,6 @@ public class LocalDataSource implements DataSource {
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTime();
-    }
-
-    @Override
-    public void getCityList(LoadCitiesCallback callback) {
-        OrmCityDao cityDao = mDaoSession.getOrmCityDao();
-        List<OrmCity> cities = cityDao.loadAll();
-        if (cities.size() > 0) {
-            callback.onCitiesLoaded(cities);
-        } else {
-            callback.onDataNotAvailable(new Exception());
-        }
-    }
-
-    @Override
-    public void getCityWithWeather(OrmCity city,  boolean isNetworkAvailable,
-                                   LoadCityWithWeatherCallback callback) {
-        //no need;
     }
 
     @Override
@@ -308,7 +164,10 @@ public class LocalDataSource implements DataSource {
     @Override
     public void deleteForecast(int cityId) {
         OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
-        weatherDao.deleteByKey((long) cityId);
+        weatherDao.queryBuilder()
+                .where(OrmWeatherDao.Properties.City_id.eq(cityId))
+                .buildDelete()
+                .executeDeleteWithoutDetachingEntities();
     }
 
     @Override

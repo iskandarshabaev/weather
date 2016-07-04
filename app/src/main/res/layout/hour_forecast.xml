@@ -1,99 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card_view"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:elevation="0dp"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/date"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_marginTop="@dimen/primary_text_top_padding"
+        android:text="15:00"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="@dimen/subtext_size" />
+
+    <TextView
+        android:id="@+id/temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_marginTop="@dimen/primary_text_top_padding"
+        android:layout_toRightOf="@+id/weather_state"
+        android:text="+18 °C"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="32sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/wind"
+            android:textColor="@color/secondaryTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
             android:layout_marginLeft="@dimen/primary_text_margin"
             android:layout_marginRight="@dimen/primary_text_margin"
-            android:layout_marginTop="@dimen/primary_text_top_padding"
-            android:text="15:00"
+            android:layout_marginTop="@dimen/subtext_size_bottom_padding"
+            android:text="Сильный: 15км/час"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="@dimen/subtext_size" />
 
         <TextView
-            android:id="@+id/temperature"
+            android:id="@+id/hummidity"
+            android:textColor="@color/secondaryTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/wind"
             android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
             android:layout_marginLeft="@dimen/primary_text_margin"
             android:layout_marginRight="@dimen/primary_text_margin"
-            android:layout_marginTop="@dimen/primary_text_top_padding"
-            android:layout_toRightOf="@+id/weather_state"
-            android:text="+18 °C"
+            android:text="Влажность: 48%"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="32sp" />
+            android:textSize="@dimen/subtext_size" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/pressure"
+            android:textColor="@color/secondaryTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/hummidity"
+            android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+            android:layout_marginLeft="@dimen/primary_text_margin"
+            android:layout_marginRight="@dimen/primary_text_margin"
+            android:text="Давлние: 768"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/subtext_size" />
 
-            <TextView
-                android:id="@+id/wind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
-                android:layout_marginLeft="@dimen/primary_text_margin"
-                android:layout_marginRight="@dimen/primary_text_margin"
-                android:layout_marginTop="@dimen/subtext_size_bottom_padding"
-                android:text="Сильный: 15км/час"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="@dimen/subtext_size" />
-
-            <TextView
-                android:id="@+id/hummidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/wind"
-                android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
-                android:layout_marginLeft="@dimen/primary_text_margin"
-                android:layout_marginRight="@dimen/primary_text_margin"
-                android:text="Влажность: 48%"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="@dimen/subtext_size" />
-
-            <TextView
-                android:id="@+id/pressure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/hummidity"
-                android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
-                android:layout_marginLeft="@dimen/primary_text_margin"
-                android:layout_marginRight="@dimen/primary_text_margin"
-                android:text="Давлние: 768"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="@dimen/subtext_size" />
-
-        </LinearLayout>
+    </LinearLayout>
 
 
-        <ImageView
-            android:id="@+id/weather_state"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/date"
-            android:src="@drawable/morning_rain" />
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+    <ImageView
+        android:id="@+id/weather_state"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/date"
+        android:src="@drawable/morning_rain" />
+</RelativeLayout>

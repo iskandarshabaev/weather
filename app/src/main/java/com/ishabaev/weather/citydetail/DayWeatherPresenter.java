@@ -1,11 +1,16 @@
 package com.ishabaev.weather.citydetail;
 
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.source.DataSource;
 import com.ishabaev.weather.data.source.Repository;
 
 import java.util.Date;
 import java.util.List;
+
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by ishabaev on 25.06.16.
@@ -14,25 +19,36 @@ public class DayWeatherPresenter implements DayWeatherContract.UserActionsListen
 
     private Repository mRepository;
     private DayWeatherContract.View mView;
+    private CompositeSubscription mSubscriptions;
 
     public DayWeatherPresenter(DayWeatherContract.View view, Repository repository) {
         mRepository = repository;
         mView = view;
+        mSubscriptions = new CompositeSubscription();
     }
 
     @Override
     public void loadDayForecast(int cityId, Date date) {
-        mRepository.getForecast(cityId, mView.isNetworkAvailable(),
-                date, new DataSource.LoadWeatherCallback() {
+        mSubscriptions.clear();
+        Subscription subscription = mRepository
+                .getForecast(cityId, date, mView.isNetworkAvailable())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<OrmWeather>>() {
                     @Override
-                    public void onWeatherLoaded(List<OrmWeather> forecast) {
-                        mView.addWeathersToList(forecast);
+                    public void onCompleted() {
                     }
 
                     @Override
-                    public void onDataNotAvailable(Throwable t) {
-                        t.printStackTrace();
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(List<OrmWeather> ormWeathers) {
+                        mView.addWeathersToList(ormWeathers);
                     }
                 });
+        mSubscriptions.add(subscription);
     }
 }

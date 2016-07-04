@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.view.View;
 
+import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.data.source.Repository;
 import com.ishabaev.weather.util.Translate;
@@ -16,7 +17,7 @@ import java.util.TimerTask;
 /**
  * Created by ishabaev on 28.06.16.
  */
-public class AddCityPresenter implements AddCityContract.UserActionsListener {
+public class AddCityPresenter implements AddCityContract.Presenter {
 
     private AddCityContract.View mView;
     private Repository mRepository;
@@ -24,6 +25,7 @@ public class AddCityPresenter implements AddCityContract.UserActionsListener {
     private final long DELAY = 500;
     private boolean isTaskRunning;
     private Handler mHandler;
+    private final static String FILE_NAME = "city_list.txt";
 
     public AddCityPresenter(AddCityContract.View view, Repository repository){
         mView = view;
@@ -53,7 +55,7 @@ public class AddCityPresenter implements AddCityContract.UserActionsListener {
                             }
                         });
                         try {
-                            InputStream is = mRepository.open("city_list.txt");
+                            InputStream is = mRepository.open(FILE_NAME);
                             Scanner scanner = new Scanner(is);
                             int lineNum = 0;
                             int count = 0;
@@ -98,7 +100,10 @@ public class AddCityPresenter implements AddCityContract.UserActionsListener {
                                     if(mView.getCitiesSize() == 0){
                                         mView.setImageViewVisibility(View.VISIBLE);
                                         mView.setSearchStateVisibility(View.VISIBLE);
-                                        mView.setSearchStateText("По таком запросу ничего не найдено. Попробуйте другое название");
+                                        String searchStateText = mView
+                                                .getResources()
+                                                .getString(R.string.could_not_find_a_city);
+                                        mView.setSearchStateText(searchStateText);
                                     }
                                 }
                             });

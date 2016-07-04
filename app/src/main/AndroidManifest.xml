@@ -23,7 +23,6 @@
         </activity>
         <activity
             android:name=".citydetail.CityDetailActivity"
-            android:label="@string/title_city_detail"
             android:parentActivityName=".cities.CitiesActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -33,7 +32,6 @@
 
         <activity
             android:name=".addcity.AddCityActivity"
-            android:label="@string/title_city_detail"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

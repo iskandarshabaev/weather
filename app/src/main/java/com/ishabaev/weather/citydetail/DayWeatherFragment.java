@@ -26,15 +26,9 @@ public class DayWeatherFragment extends Fragment implements DayWeatherContract.V
 
     public final static String CITY_ID = "city_id";
     public final static String DATE = "date";
-
     private View mView;
     private HoursRecyclerViewAdapter mAdapter;
     private DayWeatherContract.UserActionsListener mPresenter;
-
-    public DayWeatherFragment(){
-        //Bundle args=new Bundle();
-        //this.setArguments(args);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

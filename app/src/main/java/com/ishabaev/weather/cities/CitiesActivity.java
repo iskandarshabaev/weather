@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
@@ -26,12 +28,17 @@ import com.ishabaev.weather.data.CityWithWeather;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public class CitiesActivity extends AppCompatActivity implements CitiesContract.View {
 
     private boolean mTwoPane;
     private CitiesContract.Presenter mPresenter;
     private CitiesRecyclerViewAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private final static String FRAGMENT_TAG = "fragment_tag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +54,6 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                /*
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                        */
                     Intent intent = new Intent(CitiesActivity.this, AddCityActivity.class);
                     startActivity(intent);
                 }
@@ -78,13 +81,19 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        mPresenter = new CitiesPresenter(this, Injection.provideTasksRepository(getApplicationContext()));
+        mPresenter = new CitiesPresenter(this, Injection.provideTasksRepository(getApplicationContext()),
+                Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.loadCities();
     }
 
     @Override
-    public void setRefreshing(boolean refreshing) {
-        mSwipeRefreshLayout.setRefreshing(refreshing);
+    public void setRefreshing(final boolean refreshing) {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(refreshing);
+            }
+        });
     }
 
     @Override
@@ -98,11 +107,9 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
-
         mAdapter = new CitiesRecyclerViewAdapter(new ArrayList<CityWithWeather>());
         mAdapter.setListener(listener);
         recyclerView.setAdapter(mAdapter);
-
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
@@ -116,6 +123,17 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
                 mPresenter.removeWeaher(mAdapter.getCity(location).get_id().intValue());
                 mPresenter.removeCity(mAdapter.getCity(location));
                 mAdapter.removeCity(location);
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+                if (mAdapter.getCurrentPosition() == location && mTwoPane && fragment != null) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .remove(fragment)
+                            .commit();
+                    mAdapter.setCurrentPosition(-1);
+                    showNoCitiesFrameIfNeed();
+                }else if(mAdapter.getCurrentPosition() > location){
+                    mAdapter.setCurrentPosition(mAdapter.getCurrentPosition() - 1);
+                }
             }
         };
 
@@ -133,8 +151,9 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
                 CityDetailFragment fragment = new CityDetailFragment();
                 fragment.setArguments(arguments);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.city_detail_container, fragment)
+                        .replace(R.id.city_detail_container, fragment,FRAGMENT_TAG)
                         .commit();
+                showNoCitiesFrameIfNeed();
             } else {
                 Intent intent = new Intent(CitiesActivity.this, CityDetailActivity.class);
                 Bundle args = new Bundle();
@@ -169,15 +188,39 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     @Override
     public void setCities(List<CityWithWeather> cities) {
         mAdapter.setCities(cities);
+        showNoCitiesFrameIfNeed();
+    }
+
+    private void showNoCitiesFrameIfNeed(){
+        if(!mTwoPane){
+            return;
+        }
+        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.selectCityFrame);
+        if(mAdapter.getCurrentPosition() == -1){
+            if(relativeLayout != null) {
+                relativeLayout.setVisibility(View.VISIBLE);
+            }
+        }else {
+            if(relativeLayout != null) {
+                relativeLayout.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
     public void addCitiesToList(List<CityWithWeather> cities) {
         mAdapter.addCities(cities);
+        showNoCitiesFrameIfNeed();
     }
 
     @Override
     public void addCityToList(CityWithWeather cityWithWeather) {
         mAdapter.addCity(cityWithWeather);
+        showNoCitiesFrameIfNeed();
+    }
+
+    @Override
+    public boolean isActive() {
+        return true;
     }
 }

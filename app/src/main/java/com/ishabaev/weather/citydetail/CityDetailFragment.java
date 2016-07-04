@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,20 +33,11 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     private CityDetailContract.Presenter mPresenter;
     private DaysViewPagerAdapter mViewPagerAdapter;
     private ImageUtils mImageUtils;
+    private FrameLayout mProgressFrame;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /*
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(getArguments().getString(ARG_ITEM_NAME));
-            }
-        }
-        */
         mPresenter = new CityDetailPresenter(this, Injection.provideTasksRepository(getContext()));
     }
 
@@ -62,7 +55,6 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
         super.onViewCreated(view, savedInstanceState);
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-
         FragmentManager fragmentManager = getChildFragmentManager();
         mViewPagerAdapter = new DaysViewPagerAdapter(fragmentManager, new ArrayList<Day>());
         viewPager.setAdapter(mViewPagerAdapter);
@@ -87,6 +79,11 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
         });
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mProgressFrame = (FrameLayout) getActivity().findViewById(R.id.progressFrame);
+    }
 
     @Override
     public void onResume() {
@@ -110,13 +107,14 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
 
     @Override
     public void showProgressBar(boolean show) {
-        /*
-        if(show) {
-            mProgressBar.setVisibility(View.VISIBLE);
-        }else {
-            mProgressBar.setVisibility(View.GONE);
+        if(mProgressFrame == null){
+            return;
         }
-        */
+        if(show) {
+            mProgressFrame.setVisibility(View.VISIBLE);
+        }else {
+            mProgressFrame.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -173,21 +171,10 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
         if (view != null) {
 
             Bitmap bitmap = mImageUtils.decodeSampledBitmapFromAssets(assetName, 500, 500);
-            if(bitmap != null){
-                view.setImageBitmap(bitmap);
+            if (bitmap != null) {
+                Bitmap blurBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, true);
+                view.setImageBitmap(blurBitmap);
             }
-
-            /*
-            try {
-                InputStream ims = getContext().getAssets().open(assetName);
-                Drawable image = Drawable.createFromStream(ims, null);
-                if (image != null) {
-                    view.setImageDrawable(image);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            */
         }
     }
 
@@ -202,5 +189,15 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void addDays(List<Day> days) {
         mViewPagerAdapter.addDays(days);
+    }
+
+    @Override
+    public void showNoForecast() {
+
+    }
+
+    @Override
+    public void showException(String eMessage) {
+
     }
 }

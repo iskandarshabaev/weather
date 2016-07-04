@@ -14,32 +14,13 @@ import rx.Observable;
  */
 public interface DataSource {
 
-    interface LoadWeatherCallback{
-        void onWeatherLoaded(List<OrmWeather> forecast);
-        void onDataNotAvailable(Throwable t);
-    }
-
-    interface LoadCitiesCallback{
-        void onCitiesLoaded(List<OrmCity> cities);
-        void onDataNotAvailable(Throwable t);
-    }
-
-    interface LoadCityWithWeatherCallback{
-        void onCityLoaded(CityWithWeather cityWithWeather);
-        void onDataNotAvailable(Throwable t);
-    }
-
-    void getForecast(int cityId, boolean isNetworkAvailable, LoadWeatherCallback callback);
-
     Observable<List<OrmWeather>> getForecast(int cityId, boolean isNetworkAvailable);
 
-    //List<OrmWeather> getForecast(int cityId);
-
-    void getForecast(int cityId, boolean isNetworkAvailable, Date date, LoadWeatherCallback callback);
+    Observable<List<OrmWeather>> getForecast(int cityId, Date date, boolean isNetworkAvailable);
 
     void refreshAllForecast(List<OrmWeather> forecast);
 
-    void refreshForecast(int cityId,List<OrmWeather> forecast);
+    void refreshForecast(int cityId, List<OrmWeather> forecast);
 
     void deleteAllForecast();
 
@@ -49,13 +30,9 @@ public interface DataSource {
 
     void saveForecast(List<OrmWeather> forecast);
 
-    void getCityList(LoadCitiesCallback callback);
-
     Observable<List<OrmCity>> getCityList();
 
     void saveCities(List<OrmCity> cities);
 
     void saveCity(OrmCity city);
-
-    void getCityWithWeather(OrmCity city, boolean isNetworkAvailable, LoadCityWithWeatherCallback callback);
 }

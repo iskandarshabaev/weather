@@ -1,29 +1,13 @@
 package com.ishabaev.weather.citydetail;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.ishabaev.weather.R;
-import com.ishabaev.weather.cities.CitiesActivity;
 
-/**
- * An activity representing a single City detail screen. This
- * activity is only used narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link CitiesActivity}.
- */
 public class CityDetailActivity extends AppCompatActivity {
 
     @Override
@@ -50,9 +34,6 @@ public class CityDetailActivity extends AppCompatActivity {
                     .commit();
 
         }
-        //CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        //appBarLayout.setTitle(getIntent().getStringExtra(CityDetailFragment.ARG_ITEM_ID));
-
         String cityName = getIntent().getStringExtra(CityDetailFragment.ARG_ITEM_NAME);
         if (cityName != null) {
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
@@ -63,17 +44,6 @@ public class CityDetailActivity extends AppCompatActivity {
 
     }
 
-    /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            navigateUpTo(new Intent(this, CitiesActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    */
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

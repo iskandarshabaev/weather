@@ -1,11 +1,10 @@
 package com.ishabaev.weather.citydetail;
 
-import android.os.AsyncTask;
+import android.content.res.Resources;
 
+import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.CityWithWeather;
 import com.ishabaev.weather.data.Day;
-import com.ishabaev.weather.data.source.DataSource;
 import com.ishabaev.weather.data.source.Repository;
 import com.ishabaev.weather.util.DataSort;
 
@@ -15,11 +14,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -51,29 +48,15 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
 
     @Override
     public void openCity(int cityId) {
-        /*
-        mRepository.getForecast(cityId, mView.isNetworkAvailable(),
-                new DataSource.LoadWeatherCallback() {
-                    @Override
-                    public void onWeatherLoaded(List<OrmWeather> forecast) {
-                        makeView(forecast);
-                    }
-
-                    @Override
-                    public void onDataNotAvailable(Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-                */
+        mView.showProgressBar(true);
         mSubscriptions.clear();
         Subscription subscription = mRepository
-                .getForecast(cityId,mView.isNetworkAvailable())
+                .getForecast(cityId, mView.isNetworkAvailable())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<OrmWeather>>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
@@ -91,6 +74,7 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
 
     private void makeView(List<OrmWeather> forecast) {
         DataSort.sortWeatherHour(forecast);
+        mView.showProgressBar(false);
         if (forecast.size() > 0) {
             OrmWeather current = forecast.get(0);
             setTemperature(current.getTemp());
@@ -100,33 +84,41 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
             setDate(current.getDt());
             mView.setImage(current.getIcon() + ".jpg");
             addDaysToViewPager(forecast);
-        }
+        }else {
 
-        for (OrmWeather weather : forecast) {
-            weather.getTemp();
         }
     }
 
 
     private void setTemperature(Double temp) {
-        String temperature = temp > 0 ? "+" + Integer.toString(temp.intValue()) : Integer.toString(temp.intValue());
+        String temperature = temp > 0 ?
+                "+" + Integer.toString(temp.intValue()) :
+                Integer.toString(temp.intValue());
         temperature += " °C";
         mView.setTemp(temperature);
     }
 
     private void setHummidity(double hummidity) {
-        String value = "Влажность: " + Double.toString(hummidity);
-        value += "%";
+        String value = mView.getResources()
+                .getString(R.string.humidity) + ": " +
+                Double.toString(hummidity) + "%";
         mView.setHummidity(value);
     }
 
     private void setWind(Double wind) {
-        String value = wind == null ? "No wind" : "Скорость ветра: " + Double.toString(wind) + " km\\h";
+        Resources res = mView.getResources();
+        String value = wind == null ?
+                res.getString(R.string.windless) :
+                res.getString(R.string.wind) + ": " +
+                        Double.toString(wind) + " " +
+                        res.getString(R.string.km_h);
         mView.setWindSpeed(value);
     }
 
     private void setPressure(Double pressure) {
-        String value = pressure == null ? "No pressure" : "Давление: " + Double.toString(pressure);
+        String value = pressure == null ? "" :
+                mView.getResources().getString(R.string.pressure) + ": " +
+                        Double.toString(pressure);
         mView.setPressure(value);
     }
 
@@ -138,11 +130,9 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
 
     private void addDaysToViewPager(List<OrmWeather> hours) {
         List<Day> days = new ArrayList<>();
-
         Calendar c1 = Calendar.getInstance();
         c1.setTime(hours.get(0).getDt());
         Day day = new Day();
-        //List<Weather> dayHours = new ArrayList<>();
         day.setHours(new ArrayList<OrmWeather>());
         days.add(day);
         for (OrmWeather hourWeayher : hours) {
@@ -152,10 +142,6 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
                     && c1.get(Calendar.DAY_OF_YEAR) - c2.get(Calendar.DAY_OF_YEAR) == 0) {
                 day.getHours().add(hourWeayher);
             } else {
-                //day.setHours(dayHours);
-                //days.add(day);
-                //dayHours = new ArrayList<>();
-                //dayHours.add(hourWeayher);
                 day = new Day();
                 day.setHours(new ArrayList<OrmWeather>());
                 day.getHours().add(hourWeayher);

@@ -58,10 +58,11 @@
             android:layout_centerInParent="true" />
 
         <TextView
+            android:textColor="@color/secondaryTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/subtext_size"
-            android:text="Начните вводить название города"
+            android:text="@string/start_typing"
             android:id="@+id/textView"
             android:layout_margin="@dimen/text_margin"
             android:layout_centerHorizontal="true"

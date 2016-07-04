@@ -1,5 +1,6 @@
 package com.ishabaev.weather.addcity;
 
+import android.content.res.Resources;
 import android.text.Editable;
 
 import com.ishabaev.weather.dao.OrmCity;
@@ -30,9 +31,11 @@ public interface AddCityContract {
         void setSearchStateVisibility(int visibility);
 
         void setSearchStateText(String text);
+
+        Resources getResources();
     }
 
-    interface UserActionsListener{
+    interface Presenter {
 
         void textChanged(Editable s);
 

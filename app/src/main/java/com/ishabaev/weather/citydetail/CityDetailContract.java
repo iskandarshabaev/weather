@@ -1,5 +1,6 @@
 package com.ishabaev.weather.citydetail;
 
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
 import com.ishabaev.weather.BasePresenter;
@@ -34,6 +35,12 @@ public interface CityDetailContract {
         void addDays(List<Day> days);
 
         boolean isNetworkAvailable();
+
+        Resources getResources();
+
+        void showNoForecast();
+
+        void showException(String eMessage);
     }
 
     interface Presenter extends BasePresenter {

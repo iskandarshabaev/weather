@@ -23,6 +23,8 @@ public interface CitiesContract {
         void setRefreshing(boolean refreshing);
 
         boolean isNetworkAvailable();
+
+        boolean isActive();
     }
 
     interface Presenter extends BasePresenter{

@@ -30,7 +30,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gray"
+            android:background="@color/mask"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="false">
             <TextView
@@ -41,8 +41,8 @@
                 android:layout_alignParentLeft="false"
                 android:text="@string/app_name"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/primary_text_size"
+                android:textColor="@color/light"
+                android:textSize="@dimen/headline_text_size"
                 android:layout_marginLeft="@dimen/primary_text_margin"
                 android:layout_marginRight="@dimen/primary_text_margin"
                 android:layout_marginTop="@dimen/primary_text_top_padding"
@@ -54,11 +54,10 @@
                 android:layout_height="wrap_content"
                 android:text="Температура: +18 °C"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="@android:color/white"
+                android:textColor="@color/lightSecondary"
                 android:textSize="@dimen/subtext_size"
                 android:layout_marginLeft="@dimen/primary_text_margin"
                 android:layout_marginRight="@dimen/primary_text_margin"
-                android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
                 android:layout_below="@+id/city_name" />
 
             <TextView
@@ -67,11 +66,10 @@
                 android:layout_height="wrap_content"
                 android:text="Сильный: 15км/час"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="@android:color/white"
+                android:textColor="@color/lightSecondary"
                 android:textSize="@dimen/subtext_size"
                 android:layout_marginLeft="@dimen/primary_text_margin"
                 android:layout_marginRight="@dimen/primary_text_margin"
-                android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
                 android:layout_below="@+id/temperature" />
 
             <TextView
@@ -80,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:text="Влажность: 48%"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="@android:color/white"
+                android:textColor="@color/lightSecondary"
                 android:textSize="@dimen/subtext_size"
                 android:layout_marginLeft="@dimen/primary_text_margin"
                 android:layout_marginRight="@dimen/primary_text_margin"

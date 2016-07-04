@@ -3,13 +3,13 @@ package com.ishabaev.weather.cities;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.data.CityWithWeather;
-import com.ishabaev.weather.data.source.DataSource;
 import com.ishabaev.weather.data.source.Repository;
 
 import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Scheduler;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -25,19 +25,23 @@ public class CitiesPresenter implements CitiesContract.Presenter {
     private CitiesContract.View mView;
     private Repository mRepository;
     private CompositeSubscription mSubscriptions;
+    private Scheduler mBackgroundScheduler;
+    private Scheduler mMainScheduler;
 
-    public CitiesPresenter(CitiesContract.View view, Repository repository) {
+    public CitiesPresenter(CitiesContract.View view, Repository repository,
+                           Scheduler background, Scheduler main) {
         mView = view;
         mRepository = repository;
         mSubscriptions = new CompositeSubscription();
         mView.setPresenter(this);
+        mBackgroundScheduler = background;
+        mMainScheduler = main;
     }
 
     @Override
     public void subscribe() {
 
     }
-
 
     private Observable<CityWithWeather> getCityWithWeather(final OrmCity city){
         return mRepository.getForecast(city.get_id().intValue(), mView.isNetworkAvailable())
@@ -46,7 +50,12 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                     public Observable<CityWithWeather> call(List<OrmWeather> ormWeathers) {
                         CityWithWeather cityWithWeather = new CityWithWeather();
                         cityWithWeather.setCity(city);
-                        cityWithWeather.setWeather(ormWeathers.get(0));//TODO must be fixed
+                        if(ormWeathers.size() > 0) {
+                            cityWithWeather.setWeather(ormWeathers.get(0));//TODO must be fixed
+                        }else {
+                            OrmWeather emptyWeather = new OrmWeather();
+                            cityWithWeather.setWeather(emptyWeather);
+                        }
                         return Observable.just(cityWithWeather);
                     }
                 });
@@ -59,19 +68,6 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     @Override
     public void loadCities() {
-        /*
-        mRepository.getCityList(new DataSource.LoadCitiesCallback() {
-            @Override
-            public void onCitiesLoaded(List<OrmCity> cities) {
-                loadCitiesWithWeather(cities);
-            }
-
-            @Override
-            public void onDataNotAvailable(Throwable t) {
-
-            }
-        });
-        */
         mView.setRefreshing(true);
         mSubscriptions.clear();
         Subscription subscription = mRepository
@@ -101,8 +97,8 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                     }
                 })
                 .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mBackgroundScheduler)
+                .observeOn(mMainScheduler)
                 .subscribe(new Observer<List<CityWithWeather>>() {
                     @Override
                     public void onCompleted() {
@@ -120,29 +116,6 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                     }
                 });
         mSubscriptions.add(subscription);
-    }
-
-    private void loadCitiesWithWeather(List<OrmCity> cities) {
-        if (mView.isNetworkAvailable()) {
-
-        } else {
-
-        }
-
-        for (OrmCity city : cities) {
-            mRepository.getCityWithWeather(city, mView.isNetworkAvailable(),
-                    new DataSource.LoadCityWithWeatherCallback() {
-                        @Override
-                        public void onCityLoaded(CityWithWeather cityWithWeather) {
-                            mView.addCityToList(cityWithWeather);
-                        }
-
-                        @Override
-                        public void onDataNotAvailable(Throwable t) {
-                            t.printStackTrace();
-                        }
-                    });
-        }
     }
 
     @Override
