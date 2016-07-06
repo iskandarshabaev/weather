@@ -57,16 +57,16 @@ public class RepositoryTest {
 
     private void initCities(){
         CITIES = new ArrayList<OrmCity>();
-        CITIES.add(new OrmCity(54353l,"City1", "RU", 55.4, 34.4));
-        CITIES.add(new OrmCity(54354l,"City2", "RU", 55.4, 34.4));
-        CITIES.add(new OrmCity(54355l,"City3", "RU", 55.4, 34.4));
+        CITIES.add(new OrmCity(54353L,"City1", "RU", 55.4, 34.4));
+        CITIES.add(new OrmCity(54354L,"City2", "RU", 55.4, 34.4));
+        CITIES.add(new OrmCity(54355L,"City3", "RU", 55.4, 34.4));
     }
 
     private void initForecats(){
         FORECAST = new ArrayList<OrmWeather>();
-        FORECAST.add(new OrmWeather(54353l,1l,"City1", new Date(),17.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,""));
-        FORECAST.add(new OrmWeather(54353l,2l,"City2", new Date(),17.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,""));
-        FORECAST.add(new OrmWeather(54353l,3l,"City3", new Date(),17.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,""));
+        FORECAST.add(new OrmWeather(54353L,1L,"City1", new Date(),17.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,""));
+        FORECAST.add(new OrmWeather(54353L,2L,"City2", new Date(),17.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,""));
+        FORECAST.add(new OrmWeather(54353L,3L,"City3", new Date(),17.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,""));
     }
 
     @Test

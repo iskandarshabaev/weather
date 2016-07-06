@@ -24,7 +24,7 @@ import java.util.Locale;
 public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecyclerViewAdapter.ViewHolder> {
 
     private final List<OrmWeather> mHours;
-    private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm", Locale.US);
+    private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm");
 
     public HoursRecyclerViewAdapter(List<OrmWeather> hours) {
         mHours = hours;

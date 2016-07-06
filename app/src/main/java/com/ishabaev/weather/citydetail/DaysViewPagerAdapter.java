@@ -35,7 +35,7 @@ public class DaysViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        SimpleDateFormat format = new SimpleDateFormat("dd E", Locale.US);
+        SimpleDateFormat format = new SimpleDateFormat("dd E");
         return format.format(mDays.get(position).getHours().get(0).getDt());
     }
 

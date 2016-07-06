@@ -109,7 +109,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
         mAdapter = new CitiesRecyclerViewAdapter(this, new ArrayList<CityWithWeather>());
-        mAdapter.setListener(listener);
+        mAdapter.setListener(mListener);
         recyclerView.setAdapter(mAdapter);
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
@@ -142,7 +142,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener listener = new CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener() {
+    private CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener mListener = new CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener() {
         @Override
         public void onItemClick(CityWithWeather city) {
             if (mTwoPane) {

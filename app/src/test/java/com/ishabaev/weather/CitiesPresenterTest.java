@@ -53,9 +53,9 @@ public class CitiesPresenterTest {
         mTasksPresenter = new CitiesPresenter(mView, mRespository, Schedulers.immediate(),Schedulers.immediate());
         when(mView.isActive()).thenReturn(true);
         CITIES = new ArrayList<OrmCity>();
-        CITIES.add(new OrmCity(54353l,"City1", "RU", 55.4, 34.4));
-        CITIES.add(new OrmCity(54354l,"City2", "RU", 55.4, 34.4));
-        CITIES.add(new OrmCity(54355l,"City3", "RU", 55.4, 34.4));
+        CITIES.add(new OrmCity(54353L,"City1", "RU", 55.4, 34.4));
+        CITIES.add(new OrmCity(54354L,"City2", "RU", 55.4, 34.4));
+        CITIES.add(new OrmCity(54355L,"City3", "RU", 55.4, 34.4));
     }
 
     @Test

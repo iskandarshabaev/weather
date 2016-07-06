@@ -9,4 +9,5 @@
     <string name="humidity">Humidity</string>
     <string name="windless">Windless</string>
     <string name="pressure">Pressure</string>
+    <string name="image_description" translatable="false">Image</string>
 </resources>

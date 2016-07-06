@@ -123,7 +123,7 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
     }
 
     private void setDate(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM, HH:mm", Locale.US);
+        SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM, HH:mm");
         String value = format.format(date);
         mView.setDate(value);
     }

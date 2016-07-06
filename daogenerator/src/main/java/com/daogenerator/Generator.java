@@ -18,7 +18,7 @@ public class Generator {
         }
     }
 
-    public static void initCityTable(Schema schema){
+    private static void initCityTable(Schema schema){
         Entity note= schema.addEntity("OrmCity");
         note.addLongProperty("_id").primaryKey();
         note.addStringProperty("city_name");
@@ -27,7 +27,7 @@ public class Generator {
         note.addDoubleProperty("lon");
     }
 
-    public static void initWeatherTable(Schema schema){
+    private static void initWeatherTable(Schema schema){
         Entity note= schema.addEntity("OrmWeather");
         note.addIdProperty();
         note.addLongProperty("city_id");

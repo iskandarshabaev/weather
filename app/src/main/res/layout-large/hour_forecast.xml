@@ -17,7 +17,6 @@
         android:layout_marginLeft="@dimen/primary_text_margin"
         android:layout_marginRight="@dimen/primary_text_margin"
         android:layout_marginTop="@dimen/primary_text_top_padding"
-        android:text="15:00"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="@dimen/subtext_size" />
 
@@ -31,7 +30,6 @@
         android:layout_marginRight="@dimen/primary_text_margin"
         android:layout_marginTop="@dimen/primary_text_top_padding"
         android:layout_toRightOf="@+id/weather_state"
-        android:text="+18 °C"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="20sp" />
 
@@ -47,12 +45,10 @@
             android:textColor="@color/secondaryTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
             android:layout_marginLeft="@dimen/primary_text_margin"
             android:layout_marginRight="@dimen/primary_text_margin"
             android:layout_marginTop="@dimen/subtext_size_bottom_padding"
-            android:text="Сильный: 15км/час"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="@dimen/subtext_size"
             android:layout_weight="0.3"/>
@@ -62,13 +58,10 @@
             android:textColor="@color/secondaryTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/wind"
             android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
             android:layout_marginLeft="@dimen/primary_text_margin"
             android:layout_marginRight="@dimen/primary_text_margin"
             android:layout_marginTop="@dimen/subtext_size_bottom_padding"
-            android:text="Влажность: 48%"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="@dimen/subtext_size"
             android:layout_weight="0.3"/>
@@ -78,13 +71,10 @@
             android:textColor="@color/secondaryTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/hummidity"
             android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
             android:layout_marginLeft="@dimen/primary_text_margin"
             android:layout_marginRight="@dimen/primary_text_margin"
             android:layout_marginTop="@dimen/subtext_size_bottom_padding"
-            android:text="Давлние: 768"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="@dimen/subtext_size"
             android:layout_weight="0.3"/>
@@ -94,6 +84,7 @@
 
     <ImageView
         android:id="@+id/weather_state"
+        android:contentDescription="@string/image_description"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerVertical="true"

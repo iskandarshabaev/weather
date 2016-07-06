@@ -103,7 +103,7 @@ public class LocalDataSource implements DataSource {
         );
     }
 
-    public Date getStartOfDayInMillis(Date date) {
+    private Date getStartOfDayInMillis(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -113,7 +113,7 @@ public class LocalDataSource implements DataSource {
         return calendar.getTime();
     }
 
-    public Date getEndOfDayInMillis(Date date) {
+    private Date getEndOfDayInMillis(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(getStartOfDayInMillis(date));
         calendar.set(Calendar.HOUR_OF_DAY, 23);

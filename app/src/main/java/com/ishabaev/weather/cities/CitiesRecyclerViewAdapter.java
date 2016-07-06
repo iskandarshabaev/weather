@@ -167,7 +167,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         return null;
     }
 
-    public void loadBitmap(String imageName, ImageView imageView, int size) {
+    private void loadBitmap(String imageName, ImageView imageView, int size) {
         if (cancelPotentialWork(imageName, imageView)) {
             final BitmapWorkerTask task = new BitmapWorkerTask(imageView, size, size);
             final AsyncDrawable asyncDrawable =
@@ -177,7 +177,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         }
     }
 
-    public static boolean cancelPotentialWork(String data, ImageView imageView) {
+    private static boolean cancelPotentialWork(String data, ImageView imageView) {
         final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
 
         if (bitmapWorkerTask != null) {
