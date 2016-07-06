@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -195,7 +196,10 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     }
 
     @Override
-    public void showException(String eMessage) {
-
+    public void showSnackBar(String text) {
+        View view = getActivity().findViewById(R.id.viewpager);
+        if(view != null) {
+            Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.ishabaev.weather.cities;
 
+import android.content.res.Resources;
+
 import com.ishabaev.weather.BasePresenter;
 import com.ishabaev.weather.BaseView;
 import com.ishabaev.weather.dao.OrmCity;
@@ -25,6 +27,10 @@ public interface CitiesContract {
         boolean isNetworkAvailable();
 
         boolean isActive();
+
+        void showSnackBar(String text);
+
+        Resources getResources();
     }
 
     interface Presenter extends BasePresenter {

@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -223,5 +224,13 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     @Override
     public boolean isActive() {
         return true;
+    }
+
+    @Override
+    public void showSnackBar(String text) {
+        View view = findViewById(R.id.fab);
+        if(view != null) {
+            Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
+        }
     }
 }

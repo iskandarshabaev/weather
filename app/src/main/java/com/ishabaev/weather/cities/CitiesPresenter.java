@@ -1,5 +1,6 @@
 package com.ishabaev.weather.cities;
 
+import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.data.CityWithWeather;
@@ -105,6 +106,10 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        mView.setRefreshing(false);
+                        String text = mView.getResources().getString(R.string.error) + ": ";
+                        text += e.getMessage();
+                        mView.showSnackBar(text);
                         e.printStackTrace();
                     }
 

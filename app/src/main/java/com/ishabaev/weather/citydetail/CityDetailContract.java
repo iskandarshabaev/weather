@@ -40,7 +40,7 @@ public interface CityDetailContract {
 
         void showNoForecast();
 
-        void showException(String eMessage);
+        void showSnackBar(String text);
     }
 
     interface Presenter extends BasePresenter {

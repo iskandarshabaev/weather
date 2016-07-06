@@ -40,5 +40,4 @@
         app:backgroundTint="@color/colorPrimary"
         app:elevation="6dp"/>
 
-
 </android.support.design.widget.CoordinatorLayout>

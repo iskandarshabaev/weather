@@ -58,10 +58,15 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
                 .subscribe(new Observer<List<OrmWeather>>() {
                     @Override
                     public void onCompleted() {
+                        mView.showProgressBar(false);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        mView.showProgressBar(false);
+                        String text = mView.getResources().getString(R.string.error) + ": ";
+                        text += e.getMessage();
+                        mView.showSnackBar(text);
                         e.printStackTrace();
                     }
 
@@ -75,7 +80,6 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
 
     private void makeView(List<OrmWeather> forecast) {
         DataSort.sortWeatherHour(forecast);
-        mView.showProgressBar(false);
         if (forecast.size() > 0) {
             OrmWeather current = forecast.get(0);
             setTemperature(current.getTemp());
@@ -86,7 +90,9 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
             mView.setImage(current.getIcon() + ".jpg");
             addDaysToViewPager(forecast);
         } else {
-
+            String text = mView.getResources().getString(R.string.error) + ": ";
+            text += mView.getResources().getString(R.string.failed_to_load_weather);
+            mView.showSnackBar(text);
         }
     }
 

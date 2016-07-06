@@ -10,4 +10,6 @@
     <string name="windless">Windless</string>
     <string name="pressure">Pressure</string>
     <string name="image_description" translatable="false">Image</string>
+    <string name="error">Error</string>
+    <string name="failed_to_load_weather">Failed to load weather</string>
 </resources>
