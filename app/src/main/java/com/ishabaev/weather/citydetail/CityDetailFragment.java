@@ -170,10 +170,10 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
         ImageView view = (ImageView) getActivity().findViewById(R.id.backdrop);
         if (view != null) {
 
-            Bitmap bitmap = mImageUtils.decodeSampledBitmapFromAssets(assetName, 500, 500);
+            Bitmap bitmap = mImageUtils.decodeSampledBitmapFromAssets(assetName, 200, 200);
             if (bitmap != null) {
-                Bitmap blurBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, true);
-                view.setImageBitmap(blurBitmap);
+                //Bitmap blurBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, true);
+                view.setImageBitmap(bitmap);
             }
         }
     }

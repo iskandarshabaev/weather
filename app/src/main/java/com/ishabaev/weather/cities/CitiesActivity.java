@@ -28,7 +28,6 @@ import com.ishabaev.weather.data.CityWithWeather;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -43,6 +42,13 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+// set an enter transition
+        //getWindow().setEnterTransition(new ChangeImageTransform());
+// set an exit transition
+        //getWindow().setExitTransition(new ChangeImageTransform());
+
         setContentView(R.layout.activity_city_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -107,7 +113,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
-        mAdapter = new CitiesRecyclerViewAdapter(new ArrayList<CityWithWeather>());
+        mAdapter = new CitiesRecyclerViewAdapter(this, new ArrayList<CityWithWeather>());
         mAdapter.setListener(listener);
         recyclerView.setAdapter(mAdapter);
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -131,7 +137,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
                             .commit();
                     mAdapter.setCurrentPosition(-1);
                     showNoCitiesFrameIfNeed();
-                }else if(mAdapter.getCurrentPosition() > location){
+                } else if (mAdapter.getCurrentPosition() > location) {
                     mAdapter.setCurrentPosition(mAdapter.getCurrentPosition() - 1);
                 }
             }
@@ -151,7 +157,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
                 CityDetailFragment fragment = new CityDetailFragment();
                 fragment.setArguments(arguments);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.city_detail_container, fragment,FRAGMENT_TAG)
+                        .replace(R.id.city_detail_container, fragment, FRAGMENT_TAG)
                         .commit();
                 showNoCitiesFrameIfNeed();
             } else {
@@ -191,17 +197,17 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         showNoCitiesFrameIfNeed();
     }
 
-    private void showNoCitiesFrameIfNeed(){
-        if(!mTwoPane){
+    private void showNoCitiesFrameIfNeed() {
+        if (!mTwoPane) {
             return;
         }
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.selectCityFrame);
-        if(mAdapter.getCurrentPosition() == -1){
-            if(relativeLayout != null) {
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.selectCityFrame);
+        if (mAdapter.getCurrentPosition() == -1) {
+            if (relativeLayout != null) {
                 relativeLayout.setVisibility(View.VISIBLE);
             }
-        }else {
-            if(relativeLayout != null) {
+        } else {
+            if (relativeLayout != null) {
                 relativeLayout.setVisibility(View.GONE);
             }
         }

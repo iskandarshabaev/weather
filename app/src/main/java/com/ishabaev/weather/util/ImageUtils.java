@@ -43,21 +43,15 @@ public class ImageUtils {
     public Bitmap decodeSampledBitmapFromAssets(String assetName, int reqWidth, int reqHeight) {
         try {
             InputStream ims = mContext.getAssets().open(assetName);
-
-
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inJustDecodeBounds = true;
-//            Bitmap bitmap = BitmapFactory.decodeStream(ims, null, options);
-//
-//            options.inJustDecodeBounds = false;
-//            // recreate the stream
-//            // make some calculation to define inSampleSize
-//            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-//            bitmap = BitmapFactory.decodeStream(ims, null, options);
-//            return bitmap;
-
-            Bitmap icon = BitmapFactory.decodeStream(ims);
-            Bitmap scaledIcon = Bitmap.createScaledBitmap(icon, reqWidth, reqHeight, false);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(ims, null, options);
+            int scale = calculateInSampleSize(options,reqWidth, reqHeight);
+            options = new BitmapFactory.Options();
+            options.inSampleSize = scale;
+            //options.inPreferredConfig = Bitmap.Config.RGB_565;
+            ims = mContext.getAssets().open(assetName);
+            Bitmap icon = BitmapFactory.decodeStream(ims, null, options);
             return icon;
         } catch (Exception e) {
             e.printStackTrace();

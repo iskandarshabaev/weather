@@ -1,12 +1,13 @@
 package com.ishabaev.weather.cities;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +33,15 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         void onItemClick(CityWithWeather city);
     }
 
+    private Context mContext;
     private final List<CityWithWeather> mCities;
     private CitiesRecyclerViewItemListener mListener;
     private ImageUtils mImageUtils;
     private int mCurrentPosition = -1;
 
-    public CitiesRecyclerViewAdapter(List<CityWithWeather> cities) {
+    public CitiesRecyclerViewAdapter(Context context, List<CityWithWeather> cities) {
         mCities = cities;
+        mContext = context;
     }
 
     public void setListener(CitiesRecyclerViewItemListener listener) {
@@ -132,11 +135,16 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
                 holder.hummidity.setText(hummidity);
             }
 
-            int size = holder.view.getResources().getDimensionPixelSize(R.dimen.city_image_size);
+            float scaleRatio = holder.view.getResources().getDisplayMetrics().density;
+            float dimenPix = holder.view.getResources().getDimension(R.dimen.city_image_size);
+            int size = (int)(dimenPix/scaleRatio);
             holder.imageView.setImageDrawable(null);
             if (holder.city.getWeather().getIcon() != null) {
+                /*
                 BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(holder.imageView, size, size);
                 bitmapWorkerTask.execute(holder.city.getWeather().getIcon());
+                */
+                loadBitmap(holder.city.getWeather().getIcon(),holder.imageView, size);
             }
         }
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -164,25 +172,40 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         return null;
     }
 
-    public static boolean cancelPotentialWork(String imageName, ImageView imageView) {
+    public void loadBitmap(String imageName, ImageView imageView, int  size) {
+        if (cancelPotentialWork(imageName, imageView)) {
+            final BitmapWorkerTask task = new BitmapWorkerTask(imageView, size, size);
+            final AsyncDrawable asyncDrawable =
+                    new AsyncDrawable(mContext.getResources(), null, task);
+            imageView.setImageDrawable(asyncDrawable);
+            task.execute(imageName);
+        }
+    }
+
+    public static boolean cancelPotentialWork(String data, ImageView imageView) {
         final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
 
         if (bitmapWorkerTask != null) {
             final String bitmapData = bitmapWorkerTask.imageName;
-            if (bitmapData == null || bitmapData != imageName) {
+            // If bitmapData is not yet set or it differs from the new data
+            if (bitmapData == null || !bitmapData.equals(data)) {
+                // Cancel previous task
                 bitmapWorkerTask.cancel(true);
             } else {
+                // The same work is already in progress
                 return false;
             }
         }
+        // No task associated with the ImageView, or an existing task was cancelled
         return true;
     }
 
     static class AsyncDrawable extends BitmapDrawable {
         private final WeakReference<BitmapWorkerTask> bitmapWorkerTaskReference;
 
-        public AsyncDrawable(InputStream inputStream,
+        public AsyncDrawable(Resources res, Bitmap bitmap,
                              BitmapWorkerTask bitmapWorkerTask) {
+            super(res, bitmap);
             bitmapWorkerTaskReference =
                     new WeakReference<BitmapWorkerTask>(bitmapWorkerTask);
         }
@@ -208,14 +231,20 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            return mImageUtils.decodeSampledBitmapFromAssets(params[0] + ".jpg", mWidth, mHeight);
+            return mImageUtils.decodeSampledBitmapFromAssets(params[0] + ".jpg", mWidth/2, mHeight/2);
         }
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
+            if (isCancelled()) {
+                bitmap = null;
+            }
+
             if (imageViewReference != null && bitmap != null) {
                 final ImageView imageView = imageViewReference.get();
-                if (imageView != null) {
+                final BitmapWorkerTask bitmapWorkerTask =
+                        getBitmapWorkerTask(imageView);
+                if (this == bitmapWorkerTask && imageView != null) {
                     imageView.setImageBitmap(bitmap);
                 }
             }
