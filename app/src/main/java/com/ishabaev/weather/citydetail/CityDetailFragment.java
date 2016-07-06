@@ -107,12 +107,12 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
 
     @Override
     public void showProgressBar(boolean show) {
-        if(mProgressFrame == null){
+        if (mProgressFrame == null) {
             return;
         }
-        if(show) {
+        if (show) {
             mProgressFrame.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mProgressFrame.setVisibility(View.GONE);
         }
     }
@@ -169,10 +169,8 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     public void setImage(String assetName) {
         ImageView view = (ImageView) getActivity().findViewById(R.id.backdrop);
         if (view != null) {
-
             Bitmap bitmap = mImageUtils.decodeSampledBitmapFromAssets(assetName, 200, 200);
             if (bitmap != null) {
-                //Bitmap blurBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, true);
                 view.setImageBitmap(bitmap);
             }
         }

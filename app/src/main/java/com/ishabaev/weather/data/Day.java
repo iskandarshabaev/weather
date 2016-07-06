@@ -1,5 +1,6 @@
 package com.ishabaev.weather.data;
 
+import com.google.gson.annotations.SerializedName;
 import com.ishabaev.weather.dao.OrmWeather;
 
 import java.util.List;
@@ -9,13 +10,14 @@ import java.util.List;
  */
 public class Day {
 
-    private List<OrmWeather> hours;
+    @SerializedName("hours")
+    private List<OrmWeather> mHours;
 
     public List<OrmWeather> getHours() {
-        return hours;
+        return mHours;
     }
 
     public void setHours(List<OrmWeather> hours) {
-        this.hours = hours;
+        this.mHours = hours;
     }
 }

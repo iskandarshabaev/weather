@@ -8,47 +8,47 @@ import com.google.gson.annotations.SerializedName;
 public class Weather {
 
     @SerializedName("id")
-    private Integer id;
+    private Integer mId;
 
     @SerializedName("main")
-    private String main;
+    private String mMain;
 
     @SerializedName("description")
-    private String description;
+    private String mDescription;
 
     @SerializedName("icon")
-    private String icon;
+    private String mIcon;
 
     public Integer getId() {
-        return id;
+        return mId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.mId = id;
     }
 
     public String getMain() {
-        return main;
+        return mMain;
     }
 
     public void setMain(String main) {
-        this.main = main;
+        this.mMain = main;
     }
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.mDescription = description;
     }
 
     public String getIcon() {
-        return icon;
+        return mIcon;
     }
 
     public void setIcon(String icon) {
-        this.icon = icon;
+        this.mIcon = icon;
     }
 
 }

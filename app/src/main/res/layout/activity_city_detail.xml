@@ -23,6 +23,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:expandedTitleMarginBottom="@dimen/title_margin"
             app:toolbarId="@+id/toolbar">
+
             <ImageView
                 android:id="@+id/backdrop"
                 android:layout_width="match_parent"
@@ -33,7 +34,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true">
 
                 <TextView
                     android:id="@+id/header_temp"
@@ -97,7 +99,6 @@
                     android:layout_marginLeft="@dimen/primary_text_margin"
                     android:layout_marginRight="@dimen/primary_text_margin"
                     android:paddingBottom="@dimen/primary_text_margin"
-                    android:layout_marginBottom="@dimen/primary_text_margin"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true" />
             </RelativeLayout>

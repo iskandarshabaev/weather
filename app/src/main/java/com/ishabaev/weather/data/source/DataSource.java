@@ -2,7 +2,6 @@ package com.ishabaev.weather.data.source;
 
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.CityWithWeather;
 
 import java.util.Date;
 import java.util.List;

@@ -1,8 +1,6 @@
 package com.ishabaev.weather.citydetail;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +24,7 @@ public class CityDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
             arguments.putLong(CityDetailFragment.ARG_ITEM_ID,
-                    getIntent().getLongExtra(CityDetailFragment.ARG_ITEM_ID,0));
+                    getIntent().getLongExtra(CityDetailFragment.ARG_ITEM_ID, 0));
             arguments.putString(CityDetailFragment.ARG_ITEM_NAME,
                     getIntent().getStringExtra(CityDetailFragment.ARG_ITEM_NAME));
             CityDetailFragment fragment = new CityDetailFragment();

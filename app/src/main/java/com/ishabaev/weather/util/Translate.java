@@ -79,17 +79,16 @@ public class Translate {
     }
 
     public static String ru2en(String s) {
-        if(s.equals("москва")) {
+        if (s.equals("москва")) {
             return "moscow";
-        }else if(s.equals("санкт")){
+        } else if (s.equals("санкт")) {
             return "saint";
-        }else if(s.equals("харьков")){
+        } else if (s.equals("харьков")) {
             return "kharkiv";
-        }else if(s.contains("санкт петербург") ||
-                s.contains("санкт-петербург")){
+        } else if (s.contains("санкт петербург") ||
+                s.contains("санкт-петербург")) {
             return "saint petersburg";
         }
-
         StringBuilder sb = new StringBuilder(s.length() * 2);
         for (char ch : s.toCharArray()) {
             sb.append(ru2en(ch));

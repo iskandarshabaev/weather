@@ -1,6 +1,7 @@
 package com.ishabaev.weather.data;
 
-import java.util.Date;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -8,89 +9,91 @@ import java.util.List;
  */
 public class WeatherHour {
 
-    private long dt;
-    private Main main;
-    //private Weather weather;
-    private Clouds clouds;
-    private Wind wind;
-    private Rain rain;
-    private Snow snow;
-    private String dt_txt;
-    private List<Weather> weather;
+    @SerializedName("dt")
+    private long mDt;
+
+    @SerializedName("main")
+    private Main mMain;
+
+    @SerializedName("clouds")
+    private Clouds mClouds;
+
+    @SerializedName("wind")
+    private Wind mWind;
+
+    @SerializedName("rain")
+    private Rain mRain;
+
+    @SerializedName("snow")
+    private Snow mSnow;
+
+    @SerializedName("dt_txt")
+    private String mDtTxt;
+
+    @SerializedName("weather")
+    private List<Weather> mWeather;
 
     public long getDt() {
-        return dt;
+        return mDt;
     }
 
     public void setDt(long dt) {
-        this.dt = dt;
+        this.mDt = dt;
     }
 
     public Main getMain() {
-        return main;
+        return mMain;
     }
 
     public void setMain(Main main) {
-        this.main = main;
+        this.mMain = main;
     }
-
-    /*
-    public Weather getWeather() {
-        return weather;
-    }
-    */
-
-    /*
-    public void setWeather(Weather weather) {
-        this.weather = weather;
-    }
-    */
 
     public Clouds getClouds() {
-        return clouds;
+        return mClouds;
     }
 
     public void setClouds(Clouds clouds) {
-        this.clouds = clouds;
+        this.mClouds = clouds;
     }
 
     public Wind getWind() {
-        return wind;
+        return mWind;
     }
 
     public void setWind(Wind wind) {
-        this.wind = wind;
+        this.mWind = wind;
     }
 
     public Rain getRain() {
-        return rain;
+        return mRain;
     }
 
     public void setRain(Rain rain) {
-        this.rain = rain;
+        this.mRain = rain;
     }
 
     public Snow getSnow() {
-        return snow;
+        return mSnow;
     }
 
     public void setSnow(Snow snow) {
-        this.snow = snow;
+        this.mSnow = snow;
     }
 
     public String getDt_txt() {
-        return dt_txt;
+        return mDtTxt;
     }
 
     public void setDt_txt(String dt_txt) {
-        this.dt_txt = dt_txt;
+        this.mDtTxt = dt_txt;
     }
 
     public List<Weather> getWeather() {
-        return weather;
+        return mWeather;
     }
 
     public void setWeather(List<Weather> weather) {
-        this.weather = weather;
+        this.mWeather = weather;
     }
 }

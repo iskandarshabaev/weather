@@ -11,7 +11,7 @@ import java.util.List;
  * Created by ishabaev on 25.06.16.
  */
 public class DataSort {
-    public static void sortWeatherHour(List<OrmWeather> forecast){
+    public static void sortWeatherHour(List<OrmWeather> forecast) {
         Collections.sort(forecast, new Comparator<OrmWeather>() {
             @Override
             public int compare(OrmWeather o1, OrmWeather o2) {
@@ -20,7 +20,7 @@ public class DataSort {
         });
     }
 
-    public static void sortCityWithWeatherList(List<CityWithWeather> cityWithWeatherList){
+    public static void sortCityWithWeatherList(List<CityWithWeather> cityWithWeatherList) {
         Collections.sort(cityWithWeatherList, new Comparator<CityWithWeather>() {
             @Override
             public int compare(CityWithWeather o1, CityWithWeather o2) {

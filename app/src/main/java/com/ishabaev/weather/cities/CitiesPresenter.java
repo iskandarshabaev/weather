@@ -11,10 +11,8 @@ import rx.Observable;
 import rx.Observer;
 import rx.Scheduler;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.functions.Func2;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -43,16 +41,16 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     }
 
-    private Observable<CityWithWeather> getCityWithWeather(final OrmCity city){
+    private Observable<CityWithWeather> getCityWithWeather(final OrmCity city) {
         return mRepository.getForecast(city.get_id().intValue(), mView.isNetworkAvailable())
                 .flatMap(new Func1<List<OrmWeather>, Observable<CityWithWeather>>() {
                     @Override
                     public Observable<CityWithWeather> call(List<OrmWeather> ormWeathers) {
                         CityWithWeather cityWithWeather = new CityWithWeather();
                         cityWithWeather.setCity(city);
-                        if(ormWeathers.size() > 0) {
+                        if (ormWeathers.size() > 0) {
                             cityWithWeather.setWeather(ormWeathers.get(0));//TODO must be fixed
-                        }else {
+                        } else {
                             OrmWeather emptyWeather = new OrmWeather();
                             cityWithWeather.setWeather(emptyWeather);
                         }

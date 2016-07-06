@@ -42,18 +42,13 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-// set an enter transition
-        //getWindow().setEnterTransition(new ChangeImageTransform());
-// set an exit transition
-        //getWindow().setExitTransition(new ChangeImageTransform());
-
         setContentView(R.layout.activity_city_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            toolbar.setTitle(getTitle());
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {

@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface CitiesContract {
 
-    interface View extends BaseView<Presenter>{
+    interface View extends BaseView<Presenter> {
 
         void addCitiesToList(List<CityWithWeather> cities);
 
@@ -27,7 +27,8 @@ public interface CitiesContract {
         boolean isActive();
     }
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter {
+
         void loadCities();
 
         void saveCities(List<OrmCity> cities);

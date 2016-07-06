@@ -12,14 +12,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     public static final String APPID = "6bbd25b118c08120fa006fbab6f7e97b";
+    public static final String UNITS = "metric";
     private static Retrofit sRetrofit;
 
-    private ApiClient(){
-
+    private ApiClient() {
     }
 
-    public static Retrofit retrofit(){
-        if(sRetrofit == null) {
+    public static Retrofit retrofit() {
+        if (sRetrofit == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -32,10 +32,4 @@ public class ApiClient {
         }
         return sRetrofit;
     }
-    /*
-    public Call<WeatherResponse> getWeather(String cityName){
-        Call<WeatherResponse> call = service.getWeather(APPID, cityName,"metric");
-        return call;
-    }
-    */
 }

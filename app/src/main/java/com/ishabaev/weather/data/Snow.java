@@ -8,13 +8,13 @@ import com.google.gson.annotations.SerializedName;
 public class Snow {
 
     @SerializedName("3h")
-    private double val;
+    private double mVal;
 
     public double getVal() {
-        return val;
+        return mVal;
     }
 
     public void setVal(double val) {
-        this.val = val;
+        this.mVal = val;
     }
 }

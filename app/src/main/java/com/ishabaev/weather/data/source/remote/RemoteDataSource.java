@@ -34,7 +34,7 @@ public class RemoteDataSource implements DataSource {
 
     @Override
     public Observable<List<OrmWeather>> getForecast(int cityId, boolean isNetworkAvailable) {
-        return mService.getForecast2(ApiClient.APPID, cityId, "metric")
+        return mService.getForecast2(ApiClient.APPID, cityId, ApiClient.UNITS)
                 .flatMap(new Func1<Forecast, Observable<List<OrmWeather>>>() {
                     @Override
                     public Observable<List<OrmWeather>> call(Forecast sub) {

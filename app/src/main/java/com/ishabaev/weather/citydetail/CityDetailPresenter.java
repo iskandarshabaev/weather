@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import rx.Observer;
 import rx.Subscription;
@@ -84,11 +85,10 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
             setDate(current.getDt());
             mView.setImage(current.getIcon() + ".jpg");
             addDaysToViewPager(forecast);
-        }else {
+        } else {
 
         }
     }
-
 
     private void setTemperature(Double temp) {
         String temperature = temp > 0 ?
@@ -123,7 +123,7 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
     }
 
     private void setDate(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM, HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM, HH:mm", Locale.US);
         String value = format.format(date);
         mView.setDate(value);
     }

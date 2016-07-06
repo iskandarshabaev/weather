@@ -10,22 +10,24 @@ import java.util.List;
 public class Forecast {
 
     @SerializedName("city")
-    private City city;
-    private List<WeatherHour> list;
+    private City mCity;
+
+    @SerializedName("list")
+    private List<WeatherHour> mList;
 
     public City getCity() {
-        return city;
+        return mCity;
     }
 
     public void setCity(City city) {
-        this.city = city;
+        this.mCity = city;
     }
 
     public List<WeatherHour> getList() {
-        return list;
+        return mList;
     }
 
     public void setList(List<WeatherHour> list) {
-        this.list = list;
+        this.mList = list;
     }
 }

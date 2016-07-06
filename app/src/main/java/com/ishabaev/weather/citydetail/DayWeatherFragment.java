@@ -26,19 +26,18 @@ public class DayWeatherFragment extends Fragment implements DayWeatherContract.V
 
     public final static String CITY_ID = "city_id";
     public final static String DATE = "date";
-    private View mView;
     private HoursRecyclerViewAdapter mAdapter;
     private DayWeatherContract.UserActionsListener mPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.tabs, container, false);
-        RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.hour_list);
+        View view = inflater.inflate(R.layout.tabs, container, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.hour_list);
         setupRecyclerView(recyclerView);
         mPresenter = new DayWeatherPresenter(this, Injection.provideTasksRepository(getContext()));
         mPresenter.loadDayForecast(getArguments().getInt(CITY_ID),
                 new Date(getArguments().getLong(DATE)));
-        return mView;
+        return view;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {

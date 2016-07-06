@@ -1,44 +1,53 @@
 package com.ishabaev.weather.data;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by ishabaev on 21.06.16.
  */
 public class City {
 
-    private Long id;
-    private String name;
-    private String country;
-    private Coord coord;
+    @SerializedName("id")
+    private Long mId;
+
+    @SerializedName("name")
+    private String mName;
+
+    @SerializedName("country")
+    private String mCountry;
+
+    @SerializedName("coord")
+    private Coord mCoord;
 
     public Coord getCoord() {
-        return coord;
+        return mCoord;
     }
 
     public void setCoord(Coord coord) {
-        this.coord = coord;
+        this.mCoord = coord;
     }
 
     public String getCountry() {
-        return country;
+        return mCountry;
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.mCountry = country;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.mName = name;
     }
 
     public Long getId() {
-        return id;
+        return mId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.mId = id;
     }
 }

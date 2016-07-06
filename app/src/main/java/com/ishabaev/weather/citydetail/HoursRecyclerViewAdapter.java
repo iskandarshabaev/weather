@@ -16,15 +16,15 @@ import com.ishabaev.weather.dao.OrmWeather;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ishabaev on 20.06.16.
  */
 public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecyclerViewAdapter.ViewHolder> {
 
-
     private final List<OrmWeather> mHours;
-    private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm");
+    private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm", Locale.US);
 
     public HoursRecyclerViewAdapter(List<OrmWeather> hours) {
         mHours = hours;
@@ -83,8 +83,8 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
         holder.weatherState.setImageDrawable(img);
     }
 
-    private int getIcon(String iconName){
-        switch (iconName){
+    private int getIcon(String iconName) {
+        switch (iconName) {
             case "01d":
                 return R.drawable.d01;
             case "01n":

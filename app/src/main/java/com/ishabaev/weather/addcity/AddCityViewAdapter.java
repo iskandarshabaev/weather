@@ -16,7 +16,8 @@ import java.util.List;
  */
 public class AddCityViewAdapter extends RecyclerView.Adapter<AddCityViewAdapter.ViewHolder> {
 
-    public interface AddCityRecyclerViewItemListener{
+    public interface AddCityRecyclerViewItemListener {
+
         void onItemClick(OrmCity city);
     }
 
@@ -54,12 +55,12 @@ public class AddCityViewAdapter extends RecyclerView.Adapter<AddCityViewAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mListener != null){
-                    mListener.onItemClick(mCities.get(position));
+                if (mListener != null) {
+                    mListener.onItemClick(mCities.get(holder.getAdapterPosition()));
                 }
             }
         });

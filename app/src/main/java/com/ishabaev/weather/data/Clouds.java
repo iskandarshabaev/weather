@@ -1,16 +1,20 @@
 package com.ishabaev.weather.data;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by ishabaev on 20.06.16.
  */
 public class Clouds {
-    private double all;
+
+    @SerializedName("all")
+    private double mAll;
 
     public double getAll() {
-        return all;
+        return mAll;
     }
 
     public void setAll(double all) {
-        this.all = all;
+        this.mAll = all;
     }
 }

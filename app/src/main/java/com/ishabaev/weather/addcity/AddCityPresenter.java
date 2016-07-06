@@ -21,13 +21,13 @@ public class AddCityPresenter implements AddCityContract.Presenter {
 
     private AddCityContract.View mView;
     private Repository mRepository;
-    private Timer timer=new Timer();
-    private final long DELAY = 500;
-    private boolean isTaskRunning;
+    private Timer mTimer = new Timer();
+    private static final long DELAY = 500;
+    private boolean mIsTaskRunning;
     private Handler mHandler;
     private final static String FILE_NAME = "city_list.txt";
 
-    public AddCityPresenter(AddCityContract.View view, Repository repository){
+    public AddCityPresenter(AddCityContract.View view, Repository repository) {
         mView = view;
         mRepository = repository;
         mHandler = new Handler();
@@ -40,14 +40,14 @@ public class AddCityPresenter implements AddCityContract.Presenter {
 
     @Override
     public void textChanged(final Editable s) {
-        timer.cancel();
-        isTaskRunning = false;
-        timer = new Timer();
-        timer.schedule(
+        mTimer.cancel();
+        mIsTaskRunning = false;
+        mTimer = new Timer();
+        mTimer.schedule(
                 new TimerTask() {
                     @Override
                     public void run() {
-                        isTaskRunning = true;
+                        mIsTaskRunning = true;
                         mHandler.post(new Runnable() {
                             public void run() {
                                 mView.setProgressBarVisibility(View.VISIBLE);
@@ -60,7 +60,7 @@ public class AddCityPresenter implements AddCityContract.Presenter {
                             int lineNum = 0;
                             int count = 0;
                             while (scanner.hasNextLine()) {
-                                if (!isTaskRunning) {
+                                if (!mIsTaskRunning) {
                                     return;
                                 }
                                 String line = scanner.nextLine();
@@ -90,14 +90,14 @@ public class AddCityPresenter implements AddCityContract.Presenter {
                                         mView.setProgressBarValue(d);
                                     }
                                 });
-                                if(count > 10){
+                                if (count > 10) {
                                     break;
                                 }
                             }
                             mHandler.post(new Runnable() {
                                 public void run() {
                                     mView.setProgressBarVisibility(View.GONE);
-                                    if(mView.getCitiesSize() == 0){
+                                    if (mView.getCitiesSize() == 0) {
                                         mView.setImageViewVisibility(View.VISIBLE);
                                         mView.setSearchStateVisibility(View.VISIBLE);
                                         String searchStateText = mView
@@ -107,7 +107,7 @@ public class AddCityPresenter implements AddCityContract.Presenter {
                                     }
                                 }
                             });
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

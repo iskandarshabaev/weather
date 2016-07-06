@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.ishabaev.weather.data.CityWithWeather;
 import com.ishabaev.weather.util.DataSort;
 import com.ishabaev.weather.util.ImageUtils;
 
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -30,11 +28,12 @@ import java.util.List;
 public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecyclerViewAdapter.ViewHolder> {
 
     public interface CitiesRecyclerViewItemListener {
+
         void onItemClick(CityWithWeather city);
     }
 
     private Context mContext;
-    private final List<CityWithWeather> mCities;
+    private List<CityWithWeather> mCities;
     private CitiesRecyclerViewItemListener mListener;
     private ImageUtils mImageUtils;
     private int mCurrentPosition = -1;
@@ -56,11 +55,11 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         }
     }
 
-    public int getCurrentPosition(){
+    public int getCurrentPosition() {
         return mCurrentPosition;
     }
 
-    public void setCurrentPosition(int value){
+    public void setCurrentPosition(int value) {
         mCurrentPosition = value;
         notifyDataSetChanged();
     }
@@ -108,7 +107,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.city = mCities.get(position);
         holder.contentView.setText(holder.city.getCity().getCity_name());
         if (holder.city.getWeather() != null) {
@@ -121,7 +120,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
 
             if (holder.windView != null) {
                 String wind = holder.city.getWeather().getWind_speed() == null ?
-                        res.getString(R.string.windless):
+                        res.getString(R.string.windless) :
                         res.getString(R.string.wind) + ": " +
                                 holder.city.getWeather().getWind_speed().toString() + " " +
                                 res.getString(R.string.km_h);
@@ -137,21 +136,17 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
 
             float scaleRatio = holder.view.getResources().getDisplayMetrics().density;
             float dimenPix = holder.view.getResources().getDimension(R.dimen.city_image_size);
-            int size = (int)(dimenPix/scaleRatio);
+            int size = (int) (dimenPix / scaleRatio);
             holder.imageView.setImageDrawable(null);
             if (holder.city.getWeather().getIcon() != null) {
-                /*
-                BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(holder.imageView, size, size);
-                bitmapWorkerTask.execute(holder.city.getWeather().getIcon());
-                */
-                loadBitmap(holder.city.getWeather().getIcon(),holder.imageView, size);
+                loadBitmap(holder.city.getWeather().getIcon(), holder.imageView, size);
             }
         }
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 notifyItemChanged(mCurrentPosition);
-                mCurrentPosition = position;
+                mCurrentPosition = holder.getAdapterPosition();
                 notifyItemChanged(mCurrentPosition);
                 if (mListener != null) {
                     mListener.onItemClick(holder.city);
@@ -172,7 +167,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         return null;
     }
 
-    public void loadBitmap(String imageName, ImageView imageView, int  size) {
+    public void loadBitmap(String imageName, ImageView imageView, int size) {
         if (cancelPotentialWork(imageName, imageView)) {
             final BitmapWorkerTask task = new BitmapWorkerTask(imageView, size, size);
             final AsyncDrawable asyncDrawable =
@@ -187,16 +182,12 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
 
         if (bitmapWorkerTask != null) {
             final String bitmapData = bitmapWorkerTask.imageName;
-            // If bitmapData is not yet set or it differs from the new data
             if (bitmapData == null || !bitmapData.equals(data)) {
-                // Cancel previous task
                 bitmapWorkerTask.cancel(true);
             } else {
-                // The same work is already in progress
                 return false;
             }
         }
-        // No task associated with the ImageView, or an existing task was cancelled
         return true;
     }
 
@@ -207,14 +198,13 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
                              BitmapWorkerTask bitmapWorkerTask) {
             super(res, bitmap);
             bitmapWorkerTaskReference =
-                    new WeakReference<BitmapWorkerTask>(bitmapWorkerTask);
+                    new WeakReference<>(bitmapWorkerTask);
         }
 
         public BitmapWorkerTask getBitmapWorkerTask() {
             return bitmapWorkerTaskReference.get();
         }
     }
-
 
     class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
@@ -226,12 +216,12 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         BitmapWorkerTask(ImageView imageView, int width, int height) {
             mWidth = width;
             mHeight = height;
-            imageViewReference = new WeakReference<ImageView>(imageView);
+            imageViewReference = new WeakReference<>(imageView);
         }
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            return mImageUtils.decodeSampledBitmapFromAssets(params[0] + ".jpg", mWidth/2, mHeight/2);
+            return mImageUtils.decodeSampledBitmapFromAssets(params[0] + ".jpg", mWidth / 2, mHeight / 2);
         }
 
         @Override
@@ -251,7 +241,6 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         }
     }
 
-
     @Override
     public int getItemCount() {
         return mCities.size();
@@ -265,8 +254,6 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         public TextView hummidity;
         public ImageView imageView;
         public CityWithWeather city;
-        public Drawable image;
-
 
         public ViewHolder(View view) {
             super(view);

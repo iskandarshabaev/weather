@@ -1,25 +1,31 @@
 package com.ishabaev.weather.data;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by ishabaev on 20.06.16.
  */
 public class Wind {
-    private double speed;
-    private double deg;
+
+    @SerializedName("speed")
+    private double mSpeed;
+
+    @SerializedName("deg")
+    private double mDeg;
 
     public double getSpeed() {
-        return speed;
+        return mSpeed;
     }
 
     public void setSpeed(double speed) {
-        this.speed = speed;
+        this.mSpeed = speed;
     }
 
     public double getDeg() {
-        return deg;
+        return mDeg;
     }
 
     public void setDeg(double deg) {
-        this.deg = deg;
+        this.mDeg = deg;
     }
 }

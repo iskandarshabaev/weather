@@ -10,36 +10,35 @@ import java.util.List;
 public class WeatherResponse {
 
     @SerializedName("coord")
-    private Coord coord;
+    private Coord mCoord;
 
     @SerializedName("weather")
-    private List<Weather> weather;
+    private List<Weather> mWeather;
 
     @SerializedName("main")
-    private Main main;
+    private Main mMain;
 
     public void setCoord(Coord coord) {
-        this.coord = coord;
+        this.mCoord = coord;
     }
 
     public void setWeather(List<Weather> weather) {
-        this.weather = weather;
+        this.mWeather = weather;
     }
 
     public void setMain(Main main) {
-        this.main = main;
+        this.mMain = main;
     }
 
-
     public Coord getCoord() {
-        return coord;
+        return mCoord;
     }
 
     public List<Weather> getWeather() {
-        return weather;
+        return mWeather;
     }
 
     public Main getMain() {
-        return main;
+        return mMain;
     }
 }

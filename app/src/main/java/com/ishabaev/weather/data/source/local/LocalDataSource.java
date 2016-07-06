@@ -41,7 +41,7 @@ public class LocalDataSource implements DataSource {
 
     @Override
     public Observable<List<OrmWeather>> getForecast(final int cityId, boolean isNetworkAvailable) {
-        Observable<List<OrmWeather>> observable = Observable.create(
+        return Observable.create(
                 new Observable.OnSubscribe<List<OrmWeather>>() {
                     @Override
                     public void call(Subscriber<? super List<OrmWeather>> sub) {
@@ -55,12 +55,11 @@ public class LocalDataSource implements DataSource {
                     }
                 }
         );
-        return observable;
     }
 
     @Override
     public Observable<List<OrmWeather>> getForecast(final int cityId, final Date date, boolean isNetworkAvailable) {
-        Observable<List<OrmWeather>> observable = Observable.create(
+        return Observable.create(
                 new Observable.OnSubscribe<List<OrmWeather>>() {
                     @Override
                     public void call(Subscriber<? super List<OrmWeather>> sub) {
@@ -76,12 +75,11 @@ public class LocalDataSource implements DataSource {
                     }
                 }
         );
-        return observable;
     }
 
     @Override
     public Observable<List<OrmCity>> getCityList() {
-        Observable<List<OrmCity>> observable = Observable.create(
+        return Observable.create(
                 new Observable.OnSubscribe<List<OrmCity>>() {
                     @Override
                     public void call(Subscriber<? super List<OrmCity>> sub) {
@@ -89,8 +87,8 @@ public class LocalDataSource implements DataSource {
                         List<OrmCity> cities = cityDao.loadAll();
                         if (cities.size() > 0) {
                             sub.onNext(cities);
-                        }else {
-                            cities.add(new OrmCity((long) 536203, "St Petersburg", "RU", 59.916668, 30.25));
+                        } else {
+                            cities.add(new OrmCity((long) 498817, "Saint Petersburg", "RU", 59.894444, 30.264168));
                             cities.add(new OrmCity((long) 524901, "Moscow", "RU", 55.75222, 37.615555));
                             cities.add(new OrmCity((long) 551487, "Kazan", "RU", 55.788738, 49.122139));
                             cities.add(new OrmCity((long) 2759794, "Amsterdam", "NL", 52.374031, 4.88969));
@@ -103,7 +101,6 @@ public class LocalDataSource implements DataSource {
                     }
                 }
         );
-        return observable;
     }
 
     public Date getStartOfDayInMillis(Date date) {

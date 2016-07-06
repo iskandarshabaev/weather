@@ -11,11 +11,10 @@ public class CityWithWeather {
     private OrmCity mCity;
     private OrmWeather mWeather;
 
-    public CityWithWeather(){
-
+    public CityWithWeather() {
     }
 
-    public CityWithWeather(OrmCity city, OrmWeather weather){
+    public CityWithWeather(OrmCity city, OrmWeather weather) {
         mCity = city;
         mWeather = weather;
     }

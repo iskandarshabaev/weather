@@ -13,30 +13,22 @@ public class ImageUtils {
 
     private Context mContext;
 
-    public ImageUtils(Context context){
+    public ImageUtils(Context context) {
         mContext = context;
     }
 
-    public int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
+    public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
-
         if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
+            int halfHeight = height / 2;
+            int halfWidth = width / 2;
+            while ((halfHeight / inSampleSize) > reqHeight &&
+                    (halfWidth / inSampleSize) > reqWidth) {
                 inSampleSize *= 2;
             }
         }
-
         return inSampleSize;
     }
 
@@ -46,17 +38,14 @@ public class ImageUtils {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(ims, null, options);
-            int scale = calculateInSampleSize(options,reqWidth, reqHeight);
+            int scale = calculateInSampleSize(options, reqWidth, reqHeight);
             options = new BitmapFactory.Options();
             options.inSampleSize = scale;
-            //options.inPreferredConfig = Bitmap.Config.RGB_565;
             ims = mContext.getAssets().open(assetName);
-            Bitmap icon = BitmapFactory.decodeStream(ims, null, options);
-            return icon;
+            return BitmapFactory.decodeStream(ims, null, options);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }

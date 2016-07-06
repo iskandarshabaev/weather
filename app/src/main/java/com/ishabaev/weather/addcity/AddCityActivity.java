@@ -3,7 +3,6 @@ package com.ishabaev.weather.addcity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -31,9 +30,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
 
     private AddCityViewAdapter mAdapter;
     private TextView mTextView;
-    private Handler mHandler;
     private ProgressBar mProgressBar;
-    private RecyclerView mRecyclerView;
     private TextView mSearchState;
     private ImageView mImageView;
     private AddCityContract.Presenter mPresenter;
@@ -46,17 +43,22 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
         mPresenter = new AddCityPresenter(this, Injection.provideTasksRepository(this));
-        mRecyclerView = (RecyclerView) findViewById(R.id.city_search_list);
-        setupRecyclerView(mRecyclerView);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_search_list);
+        if(recyclerView != null) {
+            setupRecyclerView(recyclerView);
+        }
         mSearchState = (TextView) findViewById(R.id.textView);
         mImageView = (ImageView) findViewById(R.id.imageView);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mProgressBar.setMax(LINE_SIZE);
-        mProgressBar.setVisibility(View.GONE);
-        mHandler = new Handler();
+        if(mProgressBar != null) {
+            mProgressBar.setMax(LINE_SIZE);
+            mProgressBar.setVisibility(View.GONE);
+        }
         mTextView = (TextView) findViewById(R.id.editText);
         mTextView.addTextChangedListener(
                 new TextWatcher() {
