@@ -48,11 +48,9 @@ public class AddCityPresenter implements AddCityContract.Presenter {
                     @Override
                     public void run() {
                         mIsTaskRunning = true;
-                        mHandler.post(new Runnable() {
-                            public void run() {
-                                mView.setProgressBarVisibility(View.VISIBLE);
-                                mView.clearCities();
-                            }
+                        mHandler.post(() -> {
+                            mView.setProgressBarVisibility(View.VISIBLE);
+                            mView.clearCities();
                         });
                         try {
                             InputStream is = mRepository.open(FILE_NAME);
@@ -76,35 +74,27 @@ public class AddCityPresenter implements AddCityContract.Presenter {
                                     city.setLon(Double.parseDouble(cityParams[3]));
                                     city.setCountry(cityParams[4]);
                                     count++;
-                                    mHandler.post(new Runnable() {
-                                        public void run() {
-                                            mView.setImageViewVisibility(View.GONE);
-                                            mView.setSearchStateVisibility(View.GONE);
-                                            mView.addCityToList(city);
-                                        }
+                                    mHandler.post(() -> {
+                                        mView.setImageViewVisibility(View.GONE);
+                                        mView.setSearchStateVisibility(View.GONE);
+                                        mView.addCityToList(city);
                                     });
                                 }
                                 final int d = lineNum;
-                                mHandler.post(new Runnable() {
-                                    public void run() {
-                                        mView.setProgressBarValue(d);
-                                    }
-                                });
+                                mHandler.post(() -> mView.setProgressBarValue(d));
                                 if (count > 10) {
                                     break;
                                 }
                             }
-                            mHandler.post(new Runnable() {
-                                public void run() {
-                                    mView.setProgressBarVisibility(View.GONE);
-                                    if (mView.getCitiesSize() == 0) {
-                                        mView.setImageViewVisibility(View.VISIBLE);
-                                        mView.setSearchStateVisibility(View.VISIBLE);
-                                        String searchStateText = mView
-                                                .getResources()
-                                                .getString(R.string.could_not_find_a_city);
-                                        mView.setSearchStateText(searchStateText);
-                                    }
+                            mHandler.post(() -> {
+                                mView.setProgressBarVisibility(View.GONE);
+                                if (mView.getCitiesSize() == 0) {
+                                    mView.setImageViewVisibility(View.VISIBLE);
+                                    mView.setSearchStateVisibility(View.VISIBLE);
+                                    String searchStateText = mView
+                                            .getResources()
+                                            .getString(R.string.could_not_find_a_city);
+                                    mView.setSearchStateText(searchStateText);
                                 }
                             });
                         } catch (Exception e) {

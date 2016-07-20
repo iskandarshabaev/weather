@@ -47,31 +47,20 @@ public class Repository implements DataSource {
     public Observable<List<OrmWeather>> getForecast(final int cityId, Date date, boolean isNetworkAvailable) {
         if (isNetworkAvailable) {
             return mLocalDataSource.getForecast(cityId, date, true)
-                    .flatMap(new Func1<List<OrmWeather>, Observable<OrmWeather>>() {
-                        @Override
-                        public Observable<OrmWeather> call(List<OrmWeather> ormWeathers) {
-                            return Observable.from(ormWeathers);
-                        }
+                    .flatMap(ormWeathers -> Observable.from(ormWeathers))
+                    .toSortedList((ormWeather1, ormWeather2) -> {
+                        return ormWeather1.getDt().compareTo(ormWeather2.getDt());
                     })
-                    .toSortedList(new Func2<OrmWeather, OrmWeather, Integer>() {
-                        @Override
-                        public Integer call(OrmWeather ormWeather1, OrmWeather ormWeather2) {
-                            return ormWeather1.getDt().compareTo(ormWeather2.getDt());
+                    .flatMap(ormWeathers -> {
+                        if (ormWeathers.size() == 0) {
+                            return getForecastFromRemoteDataSource(cityId, true);
                         }
-                    })
-                    .flatMap(new Func1<List<OrmWeather>, Observable<List<OrmWeather>>>() {
-                        @Override
-                        public Observable<List<OrmWeather>> call(List<OrmWeather> ormWeathers) {
-                            if (ormWeathers.size() == 0) {
-                                return getForecastFromRemoteDataSource(cityId, true);
-                            }
-                            Calendar currenTime = Calendar.getInstance();
-                            currenTime.set(Calendar.HOUR_OF_DAY, currenTime.get(Calendar.HOUR_OF_DAY) - 6);
-                            if (ormWeathers.get(0).getDt().before(currenTime.getTime())) {
-                                return getForecastFromRemoteDataSource(cityId, true);
-                            } else {
-                                return Observable.just(ormWeathers);
-                            }
+                        Calendar currenTime = Calendar.getInstance();
+                        currenTime.set(Calendar.HOUR_OF_DAY, currenTime.get(Calendar.HOUR_OF_DAY) - 6);
+                        if (ormWeathers.get(0).getDt().before(currenTime.getTime())) {
+                            return getForecastFromRemoteDataSource(cityId, true);
+                        } else {
+                            return Observable.just(ormWeathers);
                         }
                     });
         } else {
@@ -83,31 +72,20 @@ public class Repository implements DataSource {
     public Observable<List<OrmWeather>> getForecast(final int cityId, boolean isNetworkAvailable) {
         if (isNetworkAvailable) {
             return mLocalDataSource.getForecast(cityId, true)
-                    .flatMap(new Func1<List<OrmWeather>, Observable<OrmWeather>>() {
-                        @Override
-                        public Observable<OrmWeather> call(List<OrmWeather> ormWeathers) {
-                            return Observable.from(ormWeathers);
-                        }
+                    .flatMap(ormWeathers -> Observable.from(ormWeathers))
+                    .toSortedList((ormWeather1, ormWeather2) -> {
+                        return ormWeather1.getDt().compareTo(ormWeather2.getDt());
                     })
-                    .toSortedList(new Func2<OrmWeather, OrmWeather, Integer>() {
-                        @Override
-                        public Integer call(OrmWeather ormWeather1, OrmWeather ormWeather2) {
-                            return ormWeather1.getDt().compareTo(ormWeather2.getDt());
+                    .flatMap(ormWeathers -> {
+                        if (ormWeathers.size() == 0) {
+                            return getForecastFromRemoteDataSource(cityId, true);
                         }
-                    })
-                    .flatMap(new Func1<List<OrmWeather>, Observable<List<OrmWeather>>>() {
-                        @Override
-                        public Observable<List<OrmWeather>> call(List<OrmWeather> ormWeathers) {
-                            if (ormWeathers.size() == 0) {
-                                return getForecastFromRemoteDataSource(cityId, true);
-                            }
-                            Calendar currenTime = Calendar.getInstance();
-                            currenTime.set(Calendar.HOUR_OF_DAY, currenTime.get(Calendar.HOUR_OF_DAY) - 6);
-                            if (ormWeathers.get(0).getDt().before(currenTime.getTime())) {
-                                return getForecastFromRemoteDataSource(cityId, true);
-                            } else {
-                                return Observable.just(ormWeathers);
-                            }
+                        Calendar currenTime = Calendar.getInstance();
+                        currenTime.set(Calendar.HOUR_OF_DAY, currenTime.get(Calendar.HOUR_OF_DAY) - 6);
+                        if (ormWeathers.get(0).getDt().before(currenTime.getTime())) {
+                            return getForecastFromRemoteDataSource(cityId, true);
+                        } else {
+                            return Observable.just(ormWeathers);
                         }
                     });
         } else {
@@ -118,12 +96,7 @@ public class Repository implements DataSource {
     private Observable<List<OrmWeather>> getForecastFromRemoteDataSource(final int cityId, boolean isNetworkAvailable) {
         return mRemoteDataSource
                 .getForecast(cityId, isNetworkAvailable)
-                .doOnNext(new Action1<List<OrmWeather>>() {
-                    @Override
-                    public void call(List<OrmWeather> ormWeathers) {
-                        mLocalDataSource.refreshForecast(cityId, ormWeathers);
-                    }
-                });
+                .doOnNext(ormWeathers -> mLocalDataSource.refreshForecast(cityId, ormWeathers));
     }
 
     @Override

@@ -1,12 +1,9 @@
 package com.ishabaev.weather.citydetail;
 
-import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.data.source.Repository;
 
 import java.util.Date;
-import java.util.List;
 
-import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -34,21 +31,10 @@ public class DayWeatherPresenter implements DayWeatherContract.UserActionsListen
                 .getForecast(cityId, date, mView.isNetworkAvailable())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<OrmWeather>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(List<OrmWeather> ormWeathers) {
-                        mView.addWeathersToList(ormWeathers);
-                    }
-                });
+                .subscribe(
+                        ormWeathers -> mView.addWeathersToList(ormWeathers),
+                        e -> e.printStackTrace()
+                );
         mSubscriptions.add(subscription);
     }
 }

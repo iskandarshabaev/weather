@@ -87,15 +87,12 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         recyclerView.setItemAnimator(itemAnimator);
         mAdapter = new AddCityViewAdapter(new ArrayList<OrmCity>());
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setListener(new AddCityViewAdapter.AddCityRecyclerViewItemListener() {
-            @Override
-            public void onItemClick(OrmCity city) {
-                mPresenter.onItemClick(city);
-                Intent intent = new Intent(AddCityActivity.this, CitiesActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            }
+        mAdapter.setListener(city -> {
+            mPresenter.onItemClick(city);
+            Intent intent = new Intent(AddCityActivity.this, CitiesActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         });
     }
 

@@ -54,12 +54,9 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(CitiesActivity.this, AddCityActivity.class);
-                    startActivity(intent);
-                }
+            fab.setOnClickListener(view -> {
+                Intent intent = new Intent(CitiesActivity.this, AddCityActivity.class);
+                startActivity(intent);
             });
         }
 
@@ -72,12 +69,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         setupRecyclerView(recyclerView);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPresenter.loadCities();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mPresenter.loadCities());
 
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -91,12 +83,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
 
     @Override
     public void setRefreshing(final boolean refreshing) {
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(refreshing);
-            }
-        });
+        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
     }
 
     @Override
@@ -116,7 +103,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
-        mAdapter = new CitiesRecyclerViewAdapter(this, new ArrayList<CityWithWeather>());
+        mAdapter = new CitiesRecyclerViewAdapter(this, new ArrayList<>());
         mAdapter.setListener(mListener);
         recyclerView.setAdapter(mAdapter);
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -150,7 +137,9 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener mListener = new CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener() {
+    private CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener mListener =
+            new CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener() {
+
         @Override
         public void onItemClick(CityWithWeather city) {
             if (mTwoPane) {

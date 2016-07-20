@@ -1,6 +1,5 @@
 package com.ishabaev.weather.cities;
 
-import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.data.CityWithWeather;
@@ -9,11 +8,8 @@ import com.ishabaev.weather.data.source.Repository;
 import java.util.List;
 
 import rx.Observable;
-import rx.Observer;
 import rx.Scheduler;
 import rx.Subscription;
-import rx.functions.Func1;
-import rx.functions.Func2;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -44,19 +40,16 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     private Observable<CityWithWeather> getCityWithWeather(final OrmCity city) {
         return mRepository.getForecast(city.get_id().intValue(), mView.isNetworkAvailable())
-                .flatMap(new Func1<List<OrmWeather>, Observable<CityWithWeather>>() {
-                    @Override
-                    public Observable<CityWithWeather> call(List<OrmWeather> ormWeathers) {
-                        CityWithWeather cityWithWeather = new CityWithWeather();
-                        cityWithWeather.setCity(city);
-                        if (ormWeathers.size() > 0) {
-                            cityWithWeather.setWeather(ormWeathers.get(0));//TODO must be fixed
-                        } else {
-                            OrmWeather emptyWeather = new OrmWeather();
-                            cityWithWeather.setWeather(emptyWeather);
-                        }
-                        return Observable.just(cityWithWeather);
+                .flatMap(ormWeathers -> {
+                    CityWithWeather cityWithWeather = new CityWithWeather();
+                    cityWithWeather.setCity(city);
+                    if (ormWeathers.size() > 0) {
+                        cityWithWeather.setWeather(ormWeathers.get(0));//TODO must be fixed
+                    } else {
+                        OrmWeather emptyWeather = new OrmWeather();
+                        cityWithWeather.setWeather(emptyWeather);
                     }
+                    return Observable.just(cityWithWeather);
                 });
     }
 
@@ -71,53 +64,20 @@ public class CitiesPresenter implements CitiesContract.Presenter {
         mSubscriptions.clear();
         Subscription subscription = mRepository
                 .getCityList()
-                .flatMap(new Func1<List<OrmCity>, Observable<OrmCity>>() {
-                    @Override
-                    public Observable<OrmCity> call(List<OrmCity> city) {
-                        return Observable.from(city);
-                    }
+                .flatMap(city -> Observable.from(city))
+                .toSortedList((city1, city2) -> {
+                    return city1.getCity_name().compareTo(city2.getCity_name());
                 })
-                .toSortedList(new Func2<OrmCity, OrmCity, Integer>() {
-                    @Override
-                    public Integer call(OrmCity city1, OrmCity city2) {
-                        return city1.getCity_name().compareTo(city2.getCity_name());
-                    }
-                })
-                .flatMap(new Func1<List<OrmCity>, Observable<OrmCity>>() {
-                    @Override
-                    public Observable<OrmCity> call(List<OrmCity> tasks) {
-                        return Observable.from(tasks);
-                    }
-                })
-                .flatMap(new Func1<OrmCity, Observable<CityWithWeather>>() {
-                    @Override
-                    public Observable<CityWithWeather> call(OrmCity city) {
-                        return getCityWithWeather(city);
-                    }
-                })
+                .flatMap(tasks -> Observable.from(tasks))
+                .flatMap(city -> getCityWithWeather(city))
                 .toList()
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mMainScheduler)
-                .subscribe(new Observer<List<CityWithWeather>>() {
-                    @Override
-                    public void onCompleted() {
-                        mView.setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.setRefreshing(false);
-                        String text = mView.getResources().getString(R.string.error) + ": ";
-                        text += e.getMessage();
-                        mView.showSnackBar(text);
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(List<CityWithWeather> cities) {
-                        mView.setCities(cities);
-                    }
-                });
+                .subscribe(
+                        cities -> mView.setCities(cities),
+                        e -> e.printStackTrace(),
+                        () -> mView.setRefreshing(false)
+                );
         mSubscriptions.add(subscription);
     }
 

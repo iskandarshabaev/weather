@@ -56,12 +56,9 @@ public class AddCityViewAdapter extends RecyclerView.Adapter<AddCityViewAdapter.
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.onItemClick(mCities.get(holder.getAdapterPosition()));
-                }
+        holder.view.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onItemClick(mCities.get(holder.getAdapterPosition()));
             }
         });
         holder.cityName.setText(mCities.get(position).getCity_name());

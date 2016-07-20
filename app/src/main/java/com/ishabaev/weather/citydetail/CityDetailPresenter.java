@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -55,26 +53,11 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
                 .getForecast(cityId, mView.isNetworkAvailable())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<OrmWeather>>() {
-                    @Override
-                    public void onCompleted() {
-                        mView.showProgressBar(false);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.showProgressBar(false);
-                        String text = mView.getResources().getString(R.string.error) + ": ";
-                        text += e.getMessage();
-                        mView.showSnackBar(text);
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(List<OrmWeather> ormWeathers) {
-                        makeView(ormWeathers);
-                    }
-                });
+                .subscribe(
+                        ormWeathers -> makeView(ormWeathers),
+                        e -> e.printStackTrace(),
+                        () -> mView.showProgressBar(false)
+                );
         mSubscriptions.add(subscription);
     }
 

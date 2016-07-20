@@ -35,31 +35,28 @@ public class RemoteDataSource implements DataSource {
     @Override
     public Observable<List<OrmWeather>> getForecast(int cityId, boolean isNetworkAvailable) {
         return mService.getForecast2(ApiClient.APPID, cityId, ApiClient.UNITS)
-                .flatMap(new Func1<Forecast, Observable<List<OrmWeather>>>() {
-                    @Override
-                    public Observable<List<OrmWeather>> call(Forecast sub) {
-                        List<OrmWeather> forecast = new ArrayList<>(sub.getList().size());
-                        for (WeatherHour hour : sub.getList()) {
-                            OrmWeather weather = new OrmWeather();
-                            weather.setCity_id(sub.getCity().getId());
-                            weather.setCity_name(sub.getCity().getName());
-                            weather.setDt(new Date(hour.getDt() * 1000));
-                            weather.setClouds(hour.getClouds().getAll());
-                            weather.setHumidity(hour.getMain().getHumidity());
-                            weather.setPressure(hour.getMain().getPressure());
-                            weather.setTemp(hour.getMain().getTemp());
-                            weather.setTemp_min(hour.getMain().getTempMin());
-                            weather.setTemp_max(hour.getMain().getTempMax());
-                            weather.setIcon(hour.getWeather().get(0).getIcon());
-                            if (hour.getWind() != null) {
-                                weather.setWind_speed(hour.getWind().getSpeed());
-                            }
-                            weather.setRain(hour.getRain() == null ? 0.0 : hour.getRain().getVal());
-                            weather.setSnow(hour.getSnow() == null ? 0.0 : hour.getSnow().getVal());
-                            forecast.add(weather);
+                .flatMap(sub -> {
+                    List<OrmWeather> forecast = new ArrayList<>(sub.getList().size());
+                    for (WeatherHour hour : sub.getList()) {
+                        OrmWeather weather = new OrmWeather();
+                        weather.setCity_id(sub.getCity().getId());
+                        weather.setCity_name(sub.getCity().getName());
+                        weather.setDt(new Date(hour.getDt() * 1000));
+                        weather.setClouds(hour.getClouds().getAll());
+                        weather.setHumidity(hour.getMain().getHumidity());
+                        weather.setPressure(hour.getMain().getPressure());
+                        weather.setTemp(hour.getMain().getTemp());
+                        weather.setTemp_min(hour.getMain().getTempMin());
+                        weather.setTemp_max(hour.getMain().getTempMax());
+                        weather.setIcon(hour.getWeather().get(0).getIcon());
+                        if (hour.getWind() != null) {
+                            weather.setWind_speed(hour.getWind().getSpeed());
                         }
-                        return Observable.just(forecast);
+                        weather.setRain(hour.getRain() == null ? 0.0 : hour.getRain().getVal());
+                        weather.setSnow(hour.getSnow() == null ? 0.0 : hour.getSnow().getVal());
+                        forecast.add(weather);
                     }
+                    return Observable.just(forecast);
                 });
     }
 
