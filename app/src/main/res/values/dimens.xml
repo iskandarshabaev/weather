@@ -2,6 +2,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">400dp</dimen>
+    <dimen name="shadow_height">3dp</dimen>
 
     <dimen name="city_image_size">400dp</dimen>
 

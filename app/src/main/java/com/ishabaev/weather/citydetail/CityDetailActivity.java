@@ -39,6 +39,8 @@ public class CityDetailActivity extends AppCompatActivity {
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(cityName);
+            }else if(getSupportActionBar() != null){
+                getSupportActionBar().setTitle(cityName);
             }
         }
     }
