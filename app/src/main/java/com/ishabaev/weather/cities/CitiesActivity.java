@@ -2,6 +2,7 @@ package com.ishabaev.weather.cities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -62,13 +63,13 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
             });
         }
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_list);
-        assert recyclerView != null;
-        setupRecyclerView(recyclerView);
-
         if (findViewById(R.id.city_detail_container) != null) {
             mTwoPane = true;
         }
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_list);
+        assert recyclerView != null;
+        setupRecyclerView(recyclerView);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -104,8 +105,14 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        int spanCount;
+        int orientation = getResources().getConfiguration().orientation;
+        if (!mTwoPane && Configuration.ORIENTATION_LANDSCAPE == orientation) {
+            spanCount = 2;
+        } else {
+            spanCount = 1;
+        }
+        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
@@ -229,7 +236,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     @Override
     public void showSnackBar(String text) {
         View view = findViewById(R.id.fab);
-        if(view != null) {
+        if (view != null) {
             Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
         }
     }
