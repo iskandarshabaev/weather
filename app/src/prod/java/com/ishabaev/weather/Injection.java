@@ -15,7 +15,7 @@ import com.ishabaev.weather.data.source.remote.RemoteDataSource;
 public class Injection {
     public static Repository provideTasksRepository(@NonNull Context context) {
         OpenWeatherService openWeatherService = ApiClient.retrofit().create(OpenWeatherService.class);
-        return Repository.getInstance(context.getAssets(), LocalDataSource.getInstance(context),
+        return Repository.getInstance(LocalDataSource.getInstance(context),
                 RemoteDataSource.getInstance(openWeatherService));
     }
 }

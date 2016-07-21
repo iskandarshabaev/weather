@@ -1,12 +1,8 @@
 package com.ishabaev.weather.data.source;
 
-import android.content.res.AssetManager;
-
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -21,21 +17,17 @@ public class Repository implements DataSource {
     private static Repository INSTANCE;
     private DataSource mLocalDataSource;
     private DataSource mRemoteDataSource;
-    private AssetManager mAssetManager;
 
-    private Repository(AssetManager assetManager,
-                       DataSource localDataSource,
+    private Repository(DataSource localDataSource,
                        DataSource remoteDataSource) {
         mLocalDataSource = localDataSource;
         mRemoteDataSource = remoteDataSource;
-        mAssetManager = assetManager;
     }
 
-    public static Repository getInstance(AssetManager assetManager,
-                                         DataSource localDataSource,
+    public static Repository getInstance(DataSource localDataSource,
                                          DataSource remoteDataSource) {
         if (INSTANCE == null) {
-            INSTANCE = new Repository(assetManager, localDataSource, remoteDataSource);
+            INSTANCE = new Repository(localDataSource, remoteDataSource);
         }
         return INSTANCE;
     }
@@ -95,6 +87,7 @@ public class Repository implements DataSource {
                                                                          boolean isNetworkAvailable) {
         return mRemoteDataSource
                 .getForecast(cityId, isNetworkAvailable)
+                .onErrorResumeNext(mLocalDataSource.getForecast(cityId, false))
                 .doOnNext(ormWeathers -> mLocalDataSource.refreshForecast(cityId, ormWeathers));
     }
 
@@ -141,9 +134,5 @@ public class Repository implements DataSource {
     @Override
     public void saveForecast(List<OrmWeather> forecast) {
         mLocalDataSource.saveForecast(forecast);
-    }
-
-    public InputStream open(String fileName) throws IOException {
-        return mAssetManager.open(fileName);
     }
 }

@@ -1,18 +1,15 @@
 package com.ishabaev.weather.addcity;
 
-import android.os.Handler;
-import android.text.Editable;
-import android.view.View;
+import android.text.TextUtils;
 
-import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmCity;
+import com.ishabaev.weather.data.source.FileManager;
 import com.ishabaev.weather.data.source.Repository;
-import com.ishabaev.weather.util.Translate;
 
-import java.io.InputStream;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by ishabaev on 28.06.16.
@@ -21,16 +18,24 @@ public class AddCityPresenter implements AddCityContract.Presenter {
 
     private AddCityContract.View mView;
     private Repository mRepository;
-    private Timer mTimer = new Timer();
-    private static final long DELAY = 500;
-    private boolean mIsTaskRunning;
-    private Handler mHandler;
-    private final static String FILE_NAME = "city_list.txt";
+    private FileManager mFileManager;
+    private CompositeSubscription mSubscriptions;
 
-    public AddCityPresenter(AddCityContract.View view, Repository repository) {
+    public AddCityPresenter(AddCityContract.View view, Repository repository, FileManager fileManager) {
         mView = view;
         mRepository = repository;
-        mHandler = new Handler();
+        mFileManager = fileManager;
+        mSubscriptions = new CompositeSubscription();
+    }
+
+    @Override
+    public void subscribe() {
+
+    }
+
+    @Override
+    public void unsubscribe() {
+        mSubscriptions.clear();
     }
 
     @Override
@@ -39,70 +44,35 @@ public class AddCityPresenter implements AddCityContract.Presenter {
     }
 
     @Override
-    public void textChanged(final Editable s) {
-        mTimer.cancel();
-        mIsTaskRunning = false;
-        mTimer = new Timer();
-        mTimer.schedule(
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        mIsTaskRunning = true;
-                        mHandler.post(() -> {
-                            mView.setProgressBarVisibility(View.VISIBLE);
-                            mView.clearCities();
-                        });
-                        try {
-                            InputStream is = mRepository.open(FILE_NAME);
-                            Scanner scanner = new Scanner(is);
-                            int lineNum = 0;
-                            int count = 0;
-                            while (scanner.hasNextLine()) {
-                                if (!mIsTaskRunning) {
-                                    return;
-                                }
-                                String line = scanner.nextLine();
-                                lineNum++;
-                                if (line.toLowerCase().contains(s.toString().toLowerCase()) ||
-                                        line.toLowerCase().contains(Translate.ru2en(s.toString().toLowerCase()))) {
-                                    String[] cityParams = line.split("\t");
-
-                                    final OrmCity city = new OrmCity();
-                                    city.set_id(Long.parseLong(cityParams[0]));
-                                    city.setCity_name(cityParams[1]);
-                                    city.setLat(Double.parseDouble(cityParams[2]));
-                                    city.setLon(Double.parseDouble(cityParams[3]));
-                                    city.setCountry(cityParams[4]);
-                                    count++;
-                                    mHandler.post(() -> {
-                                        mView.setImageViewVisibility(View.GONE);
-                                        mView.setSearchStateVisibility(View.GONE);
-                                        mView.addCityToList(city);
-                                    });
-                                }
-                                final int d = lineNum;
-                                mHandler.post(() -> mView.setProgressBarValue(d));
-                                if (count > 10) {
-                                    break;
-                                }
-                            }
-                            mHandler.post(() -> {
-                                mView.setProgressBarVisibility(View.GONE);
-                                if (mView.getCitiesSize() == 0) {
-                                    mView.setImageViewVisibility(View.VISIBLE);
-                                    mView.setSearchStateVisibility(View.VISIBLE);
-                                    String searchStateText = mView
-                                            .getResources()
-                                            .getString(R.string.could_not_find_a_city);
-                                    mView.setSearchStateText(searchStateText);
-                                }
-                            });
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                DELAY
-        );
+    public void textChanged(String text) {
+        if (TextUtils.isEmpty(text)) {
+            mView.clearCities();
+            mView.setImageViewVisible(true);
+            mView.setSearchStateVisibile(true);
+            mView.showStartTyping();
+            return;
+        }
+        mSubscriptions.clear();
+        mView.clearCities();
+        mView.setProgressBarVisibile(true);
+        Subscription subscription = mFileManager.searchCity(text)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        city -> {
+                            mView.setImageViewVisible(false);
+                            mView.setSearchStateVisibile(false);
+                            mView.addCityToList(city);
+                        },
+                        throwable -> {
+                            mView.showCouldNotFindCity();
+                            mView.setSearchStateVisibile(true);
+                            mView.setImageViewVisible(true);
+                            mView.setProgressBarVisibile(false);
+                            throwable.printStackTrace();
+                        },
+                        () -> mView.setProgressBarVisibile(false)
+                );
+        mSubscriptions.add(subscription);
     }
 }

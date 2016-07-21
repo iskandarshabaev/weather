@@ -10,8 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -20,8 +18,10 @@ import android.widget.TextView;
 
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
+import com.ishabaev.weather.RxEditText;
 import com.ishabaev.weather.cities.CitiesActivity;
 import com.ishabaev.weather.dao.OrmCity;
+import com.ishabaev.weather.data.source.FileManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +29,11 @@ import java.util.List;
 public class AddCityActivity extends AppCompatActivity implements AddCityContract.View {
 
     private AddCityViewAdapter mAdapter;
-    private TextView mTextView;
+    private RxEditText mTextView;
     private ProgressBar mProgressBar;
     private TextView mSearchState;
     private ImageView mImageView;
     private AddCityContract.Presenter mPresenter;
-    private final static int LINE_SIZE = 74062;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,41 +42,24 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-        mPresenter = new AddCityPresenter(this, Injection.provideTasksRepository(this));
+        mPresenter = new AddCityPresenter(this, Injection.provideTasksRepository(this), FileManager.getInsatnce(getAssets()));
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_search_list);
-        if(recyclerView != null) {
-            setupRecyclerView(recyclerView);
-        }
+        assert recyclerView != null;
+        setupRecyclerView(recyclerView);
         mSearchState = (TextView) findViewById(R.id.textView);
         mImageView = (ImageView) findViewById(R.id.imageView);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        if(mProgressBar != null) {
-            mProgressBar.setMax(LINE_SIZE);
-            mProgressBar.setVisibility(View.GONE);
-        }
-        mTextView = (TextView) findViewById(R.id.editText);
-        mTextView.addTextChangedListener(
-                new TextWatcher() {
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        mPresenter.textChanged(s);
-                    }
-                }
-        );
+        assert mProgressBar != null;
+        mProgressBar.setVisibility(View.GONE);
+        mTextView = (RxEditText) findViewById(R.id.editText);
+        assert mTextView != null;
+        mTextView.setOnRxTextChangeListener(
+                text -> mPresenter.textChanged(text),
+                500);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -85,7 +67,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
-        mAdapter = new AddCityViewAdapter(new ArrayList<OrmCity>());
+        mAdapter = new AddCityViewAdapter(new ArrayList<>());
         recyclerView.setAdapter(mAdapter);
         mAdapter.setListener(city -> {
             mPresenter.onItemClick(city);
@@ -94,6 +76,18 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
             startActivity(intent);
             finish();
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
     }
 
     private void hideKeyboard() {
@@ -129,27 +123,39 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
     }
 
     @Override
-    public void setImageViewVisibility(int visibility) {
-        mImageView.setVisibility(visibility);
+    public void setProgressBarVisibile(boolean visible) {
+        if (visible) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public void setProgressBarVisibility(int visibility) {
-        mProgressBar.setVisibility(visibility);
+    public void setImageViewVisible(boolean visible) {
+        if (visible) {
+            mImageView.setVisibility(View.VISIBLE);
+        } else {
+            mImageView.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public void setSearchStateVisibility(int visibility) {
-        mSearchState.setVisibility(visibility);
+    public void setSearchStateVisibile(boolean visible) {
+        if (visible) {
+            mSearchState.setVisibility(View.VISIBLE);
+        } else {
+            mSearchState.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public void setSearchStateText(String text) {
-        mSearchState.setText(text);
+    public void showCouldNotFindCity() {
+        mSearchState.setText(getResources().getString(R.string.could_not_find_a_city));
     }
 
     @Override
-    public void setProgressBarValue(int value) {
-        mProgressBar.setProgress(value);
+    public void showStartTyping() {
+        mSearchState.setText(getResources().getString(R.string.start_typing));
     }
 }

@@ -1,8 +1,9 @@
 package com.ishabaev.weather.addcity;
 
 import android.content.res.Resources;
-import android.text.Editable;
 
+import com.ishabaev.weather.BasePresenter;
+import com.ishabaev.weather.BaseView;
 import com.ishabaev.weather.dao.OrmCity;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface AddCityContract {
 
-    interface View{
+    interface View extends BaseView {
 
         int getCitiesSize();
 
@@ -22,22 +23,24 @@ public interface AddCityContract {
 
         void addCityToList(OrmCity city);
 
-        void setImageViewVisibility(int visibility);
+        void setImageViewVisible(boolean visible);
 
-        void setProgressBarValue(int value);
+        void setProgressBarVisibile(boolean visible);
 
-        void setProgressBarVisibility(int visibility);
+        void setSearchStateVisibile(boolean visible);
 
-        void setSearchStateVisibility(int visibility);
+        void showStartTyping();
 
-        void setSearchStateText(String text);
+        void showCouldNotFindCity();
 
         Resources getResources();
     }
 
-    interface Presenter {
+    interface Presenter extends BasePresenter {
 
-        void textChanged(Editable s);
+        //void textChanged(Editable s);
+
+        void textChanged(String s);
 
         void onItemClick(OrmCity city);
     }

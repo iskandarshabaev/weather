@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -19,12 +18,14 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <ProgressBar
+            android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:id="@+id/progressBar"
-            android:layout_height="4dp"
+            android:layout_height="6dp"
+            android:padding="-10dp"
+            android:layout_margin="-10dp"
             android:layout_below="@+id/toolbar"
-            android:indeterminate="false" />
+            android:indeterminate="true" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -33,13 +34,13 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
 
-        <EditText
+        <com.ishabaev.weather.RxEditText
+            android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
-            android:layout_margin="@dimen/primary_text_margin"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/primary_text_margin"
             android:singleLine="true" />
 
         <android.support.v7.widget.RecyclerView
@@ -51,23 +52,23 @@
         </android.support.v7.widget.RecyclerView>
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="418dp"
             android:layout_height="102dp"
-            android:id="@+id/imageView"
+            android:layout_centerInParent="true"
             android:contentDescription="@string/image_description"
-            android:src="@drawable/landscape"
-            android:layout_centerInParent="true" />
+            android:src="@drawable/landscape" />
 
         <TextView
-            android:textColor="@color/secondaryTextColor"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/subtext_size"
-            android:text="@string/start_typing"
-            android:id="@+id/textView"
-            android:layout_margin="@dimen/text_margin"
+            android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/imageView" />
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/start_typing"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="@dimen/subtext_size" />
 
     </RelativeLayout>
 
