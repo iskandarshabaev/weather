@@ -142,15 +142,12 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
                 loadBitmap(holder.city.getWeather().getIcon(), holder.imageView, size);
             }
         }
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notifyItemChanged(mCurrentPosition);
-                mCurrentPosition = holder.getAdapterPosition();
-                notifyItemChanged(mCurrentPosition);
-                if (mListener != null) {
-                    mListener.onItemClick(holder.city);
-                }
+        holder.view.setOnClickListener(v -> {
+            notifyItemChanged(mCurrentPosition);
+            mCurrentPosition = holder.getAdapterPosition();
+            notifyItemChanged(mCurrentPosition);
+            if (mListener != null) {
+                mListener.onItemClick(holder.city);
             }
         });
         holder.view.setSelected(mCurrentPosition == position);
@@ -234,7 +231,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
                 final ImageView imageView = imageViewReference.get();
                 final BitmapWorkerTask bitmapWorkerTask =
                         getBitmapWorkerTask(imageView);
-                if (this == bitmapWorkerTask && imageView != null) {
+                if (this == bitmapWorkerTask) {
                     imageView.setImageBitmap(bitmap);
                 }
             }

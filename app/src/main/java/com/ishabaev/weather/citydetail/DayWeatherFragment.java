@@ -41,7 +41,7 @@ public class DayWeatherFragment extends Fragment implements DayWeatherContract.V
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        mAdapter = new HoursRecyclerViewAdapter(new ArrayList<OrmWeather>());
+        mAdapter = new HoursRecyclerViewAdapter(new ArrayList<>());
         recyclerView.setAdapter(mAdapter);
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();

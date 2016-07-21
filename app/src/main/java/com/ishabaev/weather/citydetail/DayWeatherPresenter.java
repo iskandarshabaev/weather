@@ -33,7 +33,7 @@ public class DayWeatherPresenter implements DayWeatherContract.UserActionsListen
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         ormWeathers -> mView.addWeathersToList(ormWeathers),
-                        e -> e.printStackTrace()
+                        Throwable::printStackTrace
                 );
         mSubscriptions.add(subscription);
     }

@@ -57,7 +57,7 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         FragmentManager fragmentManager = getChildFragmentManager();
-        mViewPagerAdapter = new DaysViewPagerAdapter(fragmentManager, new ArrayList<Day>());
+        mViewPagerAdapter = new DaysViewPagerAdapter(fragmentManager, new ArrayList<>());
         viewPager.setAdapter(mViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 

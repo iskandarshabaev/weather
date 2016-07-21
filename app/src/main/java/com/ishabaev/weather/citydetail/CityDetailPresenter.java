@@ -53,8 +53,8 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        ormWeathers -> makeView(ormWeathers),
-                        e -> e.printStackTrace(),
+                        this::makeView,
+                        Throwable::printStackTrace,
                         () -> mView.showProgressBar(false)
                 );
         mSubscriptions.add(subscription);
@@ -121,7 +121,7 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
         Calendar c1 = Calendar.getInstance();
         c1.setTime(hours.get(0).getDt());
         Day day = new Day();
-        day.setHours(new ArrayList<OrmWeather>());
+        day.setHours(new ArrayList<>());
         days.add(day);
         for (OrmWeather hourWeayher : hours) {
             Calendar c2 = Calendar.getInstance();
@@ -131,7 +131,7 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
                 day.getHours().add(hourWeayher);
             } else {
                 day = new Day();
-                day.setHours(new ArrayList<OrmWeather>());
+                day.setHours(new ArrayList<>());
                 day.getHours().add(hourWeayher);
                 days.add(day);
             }

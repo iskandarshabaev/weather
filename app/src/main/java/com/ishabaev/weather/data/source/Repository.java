@@ -12,9 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.functions.Func2;
 
 /**
  * Created by ishabaev on 24.06.16.
@@ -44,10 +41,11 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public Observable<List<OrmWeather>> getForecast(final int cityId, Date date, boolean isNetworkAvailable) {
+    public Observable<List<OrmWeather>> getForecast(final int cityId, Date date,
+                                                    boolean isNetworkAvailable) {
         if (isNetworkAvailable) {
             return mLocalDataSource.getForecast(cityId, date, true)
-                    .flatMap(ormWeathers -> Observable.from(ormWeathers))
+                    .flatMap(Observable::from)
                     .toSortedList((ormWeather1, ormWeather2) -> {
                         return ormWeather1.getDt().compareTo(ormWeather2.getDt());
                     })
@@ -72,7 +70,7 @@ public class Repository implements DataSource {
     public Observable<List<OrmWeather>> getForecast(final int cityId, boolean isNetworkAvailable) {
         if (isNetworkAvailable) {
             return mLocalDataSource.getForecast(cityId, true)
-                    .flatMap(ormWeathers -> Observable.from(ormWeathers))
+                    .flatMap(Observable::from)
                     .toSortedList((ormWeather1, ormWeather2) -> {
                         return ormWeather1.getDt().compareTo(ormWeather2.getDt());
                     })
@@ -93,7 +91,8 @@ public class Repository implements DataSource {
         }
     }
 
-    private Observable<List<OrmWeather>> getForecastFromRemoteDataSource(final int cityId, boolean isNetworkAvailable) {
+    private Observable<List<OrmWeather>> getForecastFromRemoteDataSource(final int cityId,
+                                                                         boolean isNetworkAvailable) {
         return mRemoteDataSource
                 .getForecast(cityId, isNetworkAvailable)
                 .doOnNext(ormWeathers -> mLocalDataSource.refreshForecast(cityId, ormWeathers));

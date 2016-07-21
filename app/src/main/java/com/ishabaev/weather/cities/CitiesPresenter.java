@@ -63,18 +63,18 @@ public class CitiesPresenter implements CitiesContract.Presenter {
         mSubscriptions.clear();
         Subscription subscription = mRepository
                 .getCityList()
-                .flatMap(city -> Observable.from(city))
+                .flatMap(Observable::from)
                 .toSortedList((city1, city2) -> {
                     return city1.getCity_name().compareTo(city2.getCity_name());
                 })
-                .flatMap(tasks -> Observable.from(tasks))
-                .flatMap(city -> getCityWithWeather(city))
+                .flatMap(Observable::from)
+                .flatMap(this::getCityWithWeather)
                 .toList()
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mMainScheduler)
                 .subscribe(
                         cities -> mView.setCities(cities),
-                        e -> e.printStackTrace(),
+                        Throwable::printStackTrace,
                         () -> mView.setRefreshing(false)
                 );
         mSubscriptions.add(subscription);
