@@ -28,7 +28,6 @@ public class CitiesPresenter implements CitiesContract.Presenter {
         mView = view;
         mRepository = repository;
         mSubscriptions = new CompositeSubscription();
-        mView.setPresenter(this);
         mBackgroundScheduler = background;
         mMainScheduler = main;
     }

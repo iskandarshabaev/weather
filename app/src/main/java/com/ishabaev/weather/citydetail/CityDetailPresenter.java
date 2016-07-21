@@ -32,7 +32,6 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
         mView = cityDetailView;
         mRepository = repository;
         mSubscriptions = new CompositeSubscription();
-        mView.setPresenter(this);
     }
 
     @Override

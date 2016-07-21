@@ -102,11 +102,6 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     }
 
     @Override
-    public void setPresenter(CityDetailContract.Presenter presenter) {
-        mPresenter = presenter;
-    }
-
-    @Override
     public void showProgressBar(boolean show) {
         if (mProgressFrame == null) {
             return;

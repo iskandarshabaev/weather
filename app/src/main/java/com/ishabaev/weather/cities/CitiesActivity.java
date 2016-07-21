@@ -86,11 +86,6 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
     }
 
-    @Override
-    public void setPresenter(CitiesContract.Presenter presenter) {
-        mPresenter = presenter;
-    }
-
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         int spanCount;
         int orientation = getResources().getConfiguration().orientation;
