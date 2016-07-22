@@ -12,4 +12,6 @@
     <string name="pressure">Давление</string>
     <string name="error">Ошибка</string>
     <string name="failed_to_load_weather">Не удалось загрузить погоду</string>
+    <string name="city_caption">Город: </string>
+    <string name="country_caption">Страна: </string>
 </resources>

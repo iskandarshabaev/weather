@@ -12,4 +12,6 @@
     <string name="image_description" translatable="false">Image</string>
     <string name="error">Error</string>
     <string name="failed_to_load_weather">Failed to load weather</string>
+    <string name="city_caption">City: </string>
+    <string name="country_caption">Country: </string>
 </resources>
