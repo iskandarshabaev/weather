@@ -4,7 +4,7 @@ import android.content.res.Resources;
 
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.source.Repository;
+import com.ishabaev.weather.data.source.RepositoryDataSource;
 import com.ishabaev.weather.data.source.model.Day;
 import com.ishabaev.weather.util.DataSort;
 
@@ -14,9 +14,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import rx.Scheduler;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -25,13 +24,18 @@ import rx.subscriptions.CompositeSubscription;
 public class CityDetailPresenter implements CityDetailContract.Presenter {
 
     private CityDetailContract.View mView;
-    private Repository mRepository;
+    private RepositoryDataSource mRepository;
     private CompositeSubscription mSubscriptions;
+    private Scheduler mBackgroundScheduler;
+    private Scheduler mMainScheduler;
 
-    public CityDetailPresenter(CityDetailContract.View cityDetailView, Repository repository) {
+    public CityDetailPresenter(CityDetailContract.View cityDetailView, RepositoryDataSource repository,
+                               Scheduler background, Scheduler main) {
         mView = cityDetailView;
         mRepository = repository;
         mSubscriptions = new CompositeSubscription();
+        mBackgroundScheduler = background;
+        mMainScheduler = main;
     }
 
     @Override
@@ -50,8 +54,8 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
         mSubscriptions.clear();
         Subscription subscription = mRepository
                 .getForecast(cityId, mView.isNetworkAvailable())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mBackgroundScheduler)
+                .observeOn(mMainScheduler)
                 .subscribe(
                         this::makeView,
                         Throwable::printStackTrace,

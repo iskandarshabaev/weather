@@ -27,6 +27,9 @@ import com.ishabaev.weather.util.ImageUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public class CityDetailFragment extends Fragment implements CityDetailContract.View {
 
     public static final String ARG_ITEM_ID = "item_id";
@@ -54,7 +57,9 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new CityDetailPresenter(this, Injection.provideTasksRepository(getContext()));
+        mPresenter = new CityDetailPresenter(this, Injection.provideTasksRepository(getContext()),
+                Schedulers.io(), AndroidSchedulers.mainThread()
+        );
         mPresenter.subscribe();
         if (savedInstanceState != null) {
             long cityId = getArguments().getLong(ARG_ITEM_ID);
@@ -109,12 +114,12 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
         super.onResume();
         mViewPagerAdapter.clear();
         mTabLayout.setVisibility(View.VISIBLE);
-        if(!mWaitAnimations){
+        if (!mWaitAnimations) {
             loadContent();
         }
     }
 
-    public void waitAnimations(){
+    public void waitAnimations() {
         mWaitAnimations = true;
     }
 
@@ -229,5 +234,10 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
         if (view != null) {
             Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public boolean isActive() {
+        return true;
     }
 }

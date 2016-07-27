@@ -41,6 +41,8 @@ public interface CityDetailContract {
         void showNoForecast();
 
         void showSnackBar(String text);
+
+        boolean isActive();
     }
 
     interface Presenter extends BasePresenter {

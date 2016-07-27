@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by ishabaev on 18.06.16.
  */
@@ -47,7 +50,8 @@ public class DayWeatherFragment extends Fragment implements DayWeatherContract.V
         View view = inflater.inflate(R.layout.tabs, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.hour_list);
         setupRecyclerView(recyclerView);
-        mPresenter = new DayWeatherPresenter(this, Injection.provideTasksRepository(getContext()));
+        mPresenter = new DayWeatherPresenter(this, Injection.provideTasksRepository(getContext()),
+                Schedulers.io(), AndroidSchedulers.mainThread());
         mPresenter.loadDayForecast(getArguments().getInt(CITY_ID),
                 new Date(getArguments().getLong(DATE)));
         return view;

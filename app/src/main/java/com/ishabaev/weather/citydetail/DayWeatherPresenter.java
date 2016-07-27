@@ -1,12 +1,11 @@
 package com.ishabaev.weather.citydetail;
 
-import com.ishabaev.weather.data.source.Repository;
+import com.ishabaev.weather.data.source.RepositoryDataSource;
 
 import java.util.Date;
 
+import rx.Scheduler;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -14,14 +13,19 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class DayWeatherPresenter implements DayWeatherContract.Presenter {
 
-    private Repository mRepository;
+    private RepositoryDataSource mRepository;
     private DayWeatherContract.View mView;
     private CompositeSubscription mSubscriptions;
+    private Scheduler mBackgroundScheduler;
+    private Scheduler mMainScheduler;
 
-    public DayWeatherPresenter(DayWeatherContract.View view, Repository repository) {
+    public DayWeatherPresenter(DayWeatherContract.View view, RepositoryDataSource repository,
+                               Scheduler background, Scheduler main) {
         mRepository = repository;
         mView = view;
         mSubscriptions = new CompositeSubscription();
+        mBackgroundScheduler = background;
+        mMainScheduler = main;
     }
 
     @Override
@@ -29,8 +33,8 @@ public class DayWeatherPresenter implements DayWeatherContract.Presenter {
         mSubscriptions.clear();
         Subscription subscription = mRepository
                 .getForecast(cityId, date, mView.isNetworkAvailable())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mBackgroundScheduler)
+                .observeOn(mMainScheduler)
                 .subscribe(
                         ormWeathers -> mView.addWeathersToList(ormWeathers),
                         Throwable::printStackTrace
