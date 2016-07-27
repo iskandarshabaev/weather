@@ -1,11 +1,11 @@
-package com.ishabaev.weather.data;
+package com.ishabaev.weather.data.source.model;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by ishabaev on 21.06.16.
  */
-public class Snow {
+public class Rain {
 
     @SerializedName("3h")
     private double mVal;

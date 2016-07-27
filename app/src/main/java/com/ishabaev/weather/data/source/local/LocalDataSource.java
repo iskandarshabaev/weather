@@ -8,7 +8,6 @@ import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmCityDao;
 import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.dao.OrmWeatherDao;
-import com.ishabaev.weather.data.source.DataSource;
 import com.ishabaev.weather.util.DataSort;
 
 import java.util.Calendar;
@@ -20,9 +19,9 @@ import rx.Observable;
 /**
  * Created by ishabaev on 24.06.16.
  */
-public class LocalDataSource implements DataSource {
+public class LocalDataSource implements ILocalDataSource {
 
-    private static LocalDataSource INSTANCE;
+    private static ILocalDataSource INSTANCE;
     private DaoSession mDaoSession;
 
     private LocalDataSource(Context context) {
@@ -31,7 +30,7 @@ public class LocalDataSource implements DataSource {
         mDaoSession = daoMaster.newSession();
     }
 
-    public static LocalDataSource getInstance(Context context) {
+    public static ILocalDataSource getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new LocalDataSource(context);
         }
@@ -39,7 +38,7 @@ public class LocalDataSource implements DataSource {
     }
 
     @Override
-    public Observable<List<OrmWeather>> getForecast(final int cityId, boolean isNetworkAvailable) {
+    public Observable<List<OrmWeather>> getForecast(final int cityId) {
         return Observable.fromCallable(() -> loadForecastFromDb(cityId));
     }
 
@@ -52,8 +51,27 @@ public class LocalDataSource implements DataSource {
     }
 
     @Override
-    public Observable<List<OrmWeather>> getForecast(final int cityId, final Date date,
-                                                    boolean isNetworkAvailable) {
+    public Observable<OrmWeather> getSingleForecast(int cityId) {
+        return Observable.fromCallable(() -> loadSingleForecastFromDb(cityId));
+    }
+
+    private OrmWeather loadSingleForecastFromDb(int cityId) {
+        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+        List<OrmWeather> forecast = weatherDao.queryBuilder()
+                .where(OrmWeatherDao.Properties.City_id.eq(cityId))
+                .orderAsc(OrmWeatherDao.Properties.Dt)
+                .limit(1)
+                .build()
+                .list();
+        if (forecast.size() < 1) {
+            return null;
+        } else {
+            return forecast.get(0);
+        }
+    }
+
+    @Override
+    public Observable<List<OrmWeather>> getForecast(final int cityId, final Date date) {
         return Observable.fromCallable(() -> loadForecastFromDb(cityId, date));
     }
 

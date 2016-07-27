@@ -1,5 +1,6 @@
 package com.ishabaev.weather.citydetail;
 
+import com.ishabaev.weather.BasePresenter;
 import com.ishabaev.weather.dao.OrmWeather;
 
 import java.util.Date;
@@ -19,7 +20,7 @@ public interface DayWeatherContract {
         boolean isNetworkAvailable();
     }
 
-    interface UserActionsListener {
+    interface Presenter extends BasePresenter {
 
         void loadDayForecast(int cityId, Date date);
     }

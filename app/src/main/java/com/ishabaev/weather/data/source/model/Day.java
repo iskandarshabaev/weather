@@ -1,4 +1,4 @@
-package com.ishabaev.weather.data;
+package com.ishabaev.weather.data.source.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.ishabaev.weather.dao.OrmWeather;

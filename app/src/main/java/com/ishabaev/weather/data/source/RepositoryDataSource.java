@@ -11,11 +11,13 @@ import rx.Observable;
 /**
  * Created by ishabaev on 24.06.16.
  */
-public interface DataSource {
+public interface RepositoryDataSource {
 
     Observable<List<OrmWeather>> getForecast(int cityId, boolean isNetworkAvailable);
 
     Observable<List<OrmWeather>> getForecast(int cityId, Date date, boolean isNetworkAvailable);
+
+    Observable<OrmWeather> getSingleForecast(final int cityId, boolean isNetworkAvailable);
 
     void refreshAllForecast(List<OrmWeather> forecast);
 

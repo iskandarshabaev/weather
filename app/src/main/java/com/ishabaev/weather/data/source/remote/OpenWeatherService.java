@@ -1,7 +1,7 @@
 package com.ishabaev.weather.data.source.remote;
 
-import com.ishabaev.weather.data.Forecast;
-import com.ishabaev.weather.data.WeatherResponse;
+import com.ishabaev.weather.data.source.model.Forecast;
+import com.ishabaev.weather.data.source.model.WeatherResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

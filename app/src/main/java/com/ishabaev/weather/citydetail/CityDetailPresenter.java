@@ -4,8 +4,8 @@ import android.content.res.Resources;
 
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.Day;
 import com.ishabaev.weather.data.source.Repository;
+import com.ishabaev.weather.data.source.model.Day;
 import com.ishabaev.weather.util.DataSort;
 
 import java.text.SimpleDateFormat;
@@ -46,7 +46,7 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
 
     @Override
     public void openCity(int cityId) {
-        mView.showProgressBar(true);
+        //mView.showProgressBar(true);
         mSubscriptions.clear();
         Subscription subscription = mRepository
                 .getForecast(cityId, mView.isNetworkAvailable())
@@ -69,7 +69,7 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
             setWind(current.getWind_speed());
             setPressure(current.getPressure());
             setDate(current.getDt());
-            mView.setImage(current.getIcon() + ".jpg");
+            //mView.setImage(current.getIcon() + ".jpg");
             addDaysToViewPager(forecast);
         } else {
             String text = mView.getResources().getString(R.string.error) + ": ";

@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
-import com.ishabaev.weather.data.Day;
+import com.ishabaev.weather.data.source.model.Day;
 import com.ishabaev.weather.util.ImageUtils;
 
 import java.util.ArrayList;
@@ -35,11 +35,31 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     private DaysViewPagerAdapter mViewPagerAdapter;
     private ImageUtils mImageUtils;
     private FrameLayout mProgressFrame;
+    private TabLayout mTabLayout;
+    private boolean mWaitAnimations;
+
+    public CityDetailFragment() {
+
+    }
+
+    public static CityDetailFragment getInstance(long itemId, String itemName) {
+        Bundle args = new Bundle();
+        args.putLong(ARG_ITEM_ID, itemId);
+        args.putString(ARG_ITEM_NAME, itemName);
+        CityDetailFragment cityDetailFragment = new CityDetailFragment();
+        cityDetailFragment.setArguments(args);
+        return cityDetailFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new CityDetailPresenter(this, Injection.provideTasksRepository(getContext()));
+        mPresenter.subscribe();
+        if (savedInstanceState != null) {
+            long cityId = getArguments().getLong(ARG_ITEM_ID);
+            mPresenter.openCity((int) cityId);
+        }
     }
 
     @Override
@@ -54,15 +74,15 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
         FragmentManager fragmentManager = getChildFragmentManager();
         mViewPagerAdapter = new DaysViewPagerAdapter(fragmentManager, new ArrayList<>());
         viewPager.setAdapter(mViewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        mTabLayout.setupWithViewPager(viewPager);
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
@@ -70,12 +90,10 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
     }
@@ -89,15 +107,30 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.subscribe();
-        long cityId = getArguments().getLong(ARG_ITEM_ID);
         mViewPagerAdapter.clear();
+        mTabLayout.setVisibility(View.VISIBLE);
+        if(!mWaitAnimations){
+            loadContent();
+        }
+    }
+
+    public void waitAnimations(){
+        mWaitAnimations = true;
+    }
+
+    public void loadContent() {
+        long cityId = getArguments().getLong(ARG_ITEM_ID);
         mPresenter.openCity((int) cityId);
+        mWaitAnimations = false;
+    }
+
+    public void clearContent() {
+        mTabLayout.setVisibility(View.INVISIBLE);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         mPresenter.unsubscribe();
     }
 
@@ -193,7 +226,7 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void showSnackBar(String text) {
         View view = getActivity().findViewById(R.id.viewpager);
-        if(view != null) {
+        if (view != null) {
             Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
         }
     }

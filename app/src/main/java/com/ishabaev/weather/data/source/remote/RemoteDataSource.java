@@ -1,22 +1,18 @@
 package com.ishabaev.weather.data.source.remote;
 
-import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.Forecast;
-import com.ishabaev.weather.data.WeatherHour;
-import com.ishabaev.weather.data.source.DataSource;
+import com.ishabaev.weather.data.source.model.WeatherHour;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by ishabaev on 24.06.16.
  */
-public class RemoteDataSource implements DataSource {
+public class RemoteDataSource implements IRemoteDataSource {
 
     private static RemoteDataSource INSTANCE;
     private OpenWeatherService mService;
@@ -33,7 +29,7 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public Observable<List<OrmWeather>> getForecast(int cityId, boolean isNetworkAvailable) {
+    public Observable<List<OrmWeather>> getForecast(int cityId) {
         return mService.getForecast2(ApiClient.APPID, cityId, ApiClient.UNITS)
                 .flatMap(sub -> {
                     List<OrmWeather> forecast = new ArrayList<>(sub.getList().size());
@@ -61,52 +57,7 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public Observable<List<OrmWeather>> getForecast(int cityId, Date date, boolean isNetworkAvailable) {
+    public Observable<List<OrmWeather>> getForecast(int cityId, Date date) {
         return Observable.empty();
-    }
-
-    @Override
-    public Observable<List<OrmCity>> getCityList() {
-        return Observable.empty();
-    }
-
-    @Override
-    public void saveCities(List<OrmCity> cities) {
-        //no need;
-    }
-
-    @Override
-    public void saveCity(OrmCity city) {
-        //no need;
-    }
-
-    @Override
-    public void refreshAllForecast(List<OrmWeather> forecast) {
-        //no need;
-    }
-
-    @Override
-    public void refreshForecast(int cityId, List<OrmWeather> forecast) {
-        //no need;
-    }
-
-    @Override
-    public void deleteAllForecast() {
-        //no need;
-    }
-
-    @Override
-    public void deleteForecast(int cityId) {
-        //no need;
-    }
-
-    @Override
-    public void saveForecast(List<OrmWeather> forecast) {
-        //no need;
-    }
-
-    @Override
-    public void deleteCity(OrmCity city) {
-        //no need;
     }
 }

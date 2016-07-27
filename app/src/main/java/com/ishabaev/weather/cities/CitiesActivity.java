@@ -1,19 +1,23 @@
 package com.ishabaev.weather.cities;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -25,7 +29,7 @@ import com.ishabaev.weather.R;
 import com.ishabaev.weather.addcity.AddCityActivity;
 import com.ishabaev.weather.citydetail.CityDetailActivity;
 import com.ishabaev.weather.citydetail.CityDetailFragment;
-import com.ishabaev.weather.data.CityWithWeather;
+import com.ishabaev.weather.data.source.model.CityWithWeather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +82,6 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
 
         mPresenter = new CitiesPresenter(this, Injection.provideTasksRepository(getApplicationContext()),
                 Schedulers.io(), AndroidSchedulers.mainThread());
-        mPresenter.loadCities();
     }
 
     @Override
@@ -104,31 +107,31 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
-                                  RecyclerView.ViewHolder target) {
-                return false;
-            }
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
 
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                int location = viewHolder.getAdapterPosition();
-                mPresenter.removeWeaher(mAdapter.getCity(location).get_id().intValue());
-                mPresenter.removeCity(mAdapter.getCity(location));
-                mAdapter.removeCity(location);
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
-                if (mAdapter.getCurrentPosition() == location && mTwoPane && fragment != null) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .remove(fragment)
-                            .commit();
-                    mAdapter.setCurrentPosition(-1);
-                    showNoCitiesFrameIfNeed();
-                } else if (mAdapter.getCurrentPosition() > location) {
-                    mAdapter.setCurrentPosition(mAdapter.getCurrentPosition() - 1);
-                }
-            }
-        };
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        int location = viewHolder.getAdapterPosition();
+                        mPresenter.removeWeaher(mAdapter.getCity(location).get_id().intValue());
+                        mPresenter.removeCity(mAdapter.getCity(location));
+                        mAdapter.removeCity(location);
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+                        if (mAdapter.getCurrentPosition() == location && mTwoPane && fragment != null) {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .remove(fragment)
+                                    .commit();
+                            mAdapter.setCurrentPosition(-1);
+                            showNoCitiesFrameIfNeed();
+                        } else if (mAdapter.getCurrentPosition() > location) {
+                            mAdapter.setCurrentPosition(mAdapter.getCurrentPosition() - 1);
+                        }
+                    }
+                };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -137,28 +140,36 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     private CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener mListener =
             new CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener() {
 
-        @Override
-        public void onItemClick(CityWithWeather city) {
-            if (mTwoPane) {
-                Bundle arguments = new Bundle();
-                arguments.putLong(CityDetailFragment.ARG_ITEM_ID, city.getCity().get_id());
-                arguments.putString(CityDetailFragment.ARG_ITEM_NAME, city.getCity().getCity_name());
-                CityDetailFragment fragment = new CityDetailFragment();
-                fragment.setArguments(arguments);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.city_detail_container, fragment, FRAGMENT_TAG)
-                        .commit();
-                showNoCitiesFrameIfNeed();
-            } else {
-                Intent intent = new Intent(CitiesActivity.this, CityDetailActivity.class);
-                Bundle args = new Bundle();
-                args.putLong(CityDetailFragment.ARG_ITEM_ID, city.getCity().get_id());
-                args.putString(CityDetailFragment.ARG_ITEM_NAME, city.getCity().getCity_name());
-                intent.putExtras(args);
-                startActivity(intent);
-            }
-        }
-    };
+                @Override
+                public void onItemClick(CityWithWeather city, View view) {
+                    if (mTwoPane) {
+                        long cityId = city.getCity().get_id();
+                        String cityName = city.getCity().getCity_name();
+                        CityDetailFragment fragment = CityDetailFragment.getInstance(cityId, cityName);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.city_detail_container, fragment, FRAGMENT_TAG)
+                                .commit();
+                        showNoCitiesFrameIfNeed();
+                    } else {
+                        Intent intent = new Intent(CitiesActivity.this, CityDetailActivity.class);
+                        Bundle args = new Bundle();
+                        args.putLong(CityDetailFragment.ARG_ITEM_ID, city.getCity().get_id());
+                        args.putString(CityDetailFragment.ARG_ITEM_NAME, city.getCity().getCity_name());
+                        args.putString(CityDetailActivity.IMAGE_NAME, city.getWeather().getIcon());
+                        if (getResources().getConfiguration().orientation == OrientationHelper.VERTICAL &&
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            args.putString(CityDetailActivity.TRANSITION_NAME, view.getTransitionName());
+                            intent.putExtras(args);
+                            ActivityOptions transitionActivityOptions =
+                                    ActivityOptions.makeSceneTransitionAnimation(CitiesActivity.this, view, view.getTransitionName());
+                            ActivityCompat.startActivity(CitiesActivity.this, intent, transitionActivityOptions.toBundle());
+                        } else {
+                            intent.putExtras(args);
+                            startActivity(intent);
+                        }
+                    }
+                }
+            };
 
     @Override
     public boolean isNetworkAvailable() {
@@ -172,6 +183,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     protected void onResume() {
         super.onResume();
         mPresenter.subscribe();
+        mPresenter.loadCities();
     }
 
     @Override

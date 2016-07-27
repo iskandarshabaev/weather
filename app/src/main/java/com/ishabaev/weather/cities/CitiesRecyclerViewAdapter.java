@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmCity;
-import com.ishabaev.weather.data.CityWithWeather;
+import com.ishabaev.weather.data.source.model.CityWithWeather;
 import com.ishabaev.weather.util.DataSort;
 import com.ishabaev.weather.util.ImageUtils;
 
@@ -29,7 +30,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
 
     public interface CitiesRecyclerViewItemListener {
 
-        void onItemClick(CityWithWeather city);
+        void onItemClick(CityWithWeather city, View view);
     }
 
     private Context mContext;
@@ -50,8 +51,9 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
     public void addCity(CityWithWeather city) {
         if (!haveCityYet(city)) {
             mCities.add(mCities.size(), city);
-            DataSort.sortCityWithWeatherList(mCities);
-            notifyDataSetChanged();
+            //DataSort.sortCityWithWeatherList(mCities);
+            //notifyDataSetChanged();
+            notifyItemChanged(mCities.size());
         }
     }
 
@@ -110,6 +112,11 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.city = mCities.get(position);
         holder.contentView.setText(holder.city.getCity().getCity_name());
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            holder.view.setTransitionName(holder.contentView.getClass().getName() + position);
+        }
+
         if (holder.city.getWeather() != null) {
 
             Resources res = holder.view.getResources();
@@ -147,7 +154,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
             mCurrentPosition = holder.getAdapterPosition();
             notifyItemChanged(mCurrentPosition);
             if (mListener != null) {
-                mListener.onItemClick(holder.city);
+                mListener.onItemClick(holder.city,holder.view);
             }
         });
         holder.view.setSelected(mCurrentPosition == position);

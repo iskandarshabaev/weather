@@ -1,15 +1,13 @@
 package com.ishabaev.weather.citydetail;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.ishabaev.weather.data.Day;
+import com.ishabaev.weather.data.source.model.Day;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by ishabaev on 18.06.16.
@@ -41,14 +39,9 @@ public class DaysViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Bundle args = new Bundle();
-        args.putInt(DayWeatherFragment.CITY_ID,
-                mDays.get(position).getHours().get(0).getCity_id().intValue());
-        args.putLong(DayWeatherFragment.DATE,
-                mDays.get(position).getHours().get(0).getDt().getTime());
-        DayWeatherFragment tabFragment = new DayWeatherFragment();
-        tabFragment.setArguments(args);
-        return tabFragment;
+        int cityId = mDays.get(position).getHours().get(0).getCity_id().intValue();
+        long time = mDays.get(position).getHours().get(0).getDt().getTime();
+        return DayWeatherFragment.getInstance(cityId, time);
     }
 
     @Override

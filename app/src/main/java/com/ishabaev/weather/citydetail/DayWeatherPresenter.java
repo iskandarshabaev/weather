@@ -12,7 +12,7 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by ishabaev on 25.06.16.
  */
-public class DayWeatherPresenter implements DayWeatherContract.UserActionsListener {
+public class DayWeatherPresenter implements DayWeatherContract.Presenter {
 
     private Repository mRepository;
     private DayWeatherContract.View mView;
@@ -36,5 +36,15 @@ public class DayWeatherPresenter implements DayWeatherContract.UserActionsListen
                         Throwable::printStackTrace
                 );
         mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void subscribe() {
+
+    }
+
+    @Override
+    public void unsubscribe() {
+        mSubscriptions.clear();
     }
 }

@@ -27,7 +27,20 @@ public class DayWeatherFragment extends Fragment implements DayWeatherContract.V
     public final static String CITY_ID = "city_id";
     public final static String DATE = "date";
     private HoursRecyclerViewAdapter mAdapter;
-    private DayWeatherContract.UserActionsListener mPresenter;
+    private DayWeatherContract.Presenter mPresenter;
+
+    public DayWeatherFragment() {
+
+    }
+
+    public static DayWeatherFragment getInstance(int cityId, long time) {
+        Bundle args = new Bundle();
+        args.putInt(CITY_ID, cityId);
+        args.putLong(DATE, time);
+        DayWeatherFragment dayWeatherFragment = new DayWeatherFragment();
+        dayWeatherFragment.setArguments(args);
+        return dayWeatherFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,5 +76,17 @@ public class DayWeatherFragment extends Fragment implements DayWeatherContract.V
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
     }
 }

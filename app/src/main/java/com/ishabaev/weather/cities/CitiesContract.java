@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import com.ishabaev.weather.BasePresenter;
 import com.ishabaev.weather.BaseView;
 import com.ishabaev.weather.dao.OrmCity;
-import com.ishabaev.weather.data.CityWithWeather;
+import com.ishabaev.weather.data.source.model.CityWithWeather;
 
 import java.util.List;
 

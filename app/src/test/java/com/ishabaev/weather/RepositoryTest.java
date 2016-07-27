@@ -1,20 +1,11 @@
 package com.ishabaev.weather;
 
-import android.content.res.AssetManager;
-
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.source.DataSource;
 import com.ishabaev.weather.data.source.Repository;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -28,14 +19,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.observers.TestSubscriber;
-import rx.schedulers.Schedulers;
-
-import static org.mockito.Mockito.when;
 
 /**
  * Created by ishabaev on 03.07.16.
