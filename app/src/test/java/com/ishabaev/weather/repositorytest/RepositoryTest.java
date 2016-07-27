@@ -1,4 +1,4 @@
-package com.ishabaev.weather;
+package com.ishabaev.weather.repositorytest;
 
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;

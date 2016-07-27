@@ -1,17 +1,12 @@
 package com.ishabaev.weather.citydetail;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.transition.Transition;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.ishabaev.weather.R;
@@ -55,6 +50,7 @@ public class CityDetailActivity extends AppCompatActivity {
             }
         }
         boolean waitAnimations = false;
+        /*
         if (getResources().getConfiguration().orientation == OrientationHelper.VERTICAL &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             View view = findViewById(R.id.app_bar);
@@ -65,6 +61,7 @@ public class CityDetailActivity extends AppCompatActivity {
                 view.setTransitionName(transitionName);
             }
         }
+        */
 
         if (savedInstanceState == null) {
             long cityId = getIntent().getLongExtra(CityDetailFragment.ARG_ITEM_ID, 0);
@@ -78,28 +75,6 @@ public class CityDetailActivity extends AppCompatActivity {
         }
     }
 
-    /*private Bitmap blur(Bitmap bkg) {
-        long startMs = System.currentTimeMillis();
-        float scaleFactor = 8;
-        float radius = 2;
-
-        Bitmap overlay = Bitmap.createBitmap((int)(bkg.getWidth()/scaleFactor),
-                (int)(bkg.getHeight()/scaleFactor), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(overlay);
-        //canvas.translate(-view.getLeft()/scaleFactor, -view.getTop()/scaleFactor);
-        //canvas.translate(bkg.getWidth()/scaleFactor, bkg.getHeight()/scaleFactor);
-        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
-        Paint paint = new Paint();
-        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-        canvas.drawBitmap(bkg, 0, 0, paint);
-
-        overlay = FastBlur.doBlur(overlay, (int) radius, true);
-        System.out.println("Blur time: " + (System.currentTimeMillis() - startMs));
-        return overlay;
-        //view.setBackground(new BitmapDrawable(getResources(), overlay));
-    }*/
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -108,11 +83,13 @@ public class CityDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        /*
         if (getResources().getConfiguration().orientation == OrientationHelper.VERTICAL &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             supportFinishAfterTransition();
             initExitAnimation();
         }
+        */
     }
 
     @Override
@@ -121,6 +98,7 @@ public class CityDetailActivity extends AppCompatActivity {
         return false;
     }
 
+    /*
     @TargetApi(21)
     private void initEnterAnimation() {
         Transition sharedElementEnterTransition = getWindow().getSharedElementEnterTransition();
@@ -179,4 +157,5 @@ public class CityDetailActivity extends AppCompatActivity {
             }
         });
     }
+    */
 }

@@ -29,17 +29,11 @@ public interface CitiesContract {
         boolean isActive();
 
         void showSnackBar(String text);
-
-        Resources getResources();
     }
 
     interface Presenter extends BasePresenter {
 
         void loadCities();
-
-        void saveCities(List<OrmCity> cities);
-
-        void saveCity(OrmCity city);
 
         void removeCity(OrmCity city);
 

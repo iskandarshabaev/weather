@@ -2,10 +2,8 @@ package com.ishabaev.weather.cities;
 
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.source.Repository;
+import com.ishabaev.weather.data.source.RepositoryDataSource;
 import com.ishabaev.weather.data.source.model.CityWithWeather;
-
-import java.util.List;
 
 import rx.Observable;
 import rx.Scheduler;
@@ -18,12 +16,12 @@ import rx.subscriptions.CompositeSubscription;
 public class CitiesPresenter implements CitiesContract.Presenter {
 
     private CitiesContract.View mView;
-    private Repository mRepository;
+    private RepositoryDataSource mRepository;
     private CompositeSubscription mSubscriptions;
     private Scheduler mBackgroundScheduler;
     private Scheduler mMainScheduler;
 
-    public CitiesPresenter(CitiesContract.View view, Repository repository,
+    public CitiesPresenter(CitiesContract.View view, RepositoryDataSource repository,
                            Scheduler background, Scheduler main) {
         mView = view;
         mRepository = repository;
@@ -36,23 +34,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
         mSubscriptions = new CompositeSubscription();
     }
 
-    /*private Observable<CityWithWeather> getCityWithWeather(final OrmCity city) {
-        return mRepository.getForecast(city.get_id().intValue(), mView.isNetworkAvailable())
-                .flatMap(ormWeathers -> {
-                    CityWithWeather cityWithWeather = new CityWithWeather();
-                    cityWithWeather.setCity(city);
-                    if (ormWeathers.size() > 0) {
-                        cityWithWeather.setWeather(ormWeathers.get(0));
-                    } else {
-                        OrmWeather emptyWeather = new OrmWeather();
-                        cityWithWeather.setWeather(emptyWeather);
-                    }
-                    return Observable.just(cityWithWeather);
-                });
-    }*/
-
-
-    private Observable<CityWithWeather> getCityWithWeather(final OrmCity city) {
+    public Observable<CityWithWeather> getCityWithWeather(final OrmCity city) {
         return mRepository.getSingleForecast(city.get_id().intValue(), mView.isNetworkAvailable())
                 .flatMap(ormWeather -> {
                     CityWithWeather cityWithWeather = new CityWithWeather();
@@ -81,11 +63,11 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                 .flatMap(Observable::from)
                 .toSortedList((city1, city2) -> city1.getCity_name().compareTo(city2.getCity_name()))
                 .flatMap(Observable::from)
-                .flatMap(this::getCityWithWeather)
+                .flatMap(CitiesPresenter.this::getCityWithWeather)
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mMainScheduler)
                 .subscribe(
-                        cities -> mView.addCityToList(cities),
+                        city -> mView.addCityToList(city),
                         throwable -> {
                             mView.setRefreshing(false);
                             throwable.printStackTrace();
@@ -93,16 +75,6 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                         () -> mView.setRefreshing(false)
                 );
         mSubscriptions.add(subscription);
-    }
-
-    @Override
-    public void saveCities(List<OrmCity> cities) {
-        mRepository.saveCities(cities);
-    }
-
-    @Override
-    public void saveCity(OrmCity city) {
-        mRepository.saveCity(city);
     }
 
     @Override
