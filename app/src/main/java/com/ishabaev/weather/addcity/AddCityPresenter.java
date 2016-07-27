@@ -5,10 +5,10 @@ import android.text.TextUtils;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.data.source.FileManager;
 import com.ishabaev.weather.data.source.Repository;
+import com.ishabaev.weather.data.source.RepositoryDataSource;
 
+import rx.Scheduler;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -17,15 +17,20 @@ import rx.subscriptions.CompositeSubscription;
 public class AddCityPresenter implements AddCityContract.Presenter {
 
     private AddCityContract.View mView;
-    private Repository mRepository;
+    private RepositoryDataSource mRepository;
     private FileManager mFileManager;
     private CompositeSubscription mSubscriptions;
+    private Scheduler mBackgroundScheduler;
+    private Scheduler mMainScheduler;
 
-    public AddCityPresenter(AddCityContract.View view, Repository repository, FileManager fileManager) {
+    public AddCityPresenter(AddCityContract.View view, RepositoryDataSource repository, FileManager fileManager,
+                            Scheduler background, Scheduler main) {
         mView = view;
         mRepository = repository;
         mFileManager = fileManager;
         mSubscriptions = new CompositeSubscription();
+        mBackgroundScheduler = background;
+        mMainScheduler = main;
     }
 
     @Override
@@ -45,19 +50,12 @@ public class AddCityPresenter implements AddCityContract.Presenter {
 
     @Override
     public void textChanged(String text) {
-        if (TextUtils.isEmpty(text)) {
-            mView.clearCities();
-            mView.setImageViewVisible(true);
-            mView.setSearchStateVisibile(true);
-            mView.showStartTyping();
-            return;
-        }
         mSubscriptions.clear();
         mView.clearCities();
         mView.setProgressBarVisibile(true);
         Subscription subscription = mFileManager.searchCity(text)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mBackgroundScheduler)
+                .observeOn(mMainScheduler)
                 .subscribe(
                         city -> {
                             mView.setImageViewVisible(false);

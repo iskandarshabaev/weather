@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -25,6 +26,9 @@ import com.ishabaev.weather.data.source.FileManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class AddCityActivity extends AppCompatActivity implements AddCityContract.View {
 
@@ -46,7 +50,8 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-        mPresenter = new AddCityPresenter(this, Injection.provideTasksRepository(this), FileManager.getInsatnce(getAssets()));
+        mPresenter = new AddCityPresenter(this, Injection.provideTasksRepository(this),
+                FileManager.getInsatnce(getAssets()), Schedulers.io(), AndroidSchedulers.mainThread());
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_search_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
@@ -58,8 +63,20 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         mTextView = (RxEditText) findViewById(R.id.editText);
         assert mTextView != null;
         mTextView.setOnRxTextChangeListener(
-                text -> mPresenter.textChanged(text),
+                this::textChanget,
                 500);
+    }
+
+    private void textChanget(String text) {
+        if (TextUtils.isEmpty(text)) {
+            clearCities();
+            setImageViewVisible(true);
+            setSearchStateVisibile(true);
+            showStartTyping();
+            return;
+        } else {
+            mPresenter.textChanged(text);
+        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
