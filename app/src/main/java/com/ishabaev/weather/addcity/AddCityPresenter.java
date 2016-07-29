@@ -2,6 +2,7 @@ package com.ishabaev.weather.addcity;
 
 import android.text.TextUtils;
 
+import com.ishabaev.weather.EspressoIdlingResource;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.data.source.FileManager;
 import com.ishabaev.weather.data.source.Repository;
@@ -50,6 +51,7 @@ public class AddCityPresenter implements AddCityContract.Presenter {
 
     @Override
     public void textChanged(String text) {
+        EspressoIdlingResource.increment();
         mSubscriptions.clear();
         mView.clearCities();
         mView.setProgressBarVisibile(true);
@@ -69,7 +71,10 @@ public class AddCityPresenter implements AddCityContract.Presenter {
                             mView.setProgressBarVisibile(false);
                             throwable.printStackTrace();
                         },
-                        () -> mView.setProgressBarVisibile(false)
+                        () -> {
+                            EspressoIdlingResource.decrement();
+                            mView.setProgressBarVisibile(false);
+                        }
                 );
         mSubscriptions.add(subscription);
     }

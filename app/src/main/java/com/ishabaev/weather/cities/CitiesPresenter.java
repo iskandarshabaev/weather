@@ -1,5 +1,6 @@
 package com.ishabaev.weather.cities;
 
+import com.ishabaev.weather.EspressoIdlingResource;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.data.source.RepositoryDataSource;
@@ -56,6 +57,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
 
     @Override
     public void loadCities() {
+        EspressoIdlingResource.increment();
         mView.setRefreshing(true);
         mSubscriptions.clear();
         Subscription subscription = mRepository
@@ -67,12 +69,18 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mMainScheduler)
                 .subscribe(
-                        city -> mView.addCityToList(city),
+                        city -> {
+                            mView.addCityToList(city);
+                        },
                         throwable -> {
+                            EspressoIdlingResource.decrement();
                             mView.setRefreshing(false);
                             throwable.printStackTrace();
                         },
-                        () -> mView.setRefreshing(false)
+                        () -> {
+                            EspressoIdlingResource.decrement();
+                            mView.setRefreshing(false);
+                        }
                 );
         mSubscriptions.add(subscription);
     }
