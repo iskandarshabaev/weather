@@ -1,12 +1,17 @@
 package com.ishabaev.weather.citydetail;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.transition.Transition;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.ishabaev.weather.R;
@@ -50,10 +55,10 @@ public class CityDetailActivity extends AppCompatActivity {
             }
         }
         boolean waitAnimations = false;
-        /*
+
         if (getResources().getConfiguration().orientation == OrientationHelper.VERTICAL &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View view = findViewById(R.id.app_bar);
+            View view = findViewById(R.id.backdrop);
             String transitionName = getIntent().getStringExtra(TRANSITION_NAME);
             if (view != null && !TextUtils.isEmpty(transitionName)) {
                 waitAnimations = true;
@@ -61,7 +66,7 @@ public class CityDetailActivity extends AppCompatActivity {
                 view.setTransitionName(transitionName);
             }
         }
-        */
+
 
         if (savedInstanceState == null) {
             long cityId = getIntent().getLongExtra(CityDetailFragment.ARG_ITEM_ID, 0);
@@ -83,13 +88,13 @@ public class CityDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        /*
+
         if (getResources().getConfiguration().orientation == OrientationHelper.VERTICAL &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             supportFinishAfterTransition();
             initExitAnimation();
         }
-        */
+
     }
 
     @Override
@@ -98,7 +103,7 @@ public class CityDetailActivity extends AppCompatActivity {
         return false;
     }
 
-    /*
+
     @TargetApi(21)
     private void initEnterAnimation() {
         Transition sharedElementEnterTransition = getWindow().getSharedElementEnterTransition();
@@ -157,5 +162,4 @@ public class CityDetailActivity extends AppCompatActivity {
             }
         });
     }
-    */
 }

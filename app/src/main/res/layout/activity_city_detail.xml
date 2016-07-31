@@ -119,6 +119,7 @@
 
     <FrameLayout
         android:id="@+id/city_detail_container"
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -149,12 +150,14 @@
 
     <FrameLayout
         android:visibility="gone"
+        android:fitsSystemWindows="true"
         android:background="?android:colorBackground"
         android:id="@+id/progressFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ProgressBar
+            android:fitsSystemWindows="true"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

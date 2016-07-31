@@ -113,9 +113,9 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         holder.city = mCities.get(position);
         holder.contentView.setText(holder.city.getCity().getCity_name());
 
-        //if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-        //    holder.view.setTransitionName(holder.contentView.getClass().getName() + position);
-        //}
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            holder.imageView.setTransitionName(holder.contentView.getClass().getName() + position);
+        }
 
         if (holder.city.getWeather() != null) {
 
@@ -154,7 +154,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
             mCurrentPosition = holder.getAdapterPosition();
             notifyItemChanged(mCurrentPosition);
             if (mListener != null) {
-                mListener.onItemClick(holder.city,holder.view);
+                mListener.onItemClick(holder.city,holder.imageView);
             }
         });
         holder.view.setSelected(mCurrentPosition == position);
