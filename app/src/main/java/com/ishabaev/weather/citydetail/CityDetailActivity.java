@@ -11,7 +11,6 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.transition.Transition;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.ishabaev.weather.R;
@@ -58,12 +57,12 @@ public class CityDetailActivity extends AppCompatActivity {
 
         if (getResources().getConfiguration().orientation == OrientationHelper.VERTICAL &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View view = findViewById(R.id.backdrop);
+            //View view = findViewById(R.id.backdrop);
             String transitionName = getIntent().getStringExtra(TRANSITION_NAME);
-            if (view != null && !TextUtils.isEmpty(transitionName)) {
+            if (imageView != null && !TextUtils.isEmpty(transitionName)) {
                 waitAnimations = true;
                 initEnterAnimation();
-                view.setTransitionName(transitionName);
+                imageView.setTransitionName(transitionName);
             }
         }
 
@@ -78,11 +77,6 @@ public class CityDetailActivity extends AppCompatActivity {
                 fragment.waitAnimations();
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

@@ -20,7 +20,7 @@ public interface CityDetailContract {
 
         void setTemp(String temperature);
 
-        void setHummidity(String hummidity);
+        void setHumidity(String humidity);
 
         void setWindSpeed(String windSpeed);
 

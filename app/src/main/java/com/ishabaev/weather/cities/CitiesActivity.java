@@ -116,7 +116,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                         int location = viewHolder.getAdapterPosition();
-                        mPresenter.removeWeaher(mAdapter.getCity(location).get_id().intValue());
+                        mPresenter.removeWeather(mAdapter.getCity(location).get_id().intValue());
                         mPresenter.removeCity(mAdapter.getCity(location));
                         mAdapter.removeCity(location);
                         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);

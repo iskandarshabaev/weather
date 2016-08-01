@@ -47,9 +47,9 @@ public class Repository implements RepositoryDataSource {
                         if (ormWeathers.size() == 0) {
                             return getForecastFromRemoteDataSource(cityId);
                         }
-                        Calendar currenTime = Calendar.getInstance();
-                        currenTime.set(Calendar.HOUR_OF_DAY, currenTime.get(Calendar.HOUR_OF_DAY) - 6);
-                        if (ormWeathers.get(0).getDt().before(currenTime.getTime())) {
+                        Calendar currentTime = Calendar.getInstance();
+                        currentTime.set(Calendar.HOUR_OF_DAY, currentTime.get(Calendar.HOUR_OF_DAY) - 6);
+                        if (ormWeathers.get(0).getDt().before(currentTime.getTime())) {
                             return getForecastFromRemoteDataSource(cityId);
                         } else {
                             return Observable.just(ormWeathers);
@@ -72,9 +72,9 @@ public class Repository implements RepositoryDataSource {
                         if (ormWeathers.size() == 0) {
                             return getForecastFromRemoteDataSource(cityId);
                         }
-                        Calendar currenTime = Calendar.getInstance();
-                        currenTime.set(Calendar.HOUR_OF_DAY, currenTime.get(Calendar.HOUR_OF_DAY) - 6);
-                        if (ormWeathers.get(0).getDt().before(currenTime.getTime())) {
+                        Calendar currentTime = Calendar.getInstance();
+                        currentTime.set(Calendar.HOUR_OF_DAY, currentTime.get(Calendar.HOUR_OF_DAY) - 6);
+                        if (ormWeathers.get(0).getDt().before(currentTime.getTime())) {
                             return getForecastFromRemoteDataSource(cityId);
                         } else {
                             return Observable.just(ormWeathers);
@@ -89,12 +89,12 @@ public class Repository implements RepositoryDataSource {
         if (isNetworkAvailable) {
             return mLocalDataSource.getSingleForecast(cityId)
                     .flatMap(ormWeather -> {
-                        Calendar currenTime = Calendar.getInstance();
-                        currenTime.set(Calendar.HOUR_OF_DAY, currenTime.get(Calendar.HOUR_OF_DAY) - 6);
+                        Calendar currentTime = Calendar.getInstance();
+                        currentTime.set(Calendar.HOUR_OF_DAY, currentTime.get(Calendar.HOUR_OF_DAY) - 6);
                         if (ormWeather == null) {
                             return getSingleForecastFromRemoteDataSource(cityId);
                         }
-                        if (ormWeather.getDt().before(currenTime.getTime())) {
+                        if (ormWeather.getDt().before(currentTime.getTime())) {
                             return getSingleForecastFromRemoteDataSource(cityId);
                         } else {
                             return Observable.just(ormWeather);

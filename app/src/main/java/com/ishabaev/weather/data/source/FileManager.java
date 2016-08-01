@@ -15,7 +15,7 @@ import rx.Observable;
  */
 public class FileManager implements FileSource {
 
-    private static FileManager INSATNCE;
+    private static FileManager INSTANCE;
     private AssetManager mAssetManager;
     private final static String FILE_NAME = "city_list.txt";
     //private final static int LINE_SIZE = 74062;
@@ -24,11 +24,11 @@ public class FileManager implements FileSource {
         mAssetManager = assetManager;
     }
 
-    public static FileManager getInsatnce(AssetManager assetManager) {
-        if (INSATNCE == null) {
-            INSATNCE = new FileManager(assetManager);
+    public static FileManager getInstance(AssetManager assetManager) {
+        if (INSTANCE == null) {
+            INSTANCE = new FileManager(assetManager);
         }
-        return INSATNCE;
+        return INSTANCE;
     }
 
     @Override

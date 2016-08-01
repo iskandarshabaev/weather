@@ -44,7 +44,8 @@
         android:id="@+id/city_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/divider" />
+        android:layout_toRightOf="@+id/divider"
+        tools:ignore="InconsistentLayout" />
 
     <FrameLayout
         android:visibility="gone"
@@ -52,7 +53,8 @@
         android:id="@+id/progressFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/divider">
+        android:layout_toRightOf="@+id/divider"
+        tools:ignore="InconsistentLayout">
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"
@@ -67,7 +69,8 @@
         android:id="@+id/selectCityFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/divider">
+        android:layout_toRightOf="@+id/divider"
+        tools:ignore="InconsistentLayout">
 
         <ImageView
             android:layout_width="418dp"
@@ -75,7 +78,8 @@
             android:id="@+id/imageView"
             android:contentDescription="@string/image_description"
             android:src="@drawable/landscape"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            tools:ignore="InconsistentLayout" />
 
         <TextView
             android:textColor="@color/secondaryTextColor"
@@ -86,6 +90,7 @@
             android:id="@+id/textView"
             android:layout_margin="@dimen/text_margin"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/imageView" />
+            android:layout_below="@+id/imageView"
+            tools:ignore="InconsistentLayout" />
     </RelativeLayout>
 </RelativeLayout>

@@ -38,7 +38,7 @@ public class OrmWeatherDao extends AbstractDao<OrmWeather, Long> {
         public final static Property Rain = new Property(12, Double.class, "rain", false, "RAIN");
         public final static Property Snow = new Property(13, Double.class, "snow", false, "SNOW");
         public final static Property Icon = new Property(14, String.class, "icon", false, "ICON");
-    };
+    }
 
 
     public OrmWeatherDao(DaoConfig config) {
@@ -160,14 +160,14 @@ public class OrmWeatherDao extends AbstractDao<OrmWeather, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+        return cursor.isNull(offset) ? null : cursor.getLong(offset);
     }    
 
     /** @inheritdoc */
     @Override
     public OrmWeather readEntity(Cursor cursor, int offset) {
         OrmWeather entity = new OrmWeather( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset) ? null : cursor.getLong(offset), // id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // city_id
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // city_name
             cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)), // dt
@@ -189,7 +189,7 @@ public class OrmWeatherDao extends AbstractDao<OrmWeather, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, OrmWeather entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset) ? null : cursor.getLong(offset));
         entity.setCity_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setCity_name(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setDt(cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)));

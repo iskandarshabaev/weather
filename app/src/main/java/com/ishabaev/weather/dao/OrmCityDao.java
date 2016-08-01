@@ -28,7 +28,7 @@ public class OrmCityDao extends AbstractDao<OrmCity, Long> {
         public final static Property Country = new Property(2, String.class, "country", false, "COUNTRY");
         public final static Property Lat = new Property(3, Double.class, "lat", false, "LAT");
         public final static Property Lon = new Property(4, Double.class, "lon", false, "LON");
-    };
+    }
 
 
     public OrmCityDao(DaoConfig config) {
@@ -90,14 +90,14 @@ public class OrmCityDao extends AbstractDao<OrmCity, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+        return cursor.isNull(offset) ? null : cursor.getLong(offset);
     }    
 
     /** @inheritdoc */
     @Override
     public OrmCity readEntity(Cursor cursor, int offset) {
         OrmCity entity = new OrmCity( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // _id
+            cursor.isNull(offset) ? null : cursor.getLong(offset), // _id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // city_name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // country
             cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // lat
@@ -109,7 +109,7 @@ public class OrmCityDao extends AbstractDao<OrmCity, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, OrmCity entity, int offset) {
-        entity.set_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.set_id(cursor.isNull(offset) ? null : cursor.getLong(offset));
         entity.setCity_name(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setCountry(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setLat(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));

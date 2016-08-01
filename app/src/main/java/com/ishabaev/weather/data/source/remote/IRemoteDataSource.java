@@ -1,6 +1,5 @@
 package com.ishabaev.weather.data.source.remote;
 
-import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
 
 import java.util.Date;

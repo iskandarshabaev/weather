@@ -54,7 +54,7 @@
             android:layout_weight="0.3"/>
 
         <TextView
-            android:id="@+id/hummidity"
+            android:id="@+id/humidity"
             android:textColor="@color/secondaryTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

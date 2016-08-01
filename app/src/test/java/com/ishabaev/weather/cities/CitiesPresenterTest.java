@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import static org.mockito.Mockito.when;
 public class CitiesPresenterTest {
 
     private static List<OrmCity> CITIES;
-    private static List<CityWithWeather> CITIES_WITH_WEATHER;
 
     @Mock
     private RepositoryDataSource mRepository;
@@ -43,20 +41,10 @@ public class CitiesPresenterTest {
         mPresenter = new CitiesPresenter(mView, mRepository, Schedulers.immediate(), Schedulers.immediate());
         when(mView.isActive()).thenReturn(true);
         mPresenter.subscribe();
-        CITIES = new ArrayList();
-        CITIES_WITH_WEATHER = new ArrayList<>();
+        CITIES = new ArrayList<>();
         CITIES.add(new OrmCity(54353L, "City1", "RU", 55.4, 34.4));
         //CITIES.add(new OrmCity(54354L, "City2", "RU", 55.4, 34.4));
         //CITIES.add(new OrmCity(54355L, "City3", "RU", 55.4, 34.4));
-
-
-        for (OrmCity city : CITIES) {
-            CityWithWeather cityWithWeather = new CityWithWeather();
-            cityWithWeather.setCity(city);
-            OrmWeather emptyWeather = new OrmWeather();
-            cityWithWeather.setWeather(emptyWeather);
-            CITIES_WITH_WEATHER.add(cityWithWeather);
-        }
     }
 
     @Test
@@ -78,7 +66,7 @@ public class CitiesPresenterTest {
     }
 
     @Test
-    public void removeWeaher() {
+    public void removeWeather() {
         mRepository.deleteForecast(CITIES.get(0).get_id().intValue());
     }
 }

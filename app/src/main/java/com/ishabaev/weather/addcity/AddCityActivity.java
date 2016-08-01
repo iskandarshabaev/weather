@@ -51,7 +51,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
             actionBar.setDisplayShowHomeEnabled(true);
         }
         mPresenter = new AddCityPresenter(this, Injection.provideTasksRepository(this),
-                FileManager.getInsatnce(getAssets()), Schedulers.io(), AndroidSchedulers.mainThread());
+                FileManager.getInstance(getAssets()), Schedulers.io(), AndroidSchedulers.mainThread());
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_search_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
@@ -63,17 +63,16 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         mTextView = (RxEditText) findViewById(R.id.editText);
         assert mTextView != null;
         mTextView.setOnRxTextChangeListener(
-                this::textChanget,
+                this::textChanged,
                 500);
     }
 
-    private void textChanget(String text) {
+    private void textChanged(String text) {
         if (TextUtils.isEmpty(text)) {
             clearCities();
             setImageViewVisible(true);
-            setSearchStateVisibile(true);
+            setSearchStateVisible(true);
             showStartTyping();
-            return;
         } else {
             mPresenter.textChanged(text);
         }
@@ -140,7 +139,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
     }
 
     @Override
-    public void setProgressBarVisibile(boolean visible) {
+    public void setProgressBarVisible(boolean visible) {
         if (visible) {
             mProgressBar.setVisibility(View.VISIBLE);
         } else {
@@ -158,7 +157,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
     }
 
     @Override
-    public void setSearchStateVisibile(boolean visible) {
+    public void setSearchStateVisible(boolean visible) {
         if (visible) {
             mSearchState.setVisibility(View.VISIBLE);
         } else {

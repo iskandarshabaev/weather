@@ -25,9 +25,9 @@ public interface AddCityContract {
 
         void setImageViewVisible(boolean visible);
 
-        void setProgressBarVisibile(boolean visible);
+        void setProgressBarVisible(boolean visible);
 
-        void setSearchStateVisibile(boolean visible);
+        void setSearchStateVisible(boolean visible);
 
         void showStartTyping();
 

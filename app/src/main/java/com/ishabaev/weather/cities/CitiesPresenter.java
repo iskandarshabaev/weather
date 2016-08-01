@@ -35,7 +35,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
         mSubscriptions = new CompositeSubscription();
     }
 
-    public Observable<CityWithWeather> getCityWithWeather(final OrmCity city) {
+    private Observable<CityWithWeather> getCityWithWeather(final OrmCity city) {
         return mRepository.getSingleForecast(city.get_id().intValue(), mView.isNetworkAvailable())
                 .flatMap(ormWeather -> {
                     CityWithWeather cityWithWeather = new CityWithWeather();
@@ -69,9 +69,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mMainScheduler)
                 .subscribe(
-                        city -> {
-                            mView.addCityToList(city);
-                        },
+                        city -> mView.addCityToList(city),
                         throwable -> {
                             EspressoIdlingResource.decrement();
                             mView.setRefreshing(false);
@@ -91,7 +89,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
     }
 
     @Override
-    public void removeWeaher(int cityId) {
+    public void removeWeather(int cityId) {
         mRepository.deleteForecast(cityId);
     }
 }

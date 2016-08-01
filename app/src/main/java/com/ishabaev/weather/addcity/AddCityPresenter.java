@@ -1,11 +1,8 @@
 package com.ishabaev.weather.addcity;
 
-import android.text.TextUtils;
-
 import com.ishabaev.weather.EspressoIdlingResource;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.data.source.FileManager;
-import com.ishabaev.weather.data.source.Repository;
 import com.ishabaev.weather.data.source.RepositoryDataSource;
 
 import rx.Scheduler;
@@ -54,26 +51,26 @@ public class AddCityPresenter implements AddCityContract.Presenter {
         EspressoIdlingResource.increment();
         mSubscriptions.clear();
         mView.clearCities();
-        mView.setProgressBarVisibile(true);
+        mView.setProgressBarVisible(true);
         Subscription subscription = mFileManager.searchCity(text)
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mMainScheduler)
                 .subscribe(
                         city -> {
                             mView.setImageViewVisible(false);
-                            mView.setSearchStateVisibile(false);
+                            mView.setSearchStateVisible(false);
                             mView.addCityToList(city);
                         },
                         throwable -> {
                             mView.showCouldNotFindCity();
-                            mView.setSearchStateVisibile(true);
+                            mView.setSearchStateVisible(true);
                             mView.setImageViewVisible(true);
-                            mView.setProgressBarVisibile(false);
+                            mView.setProgressBarVisible(false);
                             throwable.printStackTrace();
                         },
                         () -> {
                             EspressoIdlingResource.decrement();
-                            mView.setProgressBarVisibile(false);
+                            mView.setProgressBarVisible(false);
                         }
                 );
         mSubscriptions.add(subscription);

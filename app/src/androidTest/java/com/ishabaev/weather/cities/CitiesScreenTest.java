@@ -12,9 +12,9 @@ import android.support.test.espresso.action.GeneralSwipeAction;
 import android.support.test.espresso.action.Press;
 import android.support.test.espresso.action.Swipe;
 import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.ishabaev.weather.R;
@@ -24,21 +24,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.hamcrest.core.AllOf.allOf;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.StringEndsWith.endsWith;
 
 /**
  * Created by ishabaev on 28.07.16.
@@ -52,10 +43,6 @@ public class CitiesScreenTest {
     @Rule
     public ActivityTestRule<CitiesActivity> mTasksActivityTestRule =
             new ActivityTestRule<CitiesActivity>(CitiesActivity.class) {
-                @Override
-                protected void beforeActivityLaunched() {
-                    super.beforeActivityLaunched();
-                }
             };
 
 
@@ -83,7 +70,6 @@ public class CitiesScreenTest {
     }
 
 
-
     public static ViewAction waitId(final int viewId, final long millis) {
         return new ViewAction() {
             @Override
@@ -103,14 +89,16 @@ public class CitiesScreenTest {
                 final long startTime = System.currentTimeMillis();
                 final long endTime = startTime + millis;
 
-                while (System.currentTimeMillis() < endTime) ;
+                while (System.currentTimeMillis() < endTime) {
+
+                }
             }
         };
     }
 
 
     @Test
-    public void swipteToDelete() {
+    public void swipeToDelete() {
         while (true) {
             try {
                 onView(withId(R.id.city_list))

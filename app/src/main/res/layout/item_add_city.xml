@@ -8,6 +8,7 @@
 
     <ImageView
         android:id="@+id/ic_city"
+        android:contentDescription="@string/image_view_content_description"
         android:layout_width="@dimen/image_width"
         android:layout_height="@dimen/image_height"
         android:layout_marginBottom="@dimen/image_left_margin"
@@ -34,7 +35,6 @@
         android:layout_marginTop="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
         android:layout_toRightOf="@+id/city_name_caption"
-        android:text="Moscow"
         android:textColor="@color/primaryTextColor"
         android:textSize="@dimen/primary_text_size" />
 
@@ -56,11 +56,10 @@
         android:layout_below="@+id/city_name_caption"
         android:layout_marginRight="@dimen/text_margin"
         android:layout_toRightOf="@+id/country_name_caption"
-        android:text="RU"
         android:textColor="@color/secondaryTextColor"
         android:textSize="@dimen/subtext_size" />
     <View
-        android:background="@drawable/dropshadow"
+        android:background="@drawable/drop_shadow"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginLeft="@dimen/image_left_margin"

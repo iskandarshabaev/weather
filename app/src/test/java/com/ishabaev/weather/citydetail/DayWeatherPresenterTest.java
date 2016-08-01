@@ -79,7 +79,7 @@ public class DayWeatherPresenterTest {
         verify(mView).showProgressBar(false);
         ArgumentCaptor<String> text = ArgumentCaptor.forClass(String.class);
         verify(mView).setTemp(text.capture());
-        verify(mView).setHummidity(text.capture());
+        verify(mView).setHumidity(text.capture());
         verify(mView).setWindSpeed(text.capture());
         verify(mView).setPressure(text.capture());
         verify(mView).setDate(text.capture());

@@ -11,7 +11,7 @@
         android:layout_height="?attr/actionBarSize"
         app:tabIndicatorHeight="3dp" />
     <View
-        android:background="@drawable/dropshadow"
+        android:background="@drawable/drop_shadow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/shadow_height"/>
 

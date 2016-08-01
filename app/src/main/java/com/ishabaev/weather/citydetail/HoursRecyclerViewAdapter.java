@@ -16,7 +16,6 @@ import com.ishabaev.weather.dao.OrmWeather;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by ishabaev on 20.06.16.
@@ -68,10 +67,10 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
                         res.getString(R.string.km_h);
         holder.wind.setText(wind);
 
-        String hummidity = res.getString(R.string.humidity) + ": ";
-        hummidity += mHours.get(position).getHumidity() == null ? "" :
+        String humidity = res.getString(R.string.humidity) + ": ";
+        humidity += mHours.get(position).getHumidity() == null ? "" :
                 mHours.get(position).getHumidity().toString() + "%";
-        holder.hummidity.setText(hummidity);
+        holder.humidity.setText(humidity);
 
         String pressure = res.getString(R.string.pressure) + ": ";
         pressure += mHours.get(position).getPressure() == null ? "" :
@@ -132,7 +131,7 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
         public TextView time;
         public TextView temperature;
         public TextView wind;
-        public TextView hummidity;
+        public TextView humidity;
         public TextView pressure;
         public ImageView weatherState;
         public OrmCity city;
@@ -143,14 +142,9 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
             this.time = (TextView) view.findViewById(R.id.date);
             this.temperature = (TextView) view.findViewById(R.id.temperature);
             this.wind = (TextView) view.findViewById(R.id.wind);
-            this.hummidity = (TextView) view.findViewById(R.id.hummidity);
+            this.humidity = (TextView) view.findViewById(R.id.humidity);
             this.pressure = (TextView) view.findViewById(R.id.pressure);
             this.weatherState = (ImageView) view.findViewById(R.id.weather_state);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString();
         }
     }
 }

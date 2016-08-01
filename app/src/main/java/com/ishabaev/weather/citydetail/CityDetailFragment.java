@@ -87,7 +87,7 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
         mTabLayout.setupWithViewPager(viewPager);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
@@ -160,10 +160,10 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     }
 
     @Override
-    public void setHummidity(String hummidity) {
-        TextView view = (TextView) getActivity().findViewById(R.id.header_hummidity);
+    public void setHumidity(String humidity) {
+        TextView view = (TextView) getActivity().findViewById(R.id.header_humidity);
         if (view != null) {
-            view.setText(hummidity);
+            view.setText(humidity);
         }
     }
 

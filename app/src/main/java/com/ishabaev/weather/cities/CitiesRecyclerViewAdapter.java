@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.data.source.model.CityWithWeather;
-import com.ishabaev.weather.util.DataSort;
 import com.ishabaev.weather.util.ImageUtils;
 
 import java.lang.ref.WeakReference;
@@ -134,11 +133,11 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
                 holder.windView.setText(wind);
             }
 
-            if (holder.hummidity != null) {
-                String hummidity = res.getString(R.string.humidity) + ": ";
-                hummidity += holder.city.getWeather().getHumidity() == null ? "-/-" :
+            if (holder.humidity != null) {
+                String humidity = res.getString(R.string.humidity) + ": ";
+                humidity += holder.city.getWeather().getHumidity() == null ? "-/-" :
                         holder.city.getWeather().getHumidity().toString() + "%";
-                holder.hummidity.setText(hummidity);
+                holder.humidity.setText(humidity);
             }
 
             float scaleRatio = holder.view.getResources().getDisplayMetrics().density;
@@ -255,7 +254,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         public TextView contentView;
         public TextView temperatureView;
         public TextView windView;
-        public TextView hummidity;
+        public TextView humidity;
         public ImageView imageView;
         public CityWithWeather city;
 
@@ -265,7 +264,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
             this.contentView = (TextView) view.findViewById(R.id.city_name);
             this.temperatureView = (TextView) view.findViewById(R.id.temperature);
             this.windView = (TextView) view.findViewById(R.id.wind);
-            this.hummidity = (TextView) view.findViewById(R.id.hummidity);
+            this.humidity = (TextView) view.findViewById(R.id.humidity);
             this.imageView = (ImageView) view.findViewById(R.id.state_image);
         }
 

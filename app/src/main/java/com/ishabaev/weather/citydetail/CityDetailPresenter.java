@@ -69,7 +69,7 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
         if (forecast.size() > 0) {
             OrmWeather current = forecast.get(0);
             setTemperature(current.getTemp());
-            setHummidity(current.getHumidity());
+            setHumidity(current.getHumidity());
             setWind(current.getWind_speed());
             setPressure(current.getPressure());
             setDate(current.getDt());
@@ -90,11 +90,11 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
         mView.setTemp(temperature);
     }
 
-    private void setHummidity(double hummidity) {
+    private void setHumidity(double humidity) {
         String value = mView.getResources()
                 .getString(R.string.humidity) + ": " +
-                Double.toString(hummidity) + "%";
-        mView.setHummidity(value);
+                Double.toString(humidity) + "%";
+        mView.setHumidity(value);
     }
 
     private void setWind(Double wind) {
@@ -127,16 +127,16 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
         Day day = new Day();
         day.setHours(new ArrayList<>());
         days.add(day);
-        for (OrmWeather hourWeayher : hours) {
+        for (OrmWeather hourWeather : hours) {
             Calendar c2 = Calendar.getInstance();
-            c2.setTime(hourWeayher.getDt());
+            c2.setTime(hourWeather.getDt());
             if (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
                     && c1.get(Calendar.DAY_OF_YEAR) - c2.get(Calendar.DAY_OF_YEAR) == 0) {
-                day.getHours().add(hourWeayher);
+                day.getHours().add(hourWeather);
             } else {
                 day = new Day();
                 day.setHours(new ArrayList<>());
-                day.getHours().add(hourWeayher);
+                day.getHours().add(hourWeather);
                 days.add(day);
             }
             c1 = c2;
