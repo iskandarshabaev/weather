@@ -166,7 +166,7 @@ public class OrmWeatherDao extends AbstractDao<OrmWeather, Long> {
     /** @inheritdoc */
     @Override
     public OrmWeather readEntity(Cursor cursor, int offset) {
-        OrmWeather entity = new OrmWeather( //
+        return new OrmWeather( //
             cursor.isNull(offset) ? null : cursor.getLong(offset), // id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // city_id
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // city_name
@@ -183,7 +183,6 @@ public class OrmWeatherDao extends AbstractDao<OrmWeather, Long> {
             cursor.isNull(offset + 13) ? null : cursor.getDouble(offset + 13), // snow
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14) // icon
         );
-        return entity;
     }
      
     /** @inheritdoc */

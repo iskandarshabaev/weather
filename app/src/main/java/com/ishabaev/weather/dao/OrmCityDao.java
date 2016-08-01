@@ -96,14 +96,13 @@ public class OrmCityDao extends AbstractDao<OrmCity, Long> {
     /** @inheritdoc */
     @Override
     public OrmCity readEntity(Cursor cursor, int offset) {
-        OrmCity entity = new OrmCity( //
+        return new OrmCity( //
             cursor.isNull(offset) ? null : cursor.getLong(offset), // _id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // city_name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // country
             cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // lat
             cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4) // lon
         );
-        return entity;
     }
      
     /** @inheritdoc */

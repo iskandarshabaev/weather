@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import rx.Scheduler;
 import rx.Subscription;
@@ -115,7 +116,7 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
     }
 
     private void setDate(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM, HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM, HH:mm", Locale.getDefault());
         String value = format.format(date);
         mView.setDate(value);
     }

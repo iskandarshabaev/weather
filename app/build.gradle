@@ -79,7 +79,3 @@ dependencies {
     androidTestCompile "com.android.support:support-v4:24.1.1"
     androidTestCompile "com.android.support:recyclerview-v7:24.1.1"
 }
-
-retrolambda {
-    javaVersion JavaVersion.VERSION_1_7
-}

@@ -8,6 +8,7 @@ import com.ishabaev.weather.data.source.model.Day;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ishabaev on 18.06.16.
@@ -33,7 +34,7 @@ public class DaysViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        SimpleDateFormat format = new SimpleDateFormat("dd E");
+        SimpleDateFormat format = new SimpleDateFormat("dd E",Locale.getDefault());
         return format.format(mDays.get(position).getHours().get(0).getDt());
     }
 

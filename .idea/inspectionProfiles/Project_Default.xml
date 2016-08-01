@@ -8,6 +8,10 @@
       <option name="REPORT_METHODS" value="false" />
       <option name="REPORT_FIELDS" value="true" />
     </inspection_tool>
+    <inspection_tool class="ConstantConditions" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="SUGGEST_NULLABLE_ANNOTATIONS" value="false" />
+      <option name="DONT_REPORT_TRUE_ASSERT_STATEMENTS" value="false" />
+    </inspection_tool>
     <inspection_tool class="DefaultFileTemplate" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="CHECK_FILE_HEADER" value="true" />
       <option name="CHECK_TRY_CATCH_SECTION" value="true" />

@@ -5,10 +5,12 @@ import android.content.res.Resources;
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.data.source.RepositoryDataSource;
+import com.ishabaev.weather.data.source.model.Day;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -41,6 +43,9 @@ public class CityDetailPresenterTest {
     private CityDetailPresenter mPresenter;
 
     private final static long cityId = 54353;
+
+    @Captor
+    private ArgumentCaptor<List<Day>> days;
 
     @Before
     public void setupTasksPresenter() {
@@ -88,7 +93,6 @@ public class CityDetailPresenterTest {
         verify(mView).setWindSpeed(text.capture());
         verify(mView).setPressure(text.capture());
         verify(mView).setDate(text.capture());
-        ArgumentCaptor<List> days = ArgumentCaptor.forClass(List.class);
         verify(mView).addDays(days.capture());
     }
 }

@@ -84,13 +84,11 @@ public class CitiesScreenTest {
 
             @Override
             public void perform(final UiController uiController, final View view) {
-
                 uiController.loopMainThreadUntilIdle();
-                final long startTime = System.currentTimeMillis();
-                final long endTime = startTime + millis;
-
-                while (System.currentTimeMillis() < endTime) {
-
+                try {
+                    Thread.sleep(millis);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
                 }
             }
         };

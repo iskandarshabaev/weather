@@ -16,6 +16,7 @@ import com.ishabaev.weather.dao.OrmWeather;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ishabaev on 20.06.16.
@@ -23,7 +24,7 @@ import java.util.List;
 public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecyclerViewAdapter.ViewHolder> {
 
     private final List<OrmWeather> mHours;
-    private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm");
+    private SimpleDateFormat mFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     public HoursRecyclerViewAdapter(List<OrmWeather> hours) {
         mHours = hours;
