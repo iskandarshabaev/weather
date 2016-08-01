@@ -2,7 +2,7 @@ package com.ishabaev.weather.addcity;
 
 import com.ishabaev.weather.EspressoIdlingResource;
 import com.ishabaev.weather.dao.OrmCity;
-import com.ishabaev.weather.data.source.FileManager;
+import com.ishabaev.weather.data.source.FileSource;
 import com.ishabaev.weather.data.source.RepositoryDataSource;
 
 import rx.Scheduler;
@@ -16,12 +16,12 @@ public class AddCityPresenter implements AddCityContract.Presenter {
 
     private AddCityContract.View mView;
     private RepositoryDataSource mRepository;
-    private FileManager mFileManager;
+    private FileSource mFileManager;
     private CompositeSubscription mSubscriptions;
     private Scheduler mBackgroundScheduler;
     private Scheduler mMainScheduler;
 
-    public AddCityPresenter(AddCityContract.View view, RepositoryDataSource repository, FileManager fileManager,
+    public AddCityPresenter(AddCityContract.View view, RepositoryDataSource repository, FileSource fileManager,
                             Scheduler background, Scheduler main) {
         mView = view;
         mRepository = repository;

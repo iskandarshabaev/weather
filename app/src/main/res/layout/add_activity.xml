@@ -34,7 +34,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
 
-        <com.ishabaev.weather.RxEditText
+        <com.ishabaev.weather.rxview.RxEditText
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
-import com.ishabaev.weather.data.source.model.Day;
+import com.ishabaev.weather.data.model.Day;
 import com.ishabaev.weather.util.ImageUtils;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new CityDetailPresenter(this, Injection.provideTasksRepository(getContext()),
+        mPresenter = new CityDetailPresenter(this, Injection.provideRepository(getContext()),
                 Schedulers.io(), AndroidSchedulers.mainThread()
         );
         mPresenter.subscribe();

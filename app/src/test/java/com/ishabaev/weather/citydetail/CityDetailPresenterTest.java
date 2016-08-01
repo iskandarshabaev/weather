@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.data.source.RepositoryDataSource;
-import com.ishabaev.weather.data.source.model.Day;
+import com.ishabaev.weather.data.model.Day;
 
 import org.junit.Before;
 import org.junit.Test;

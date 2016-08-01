@@ -29,7 +29,7 @@ import com.ishabaev.weather.R;
 import com.ishabaev.weather.addcity.AddCityActivity;
 import com.ishabaev.weather.citydetail.CityDetailActivity;
 import com.ishabaev.weather.citydetail.CityDetailFragment;
-import com.ishabaev.weather.data.source.model.CityWithWeather;
+import com.ishabaev.weather.data.model.CityWithWeather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +80,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        mPresenter = new CitiesPresenter(this, Injection.provideTasksRepository(getApplicationContext()),
+        mPresenter = new CitiesPresenter(this, Injection.provideRepository(getApplicationContext()),
                 Schedulers.io(), AndroidSchedulers.mainThread());
     }
 

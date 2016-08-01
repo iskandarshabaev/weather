@@ -1,4 +1,4 @@
-package com.ishabaev.weather;
+package com.ishabaev.weather.rxview;
 
 import android.content.Context;
 import android.util.AttributeSet;

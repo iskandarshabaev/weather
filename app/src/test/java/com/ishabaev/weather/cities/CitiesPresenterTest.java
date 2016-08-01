@@ -3,7 +3,7 @@ package com.ishabaev.weather.cities;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
 import com.ishabaev.weather.data.source.RepositoryDataSource;
-import com.ishabaev.weather.data.source.model.CityWithWeather;
+import com.ishabaev.weather.data.model.CityWithWeather;
 
 import org.junit.Before;
 import org.junit.Test;

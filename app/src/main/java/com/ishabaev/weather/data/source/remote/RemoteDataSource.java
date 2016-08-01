@@ -1,7 +1,7 @@
 package com.ishabaev.weather.data.source.remote;
 
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.source.model.WeatherHour;
+import com.ishabaev.weather.data.model.WeatherHour;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -19,10 +19,9 @@ import android.widget.TextView;
 
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
-import com.ishabaev.weather.RxEditText;
+import com.ishabaev.weather.rxview.RxEditText;
 import com.ishabaev.weather.cities.CitiesActivity;
 import com.ishabaev.weather.dao.OrmCity;
-import com.ishabaev.weather.data.source.FileManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +49,8 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-        mPresenter = new AddCityPresenter(this, Injection.provideTasksRepository(this),
-                FileManager.getInstance(getAssets()), Schedulers.io(), AndroidSchedulers.mainThread());
+        mPresenter = new AddCityPresenter(this, Injection.provideRepository(this),
+                Injection.provideFileSource(this),Schedulers.io(), AndroidSchedulers.mainThread());
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_search_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);

@@ -1,4 +1,4 @@
-package com.ishabaev.weather.data.source.model;
+package com.ishabaev.weather.data.model;
 
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;

@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.ishabaev.weather.data.source.model.Day;
+import com.ishabaev.weather.data.model.Day;
 
 import java.text.SimpleDateFormat;
 import java.util.List;

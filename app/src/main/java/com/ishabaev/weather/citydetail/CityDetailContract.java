@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 
 import com.ishabaev.weather.BasePresenter;
 import com.ishabaev.weather.BaseView;
-import com.ishabaev.weather.data.source.model.Day;
+import com.ishabaev.weather.data.model.Day;
 
 import java.util.List;
 

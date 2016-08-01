@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmCity;
-import com.ishabaev.weather.data.source.model.CityWithWeather;
+import com.ishabaev.weather.data.model.CityWithWeather;
 import com.ishabaev.weather.util.ImageUtils;
 
 import java.lang.ref.WeakReference;

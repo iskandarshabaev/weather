@@ -3,7 +3,7 @@ package com.ishabaev.weather.cities;
 import com.ishabaev.weather.BasePresenter;
 import com.ishabaev.weather.BaseView;
 import com.ishabaev.weather.dao.OrmCity;
-import com.ishabaev.weather.data.source.model.CityWithWeather;
+import com.ishabaev.weather.data.model.CityWithWeather;
 
 import java.util.List;
 
