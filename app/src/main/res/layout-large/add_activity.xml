@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -17,29 +19,52 @@
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+
+
     </android.support.design.widget.AppBarLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
 
-        <com.ishabaev.weather.rxview.RxEditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
+        <android.support.v7.widget.CardView
+            android:id="@+id/editText_container"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/primary_text_margin"
-            android:singleLine="true" />
+            android:layout_marginTop="@dimen/primary_text_margin"
+            card_view:cardCornerRadius="2dp"
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/city_search_list"
-            android:layout_width="match_parent"
+            <com.ishabaev.weather.rxview.RxEditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/primary_text_margin"
+                android:singleLine="true" />
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/city_search_list_container"
+            android:layout_width="400dp"
             android:layout_height="match_parent"
-            android:layout_below="@+id/editText">
+            android:layout_below="@+id/editText_container"
+            android:layout_centerHorizontal="true"
+            card_view:cardCornerRadius="2dp"
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/city_search_list"
+                android:layout_width="400dp"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_add_city" />
+        </android.support.v7.widget.CardView>
 
         <ImageView
             android:id="@+id/imageView"
@@ -73,8 +98,7 @@
         android:tint="@android:color/white"
         app:backgroundTint="@color/colorPrimary"
         app:elevation="6dp"/>
-        !-->
-
+    !-->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_marginTop="?attr/actionBarSize"
@@ -83,4 +107,5 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         android:indeterminate="true" />
+
 </android.support.design.widget.CoordinatorLayout>

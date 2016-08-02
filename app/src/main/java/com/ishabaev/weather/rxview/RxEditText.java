@@ -1,6 +1,7 @@
 package com.ishabaev.weather.rxview;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -13,7 +14,7 @@ import rx.subjects.PublishSubject;
 /**
  * Created by ishabaev on 22.07.16.
  */
-public class RxEditText extends EditText {
+public class RxEditText extends AppCompatEditText {
 
     private PublishSubject<String> editTextSubject = PublishSubject.create();
     private Subscription subscription;

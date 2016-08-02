@@ -23,6 +23,8 @@ public interface AddCityContract {
 
         void addCityToList(OrmCity city);
 
+        void setCityListVisible(boolean visible);
+
         void setImageViewVisible(boolean visible);
 
         void setProgressBarVisible(boolean visible);

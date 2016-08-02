@@ -50,6 +50,7 @@ public class AddCityPresenter implements AddCityContract.Presenter {
     public void textChanged(String text) {
         EspressoIdlingResource.increment();
         mSubscriptions.clear();
+        mView.setCityListVisible(false);
         mView.clearCities();
         mView.setProgressBarVisible(true);
         Subscription subscription = mFileManager.searchCity(text)
@@ -59,6 +60,7 @@ public class AddCityPresenter implements AddCityContract.Presenter {
                         city -> {
                             mView.setImageViewVisible(false);
                             mView.setSearchStateVisible(false);
+                            mView.setCityListVisible(true);
                             mView.addCityToList(city);
                         },
                         throwable -> {
@@ -67,6 +69,7 @@ public class AddCityPresenter implements AddCityContract.Presenter {
                             mView.setSearchStateVisible(true);
                             mView.setImageViewVisible(true);
                             mView.setProgressBarVisible(false);
+                            mView.setCityListVisible(false);
                             throwable.printStackTrace();
                         },
                         () -> {

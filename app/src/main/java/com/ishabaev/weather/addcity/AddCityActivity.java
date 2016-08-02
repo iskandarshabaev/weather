@@ -22,9 +22,9 @@ import android.widget.TextView;
 import com.ishabaev.weather.EspressoIdlingResource;
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
-import com.ishabaev.weather.rxview.RxEditText;
 import com.ishabaev.weather.cities.CitiesActivity;
 import com.ishabaev.weather.dao.OrmCity;
+import com.ishabaev.weather.rxview.RxEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
     private ProgressBar mProgressBar;
     private TextView mSearchState;
     private ImageView mImageView;
+    private View mCityListView;
     private AddCityContract.Presenter mPresenter;
 
     @Override
@@ -54,7 +55,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
             actionBar.setDisplayShowHomeEnabled(true);
         }
         mPresenter = new AddCityPresenter(this, Injection.provideRepository(this),
-                Injection.provideFileSource(this),Schedulers.io(), AndroidSchedulers.mainThread());
+                Injection.provideFileSource(this), Schedulers.io(), AndroidSchedulers.mainThread());
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_search_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
@@ -68,6 +69,10 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         mTextView.setOnRxTextChangeListener(
                 this::textChanged,
                 debounce);
+        mCityListView = findViewById(R.id.city_search_list_container);
+        if (mCityListView != null) {
+            mCityListView.setVisibility(View.GONE);
+        }
     }
 
     private void textChanged(String text) {
@@ -75,6 +80,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
             clearCities();
             setImageViewVisible(true);
             setSearchStateVisible(true);
+            setCityListVisible(false);
             showStartTyping();
         } else {
             mPresenter.textChanged(text);
@@ -139,6 +145,18 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
     @Override
     public void addCityToList(OrmCity city) {
         mAdapter.addCity(city);
+    }
+
+    @Override
+    public void setCityListVisible(boolean visible) {
+        if (mCityListView == null) {
+            return;
+        }
+        if (visible) {
+            mCityListView.setVisibility(View.VISIBLE);
+        } else {
+            mCityListView.setVisibility(View.GONE);
+        }
     }
 
     @Override
