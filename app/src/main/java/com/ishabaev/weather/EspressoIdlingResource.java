@@ -19,7 +19,7 @@ package com.ishabaev.weather;
 import android.support.test.espresso.IdlingResource;
 
 /**
- * Contains a static reference to {@link IdlingResource}, only available in the 'mock' build type.
+ * From https://github.com/googlesamples/android-architecture/tree/dev-todo-mvp-rxjava/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/util
  */
 public class EspressoIdlingResource {
 
