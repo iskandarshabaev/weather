@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 import rx.Observable;
+import rx.Subscription;
 
 /**
  * Created by ishabaev on 21.07.16.
@@ -35,6 +36,20 @@ public class FileManager implements FileSource {
     public Observable<OrmCity> searchCity(String cityName) {
         return Observable.create(
                 (Observable.OnSubscribe<OrmCity>) sub -> {
+                    sub.add(new Subscription() {
+
+                        boolean unsubscribed = false;
+
+                        @Override
+                        public void unsubscribe() {
+                            unsubscribed = true;
+                        }
+
+                        @Override
+                        public boolean isUnsubscribed() {
+                            return unsubscribed;
+                        }
+                    });
                     try {
                         InputStream is = mAssetManager.open(FILE_NAME);
                         Scanner scanner = new Scanner(is);
@@ -63,6 +78,10 @@ public class FileManager implements FileSource {
                                 break;
                             }
                             row++;
+                            if(sub.isUnsubscribed()){
+                                sub.onCompleted();
+                                break;
+                            }
                         }
                         if(count > 0) {
                             sub.onCompleted();

@@ -1,25 +1,15 @@
 package com.ishabaev.weather.cities;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.action.GeneralLocation;
-import android.support.test.espresso.action.GeneralSwipeAction;
-import android.support.test.espresso.action.Press;
-import android.support.test.espresso.action.Swipe;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 
 import com.ishabaev.weather.R;
+import com.ishabaev.weather.cities.utils.Actions;
 
-import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +20,8 @@ import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.ishabaev.weather.cities.utils.Actions.swipeRight;
+import static com.ishabaev.weather.cities.utils.Actions.waitId;
 
 /**
  * Created by ishabaev on 28.07.16.
@@ -45,7 +37,6 @@ public class CitiesScreenTest {
             new ActivityTestRule<CitiesActivity>(CitiesActivity.class) {
             };
 
-
     @Test
     public void addCities() {
         for (char alphabet = 'a'; alphabet <= 'c'; alphabet++) {
@@ -59,7 +50,6 @@ public class CitiesScreenTest {
         }
     }
 
-
     @Test
     public void addCity() {
         onView(withId(R.id.fab)).perform(click());
@@ -68,32 +58,6 @@ public class CitiesScreenTest {
         onView(withId(R.id.city_search_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
     }
-
-
-    public static ViewAction waitId(final int viewId, final long millis) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for a specific view with id <" + viewId + "> during " + millis + " millis.";
-            }
-
-            @Override
-            public void perform(final UiController uiController, final View view) {
-                uiController.loopMainThreadUntilIdle();
-                try {
-                    Thread.sleep(millis);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        };
-    }
-
 
     @Test
     public void swipeToDelete() {
@@ -108,30 +72,21 @@ public class CitiesScreenTest {
         onView(withId(R.id.swipe_to_refresh)).perform(swipeDown());
     }
 
-    public static ViewAction swipeRight() {
-        return new GeneralSwipeAction(Swipe.FAST, GeneralLocation.CENTER_LEFT,
-                GeneralLocation.CENTER_RIGHT, Press.FINGER);
-    }
-
     @Test
     public void swipeToRefresh() {
         for (int i = 0; i < 10; i++) {
-            rotateScreen();
+            Actions.rotateScreen(mTasksActivityTestRule.getActivity());
             onView(withId(R.id.swipe_to_refresh))
                     .perform(swipeDown());
         }
     }
 
-    private void rotateScreen() {
-        Context context = InstrumentationRegistry.getTargetContext();
-        int orientation
-                = context.getResources().getConfiguration().orientation;
+    @Test
+    public void loadAllCities() {
+        onView(withId(R.id.swipe_to_refresh)).perform(swipeDown());
+        onView(withId(R.id.city_list))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        Activity activity = mTasksActivityTestRule.getActivity();
-        activity.setRequestedOrientation(
-                (orientation == Configuration.ORIENTATION_PORTRAIT) ?
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Test
@@ -155,25 +110,4 @@ public class CitiesScreenTest {
         // Check if the add task screen is displayed
         //onView(withId(R.id.add_task_title)).check(matches(isDisplayed()));
     }
-
-    public static ViewAction withCustomConstraints(final ViewAction action, final Matcher<View> constraints) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return constraints;
-            }
-
-            @Override
-            public String getDescription() {
-                return action.getDescription();
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                action.perform(uiController, view);
-            }
-        };
-    }
-
-
 }

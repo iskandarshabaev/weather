@@ -62,6 +62,7 @@ public class AddCityPresenter implements AddCityContract.Presenter {
                             mView.addCityToList(city);
                         },
                         throwable -> {
+                            EspressoIdlingResource.decrement();
                             mView.showCouldNotFindCity();
                             mView.setSearchStateVisible(true);
                             mView.setImageViewVisible(true);

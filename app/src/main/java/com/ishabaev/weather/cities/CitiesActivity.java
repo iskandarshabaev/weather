@@ -9,8 +9,10 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -24,6 +26,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.ishabaev.weather.EspressoIdlingResource;
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.addcity.AddCityActivity;
@@ -241,5 +244,10 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         if (view != null) {
             Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
     }
 }

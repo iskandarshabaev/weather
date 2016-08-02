@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ishabaev.weather.EspressoIdlingResource;
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.rxview.RxEditText;
@@ -31,6 +34,7 @@ import rx.schedulers.Schedulers;
 
 public class AddCityActivity extends AppCompatActivity implements AddCityContract.View {
 
+    public final static int debounce = 500;
     private AddCityViewAdapter mAdapter;
     private RxEditText mTextView;
     private ProgressBar mProgressBar;
@@ -63,7 +67,7 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
         assert mTextView != null;
         mTextView.setOnRxTextChangeListener(
                 this::textChanged,
-                500);
+                debounce);
     }
 
     private void textChanged(String text) {
@@ -172,5 +176,10 @@ public class AddCityActivity extends AppCompatActivity implements AddCityContrac
     @Override
     public void showStartTyping() {
         mSearchState.setText(getResources().getString(R.string.start_typing));
+    }
+
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
     }
 }
