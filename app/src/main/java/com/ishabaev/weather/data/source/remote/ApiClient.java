@@ -1,17 +1,16 @@
 package com.ishabaev.weather.data.source.remote;
 
+import com.ishabaev.weather.BuildConfig;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by ishabaev on 17.06.16.
- */
 public class ApiClient {
 
-    public static final String APPID = "6bbd25b118c08120fa006fbab6f7e97b";
+    public static final String APPID = BuildConfig.API_KEY;
     public static final String UNITS = "metric";
     private static Retrofit sRetrofit;
 
@@ -25,7 +24,7 @@ public class ApiClient {
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
             sRetrofit = new Retrofit.Builder()
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                    .baseUrl("http://api.openweathermap.org/")
+                    .baseUrl(BuildConfig.API_ENDPOINT)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();

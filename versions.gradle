@@ -1,0 +1,11 @@
+ext{
+    supportVersion = '24.2.1'
+    okhttpVersion = '3.4.1'
+    retrofitVersion = '2.1.0'
+    rxandroidVersion = '1.2.1'
+    rxjavaVersion = '1.1.10'
+    greenDaoVersion = '2.2.0'
+
+    junitVersion = '4.12'
+    espressoVersion = '2.2.1'
+}
