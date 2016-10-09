@@ -1,5 +1,7 @@
 package com.ishabaev.weather.cities;
 
+import android.support.annotation.NonNull;
+
 import com.ishabaev.weather.EspressoIdlingResource;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
@@ -11,9 +13,6 @@ import rx.Scheduler;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-/**
- * Created by ishabaev on 19.06.16.
- */
 public class CitiesPresenter implements CitiesContract.Presenter {
 
     private CitiesContract.View mView;
@@ -22,8 +21,9 @@ public class CitiesPresenter implements CitiesContract.Presenter {
     private Scheduler mBackgroundScheduler;
     private Scheduler mMainScheduler;
 
-    public CitiesPresenter(CitiesContract.View view, RepositoryDataSource repository,
-                           Scheduler background, Scheduler main) {
+    public CitiesPresenter(@NonNull CitiesContract.View view,
+                           @NonNull RepositoryDataSource repository,
+                           @NonNull Scheduler background, Scheduler main) {
         mView = view;
         mRepository = repository;
         mBackgroundScheduler = background;
@@ -35,7 +35,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
         mSubscriptions = new CompositeSubscription();
     }
 
-    private Observable<CityWithWeather> getCityWithWeather(final OrmCity city) {
+    private Observable<CityWithWeather> getCityWithWeather(@NonNull OrmCity city) {
         return mRepository.getSingleForecast(city.get_id().intValue(), mView.isNetworkAvailable())
                 .flatMap(ormWeather -> {
                     CityWithWeather cityWithWeather = new CityWithWeather();
@@ -84,7 +84,7 @@ public class CitiesPresenter implements CitiesContract.Presenter {
     }
 
     @Override
-    public void removeCity(OrmCity city) {
+    public void removeCity(@NonNull OrmCity city) {
         mRepository.deleteCity(city);
     }
 

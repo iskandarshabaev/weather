@@ -22,9 +22,6 @@ import java.util.List;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by ishabaev on 18.06.16.
- */
 public class DayWeatherFragment extends Fragment implements DayWeatherContract.View {
 
     public final static String CITY_ID = "city_id";

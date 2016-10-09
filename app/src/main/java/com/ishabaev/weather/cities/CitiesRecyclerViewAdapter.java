@@ -1,12 +1,8 @@
 package com.ishabaev.weather.cities;
 
-import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,41 +13,31 @@ import android.widget.TextView;
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.data.model.CityWithWeather;
-import com.ishabaev.weather.util.ImageUtils;
+import com.ishabaev.weather.util.ImageHelper;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
-/**
- * Created by ishabaev on 19.06.16.
- */
 public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecyclerViewAdapter.ViewHolder> {
 
     public interface CitiesRecyclerViewItemListener {
-
-        void onItemClick(CityWithWeather city, View view);
+        void onItemClick(@NonNull CityWithWeather city, @NonNull View view);
     }
 
-    private Context mContext;
     private List<CityWithWeather> mCities;
     private CitiesRecyclerViewItemListener mListener;
-    private ImageUtils mImageUtils;
     private int mCurrentPosition = -1;
 
-    public CitiesRecyclerViewAdapter(Context context, List<CityWithWeather> cities) {
+    public CitiesRecyclerViewAdapter(@NonNull List<CityWithWeather> cities) {
         mCities = cities;
-        mContext = context;
     }
 
-    public void setListener(CitiesRecyclerViewItemListener listener) {
+    public void setListener(@NonNull CitiesRecyclerViewItemListener listener) {
         this.mListener = listener;
     }
 
-    public void addCity(CityWithWeather city) {
+    public void addCity(@NonNull CityWithWeather city) {
         if (!haveCityYet(city)) {
             mCities.add(mCities.size(), city);
-            //DataSort.sortCityWithWeatherList(mCities);
-            //notifyDataSetChanged();
             notifyItemChanged(mCities.size());
         }
     }
@@ -65,7 +51,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         notifyDataSetChanged();
     }
 
-    private boolean haveCityYet(CityWithWeather cityWithWeather) {
+    private boolean haveCityYet(@NonNull CityWithWeather cityWithWeather) {
         for (CityWithWeather city : mCities) {
             if (city.getCity().get_id().equals(cityWithWeather.getCity().get_id())) {
                 return true;
@@ -74,13 +60,13 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         return false;
     }
 
-    public void setCities(List<CityWithWeather> cities) {
+    public void setCities(@NonNull List<CityWithWeather> cities) {
         mCities.clear();
         mCities.addAll(mCities.size(), cities);
         notifyDataSetChanged();
     }
 
-    public void addCities(List<CityWithWeather> cities) {
+    public void addCities(@NonNull List<CityWithWeather> cities) {
         mCities.addAll(mCities.size(), cities);
         notifyDataSetChanged();
     }
@@ -90,6 +76,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         notifyItemRemoved(location);
     }
 
+    @NonNull
     public OrmCity getCity(int location) {
         return mCities.get(location).getCity();
     }
@@ -100,52 +87,45 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.city_list_content, parent, false);
-        mImageUtils = new ImageUtils(view.getContext());
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.city = mCities.get(position);
         holder.contentView.setText(holder.city.getCity().getCity_name());
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             holder.imageView.setTransitionName(holder.contentView.getClass().getName() + position);
         }
 
         if (holder.city.getWeather() != null) {
-
             Resources res = holder.view.getResources();
-            String temperature = res.getString(R.string.temperature) + ": ";
-            temperature += holder.city.getWeather().getTemp() == null ? "-/-" :
-                    holder.city.getWeather().getTemp().toString() + " °C";
-            holder.temperatureView.setText(temperature);
+
+            String temperatureText = holder.city.getWeather().getTemp() > 0 ?
+                    res.getString(R.string.temperature_plus, (int)holder.city.getWeather().getTemp()) :
+                    res.getString(R.string.temperature_minus, (int)holder.city.getWeather().getTemp());
+            holder.temperatureView.setText(temperatureText);
 
             if (holder.windView != null) {
-                String wind = holder.city.getWeather().getWind_speed() == null ?
-                        res.getString(R.string.windless) :
-                        res.getString(R.string.wind) + ": " +
-                                holder.city.getWeather().getWind_speed().toString() + " " +
-                                res.getString(R.string.km_h);
-                holder.windView.setText(wind);
+                String windText = res.getString(R.string.wind,
+                        holder.city.getWeather().getWind_speed());
+                holder.windView.setText(windText);
             }
 
             if (holder.humidity != null) {
-                String humidity = res.getString(R.string.humidity) + ": ";
-                humidity += holder.city.getWeather().getHumidity() == null ? "-/-" :
-                        holder.city.getWeather().getHumidity().toString() + "%";
-                holder.humidity.setText(humidity);
+                String holderText = res.getString(R.string.humidity,
+                        holder.city.getWeather().getHumidity());
+                holder.humidity.setText(holderText);
             }
 
-            float scaleRatio = holder.view.getResources().getDisplayMetrics().density;
-            float dimenPix = holder.view.getResources().getDimension(R.dimen.city_image_size);
-            int size = (int) (dimenPix / scaleRatio);
             holder.imageView.setImageDrawable(null);
             if (holder.city.getWeather().getIcon() != null) {
-                loadBitmap(holder.city.getWeather().getIcon(), holder.imageView, size);
+                String fileName = holder.city.getWeather().getIcon() + ".jpg";
+                ImageHelper.load("file:///android_asset/" + fileName, holder.imageView);
             }
         }
         holder.view.setOnClickListener(v -> {
@@ -153,95 +133,10 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
             mCurrentPosition = holder.getAdapterPosition();
             notifyItemChanged(mCurrentPosition);
             if (mListener != null) {
-                mListener.onItemClick(holder.city,holder.imageView);
+                mListener.onItemClick(holder.city, holder.imageView);
             }
         });
         holder.view.setSelected(mCurrentPosition == position);
-    }
-
-    private static BitmapWorkerTask getBitmapWorkerTask(ImageView imageView) {
-        if (imageView != null) {
-            final Drawable drawable = imageView.getDrawable();
-            if (drawable instanceof AsyncDrawable) {
-                final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
-                return asyncDrawable.getBitmapWorkerTask();
-            }
-        }
-        return null;
-    }
-
-    private void loadBitmap(String imageName, ImageView imageView, int size) {
-        if (cancelPotentialWork(imageName, imageView)) {
-            final BitmapWorkerTask task = new BitmapWorkerTask(imageView, size, size);
-            final AsyncDrawable asyncDrawable =
-                    new AsyncDrawable(mContext.getResources(), null, task);
-            imageView.setImageDrawable(asyncDrawable);
-            task.execute(imageName);
-        }
-    }
-
-    private static boolean cancelPotentialWork(String data, ImageView imageView) {
-        final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
-
-        if (bitmapWorkerTask != null) {
-            final String bitmapData = bitmapWorkerTask.imageName;
-            if (bitmapData == null || !bitmapData.equals(data)) {
-                bitmapWorkerTask.cancel(true);
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    static class AsyncDrawable extends BitmapDrawable {
-        private final WeakReference<BitmapWorkerTask> bitmapWorkerTaskReference;
-
-        public AsyncDrawable(Resources res, Bitmap bitmap,
-                             BitmapWorkerTask bitmapWorkerTask) {
-            super(res, bitmap);
-            bitmapWorkerTaskReference =
-                    new WeakReference<>(bitmapWorkerTask);
-        }
-
-        public BitmapWorkerTask getBitmapWorkerTask() {
-            return bitmapWorkerTaskReference.get();
-        }
-    }
-
-    class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
-
-        private WeakReference<ImageView> imageViewReference;
-        private int mWidth;
-        private int mHeight;
-        String imageName;
-
-        BitmapWorkerTask(ImageView imageView, int width, int height) {
-            mWidth = width;
-            mHeight = height;
-            imageViewReference = new WeakReference<>(imageView);
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            return mImageUtils.decodeSampledBitmapFromAssets(params[0] + ".jpg", mWidth / 2, mHeight / 2);
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (isCancelled()) {
-                bitmap = null;
-            }
-
-            if (imageViewReference != null && bitmap != null) {
-                final ImageView imageView = imageViewReference.get();
-                final BitmapWorkerTask bitmapWorkerTask =
-                        getBitmapWorkerTask(imageView);
-                if (this == bitmapWorkerTask) {
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-        }
     }
 
     @Override

@@ -31,7 +31,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/primary_text_margin"
-            android:singleLine="true" />
+            android:maxLines="1" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/city_search_list"

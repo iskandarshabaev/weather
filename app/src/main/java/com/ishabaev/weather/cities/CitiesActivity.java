@@ -9,10 +9,8 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,7 +24,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.ishabaev.weather.EspressoIdlingResource;
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.addcity.AddCityActivity;
@@ -52,47 +49,26 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_list);
+        if (findViewById(R.id.city_detail_container) != null) {
+            mTwoPane = true;
+        }
+        initToolbar();
+        initRecycler();
+        initAddActionButton();
+        initSwipeToRefresh();
+        initPresenter();
+    }
 
+    private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
         }
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (fab != null) {
-            fab.setOnClickListener(view -> {
-                Intent intent = new Intent(CitiesActivity.this, AddCityActivity.class);
-                startActivity(intent);
-            });
-        }
-
-        if (findViewById(R.id.city_detail_container) != null) {
-            mTwoPane = true;
-        }
-
+    private void initRecycler() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_list);
-        assert recyclerView != null;
-        setupRecyclerView(recyclerView);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh);
-        mSwipeRefreshLayout.setOnRefreshListener(() -> mPresenter.loadCities());
-
-        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-        mPresenter = new CitiesPresenter(this, Injection.provideRepository(getApplicationContext()),
-                Schedulers.io(), AndroidSchedulers.mainThread());
-    }
-
-    @Override
-    public void setRefreshing(final boolean refreshing) {
-        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
-    }
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         int spanCount;
         int orientation = getResources().getConfiguration().orientation;
         if (!mTwoPane && Configuration.ORIENTATION_LANDSCAPE == orientation) {
@@ -104,7 +80,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
-        mAdapter = new CitiesRecyclerViewAdapter(this, new ArrayList<>());
+        mAdapter = new CitiesRecyclerViewAdapter(new ArrayList<>());
         mAdapter.setListener(mListener);
         recyclerView.setAdapter(mAdapter);
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
@@ -135,16 +111,43 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
                         }
                     }
                 };
-
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    private void initAddActionButton() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (fab != null) {
+            fab.setOnClickListener(view -> {
+                Intent intent = new Intent(CitiesActivity.this, AddCityActivity.class);
+                startActivity(intent);
+            });
+        }
+    }
+
+    private void initSwipeToRefresh() {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mPresenter.loadCities());
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+    private void initPresenter() {
+        mPresenter = new CitiesPresenter(this, Injection.provideRepository(getApplicationContext()),
+                Schedulers.io(), AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public void setRefreshing(final boolean refreshing) {
+        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
+    }
+
     private CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener mListener =
             new CitiesRecyclerViewAdapter.CitiesRecyclerViewItemListener() {
-
                 @Override
-                public void onItemClick(CityWithWeather city, View view) {
+                public void onItemClick(@NonNull CityWithWeather city, @NonNull View view) {
                     if (mTwoPane) {
                         long cityId = city.getCity().get_id();
                         String cityName = city.getCity().getCity_name();
@@ -171,9 +174,6 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
                             intent.putExtras(args);
                             startActivity(intent);
                         }
-
-                        //intent.putExtras(args);
-                        //startActivity(intent);
                     }
                 }
             };
@@ -200,7 +200,7 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     }
 
     @Override
-    public void setCities(List<CityWithWeather> cities) {
+    public void setCities(@NonNull List<CityWithWeather> cities) {
         mAdapter.setCities(cities);
         showNoCitiesFrameIfNeed();
     }
@@ -222,13 +222,13 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     }
 
     @Override
-    public void addCitiesToList(List<CityWithWeather> cities) {
+    public void addCitiesToList(@NonNull List<CityWithWeather> cities) {
         mAdapter.addCities(cities);
         showNoCitiesFrameIfNeed();
     }
 
     @Override
-    public void addCityToList(CityWithWeather cityWithWeather) {
+    public void addCityToList(@NonNull CityWithWeather cityWithWeather) {
         mAdapter.addCity(cityWithWeather);
         showNoCitiesFrameIfNeed();
     }
@@ -239,15 +239,10 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
     }
 
     @Override
-    public void showSnackBar(String text) {
+    public void showSnackBar(@NonNull String text) {
         View view = findViewById(R.id.fab);
         if (view != null) {
             Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
         }
-    }
-
-    @VisibleForTesting
-    public IdlingResource getCountingIdlingResource() {
-        return EspressoIdlingResource.getIdlingResource();
     }
 }

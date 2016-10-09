@@ -1,11 +1,8 @@
 package com.ishabaev.weather.citydetail;
 
-import android.content.res.Resources;
-
-import com.ishabaev.weather.R;
 import com.ishabaev.weather.dao.OrmWeather;
-import com.ishabaev.weather.data.source.RepositoryDataSource;
 import com.ishabaev.weather.data.model.Day;
+import com.ishabaev.weather.data.source.RepositoryDataSource;
 import com.ishabaev.weather.util.DataSort;
 
 import java.text.SimpleDateFormat;
@@ -19,9 +16,6 @@ import rx.Scheduler;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-/**
- * Created by ishabaev on 18.06.16.
- */
 public class CityDetailPresenter implements CityDetailContract.Presenter {
 
     private CityDetailContract.View mView;
@@ -69,50 +63,16 @@ public class CityDetailPresenter implements CityDetailContract.Presenter {
         DataSort.sortWeatherHour(forecast);
         if (forecast.size() > 0) {
             OrmWeather current = forecast.get(0);
-            setTemperature(current.getTemp());
-            setHumidity(current.getHumidity());
-            setWind(current.getWind_speed());
-            setPressure(current.getPressure());
+            mView.setTemp((int)current.getTemp());
+            mView.setHumidity(current.getHumidity());
+            mView.setWindSpeed(current.getWind_speed());
+            mView.setPressure(current.getPressure());
             setDate(current.getDt());
             //mView.setImage(current.getIcon() + ".jpg");
             addDaysToViewPager(forecast);
         } else {
-            String text = mView.getResources().getString(R.string.error) + ": ";
-            text += mView.getResources().getString(R.string.failed_to_load_weather);
-            mView.showSnackBar(text);
+            mView.showError();
         }
-    }
-
-    private void setTemperature(Double temp) {
-        String temperature = temp > 0 ?
-                "+" + Integer.toString(temp.intValue()) :
-                Integer.toString(temp.intValue());
-        temperature += " °C";
-        mView.setTemp(temperature);
-    }
-
-    private void setHumidity(double humidity) {
-        String value = mView.getResources()
-                .getString(R.string.humidity) + ": " +
-                Double.toString(humidity) + "%";
-        mView.setHumidity(value);
-    }
-
-    private void setWind(Double wind) {
-        Resources res = mView.getResources();
-        String value = wind == null ?
-                res.getString(R.string.windless) :
-                res.getString(R.string.wind) + ": " +
-                        Double.toString(wind) + " " +
-                        res.getString(R.string.km_h);
-        mView.setWindSpeed(value);
-    }
-
-    private void setPressure(Double pressure) {
-        String value = pressure == null ? "" :
-                mView.getResources().getString(R.string.pressure) + ": " +
-                        Double.toString(pressure);
-        mView.setPressure(value);
     }
 
     private void setDate(Date date) {

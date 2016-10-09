@@ -10,9 +10,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subjects.PublishSubject;
 
-/**
- * Created by ishabaev on 22.07.16.
- */
 public class RxEditText extends AppCompatEditText {
 
     private PublishSubject<String> editTextSubject = PublishSubject.create();

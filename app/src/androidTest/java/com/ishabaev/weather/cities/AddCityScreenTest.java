@@ -22,10 +22,6 @@ import static com.ishabaev.weather.cities.utils.Actions.rotateScreen;
 import static com.ishabaev.weather.cities.utils.Actions.waitId;
 import static com.ishabaev.weather.cities.utils.Matchers.atPosition;
 
-/**
- * Created by ishabaev on 02.08.16.
- */
-
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class AddCityScreenTest {

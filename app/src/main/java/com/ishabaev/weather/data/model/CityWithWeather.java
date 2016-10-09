@@ -3,9 +3,6 @@ package com.ishabaev.weather.data.model;
 import com.ishabaev.weather.dao.OrmCity;
 import com.ishabaev.weather.dao.OrmWeather;
 
-/**
- * Created by ishabaev on 22.06.16.
- */
 public class CityWithWeather {
 
     private OrmCity mCity;

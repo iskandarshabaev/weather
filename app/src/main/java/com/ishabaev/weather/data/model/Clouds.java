@@ -2,9 +2,6 @@ package com.ishabaev.weather.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by ishabaev on 20.06.16.
- */
 public class Clouds {
 
     @SerializedName("all")

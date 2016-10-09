@@ -19,6 +19,7 @@ android {
         buildConfigField "String", "API_ENDPOINT", "\"$API_ENDPOINT\""
         buildConfigField "String", "API_KEY", "\"$API_KEY\""
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -60,6 +61,8 @@ dependencies {
     compile "io.reactivex:rxandroid:$rxandroidVersion"
     compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
     compile "com.android.support.test.espresso:espresso-idling-resource:$espressoVersion"
+    compile "com.squareup.picasso:picasso:$picassoVersion"
+    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:$picassoDownloaderVersion"
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$junitVersion"

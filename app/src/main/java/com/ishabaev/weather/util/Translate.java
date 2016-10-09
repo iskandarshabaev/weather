@@ -1,8 +1,5 @@
 package com.ishabaev.weather.util;
 
-/**
- * Created by ishabaev on 26.06.16.
- */
 public class Translate {
 
     public static String ru2en(char ch) {

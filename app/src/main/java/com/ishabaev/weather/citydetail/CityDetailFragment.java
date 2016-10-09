@@ -1,11 +1,12 @@
 package com.ishabaev.weather.citydetail;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -22,7 +23,7 @@ import android.widget.TextView;
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
 import com.ishabaev.weather.data.model.Day;
-import com.ishabaev.weather.util.ImageUtils;
+import com.ishabaev.weather.util.ImageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,6 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     public static final String ARG_ITEM_NAME = "item_name";
     private CityDetailContract.Presenter mPresenter;
     private DaysViewPagerAdapter mViewPagerAdapter;
-    private ImageUtils mImageUtils;
     private FrameLayout mProgressFrame;
     private TabLayout mTabLayout;
     private boolean mWaitAnimations;
@@ -70,9 +70,7 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.city_detail, container, false);
-        mImageUtils = new ImageUtils(rootView.getContext());
-        return rootView;
+        return inflater.inflate(R.layout.city_detail, container, false);
     }
 
 
@@ -152,39 +150,49 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     }
 
     @Override
-    public void setTemp(String temperature) {
+    public void setTemp(int temperature) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_temp);
         if (view != null) {
-            view.setText(temperature);
+            Resources res = getResources();
+            String temperatureText = temperature > 0 ?
+                    res.getString(R.string.temp_plus, temperature) :
+                    res.getString(R.string.temp_minus, temperature);
+            view.setText(temperatureText);
         }
     }
 
     @Override
-    public void setHumidity(String humidity) {
+    public void setHumidity(double humidity) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_humidity);
         if (view != null) {
-            view.setText(humidity);
+            Resources res = getResources();
+            String humidityText = res.getString(R.string.humidity, humidity);
+            view.setText(humidityText);
         }
     }
 
     @Override
-    public void setWindSpeed(String windSpeed) {
+    public void setWindSpeed(double windSpeed) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_wind);
         if (view != null) {
-            view.setText(windSpeed);
+            Resources res = getResources();
+            String windText = res.getString(R.string.wind, windSpeed);
+            view.setText(windText);
         }
     }
 
     @Override
-    public void setPressure(String pressure) {
+    public void setPressure(double pressure) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_pressure);
         if (view != null) {
-            view.setText(pressure);
+            Resources res = getResources();
+            String pressureText = res.getString(R.string.pressure, pressure);
+            view.setText(pressureText);
         }
     }
 
     @Override
-    public void setDate(String date) {
+    public void setDate(@NonNull String date) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_date);
         if (view != null) {
             view.setText(date);
@@ -192,7 +200,7 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     }
 
     @Override
-    public void setImage(Drawable drawable) {
+    public void setImage(@NonNull Drawable drawable) {
         ImageView view = (ImageView) getActivity().findViewById(R.id.backdrop);
         if (view != null) {
             view.setImageDrawable(drawable);
@@ -200,13 +208,11 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     }
 
     @Override
-    public void setImage(String assetName) {
-        ImageView view = (ImageView) getActivity().findViewById(R.id.backdrop);
-        if (view != null) {
-            Bitmap bitmap = mImageUtils.decodeSampledBitmapFromAssets(assetName, 200, 200);
-            if (bitmap != null) {
-                view.setImageBitmap(bitmap);
-            }
+    public void setImage(@NonNull String assetName) {
+        ImageView imageView = (ImageView) getActivity().findViewById(R.id.backdrop);
+        if (imageView != null) {
+            String fileName = assetName + ".jpg";
+            ImageHelper.load("file:///android_asset/" + fileName, imageView);
         }
     }
 
@@ -219,7 +225,7 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     }
 
     @Override
-    public void addDays(List<Day> days) {
+    public void addDays(@NonNull List<Day> days) {
         mViewPagerAdapter.addDays(days);
     }
 
@@ -229,9 +235,11 @@ public class CityDetailFragment extends Fragment implements CityDetailContract.V
     }
 
     @Override
-    public void showSnackBar(String text) {
+    public void showError() {
         View view = getActivity().findViewById(R.id.viewpager);
         if (view != null) {
+            String text = getResources().getString(R.string.error) + ": ";
+            text += getResources().getString(R.string.failed_to_load_weather);
             Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
         }
     }

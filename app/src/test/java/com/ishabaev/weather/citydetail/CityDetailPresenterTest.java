@@ -24,9 +24,6 @@ import rx.schedulers.Schedulers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by ishabaev on 28.07.16.
- */
 public class CityDetailPresenterTest {
 
     private static List<OrmWeather> WEATHER_LIST;
@@ -76,7 +73,7 @@ public class CityDetailPresenterTest {
         mPresenter.openCity(54353);
         verify(mRepository).getForecast(54353, false);
         ArgumentCaptor<String> errorMessage = ArgumentCaptor.forClass(String.class);
-        verify(mView).showSnackBar(errorMessage.capture());
+        verify(mView).showError(errorMessage.capture());
         verify(mView).showProgressBar(false);
     }
 

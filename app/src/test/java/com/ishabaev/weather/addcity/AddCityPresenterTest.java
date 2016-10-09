@@ -18,9 +18,6 @@ import rx.schedulers.Schedulers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by ishabaev on 27.07.16.
- */
 public class AddCityPresenterTest {
 
     private static List<OrmCity> CITIES;

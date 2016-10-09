@@ -18,9 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by ishabaev on 20.06.16.
- */
 public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecyclerViewAdapter.ViewHolder> {
 
     private final List<OrmWeather> mHours;
@@ -55,28 +52,20 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Resources res = holder.view.getResources();
-        holder.time.setText(mFormat.format(mHours.get(position).getDt()));
-        String temperature = mHours.get(position).getTemp() > 0 ? "+" +
-                Integer.toString(mHours.get(position).getTemp().intValue()) :
-                Integer.toString(mHours.get(position).getTemp().intValue());
-        temperature += " °C";
-        holder.temperature.setText(temperature);
 
-        String wind = res.getString(R.string.wind) + ": ";
-        wind += mHours.get(position).getWind_speed() == null ? "" :
-                mHours.get(position).getWind_speed().toString() + " " +
-                        res.getString(R.string.km_h);
-        holder.wind.setText(wind);
+        String temperatureText = mHours.get(position).getTemp() > 0 ?
+                res.getString(R.string.temp_plus, (int)mHours.get(position).getTemp()) :
+                res.getString(R.string.temp_minus, (int)mHours.get(position).getTemp());
+        holder.temperature.setText(temperatureText);
 
-        String humidity = res.getString(R.string.humidity) + ": ";
-        humidity += mHours.get(position).getHumidity() == null ? "" :
-                mHours.get(position).getHumidity().toString() + "%";
-        holder.humidity.setText(humidity);
+        String windText = res.getString(R.string.wind, mHours.get(position).getWind_speed());
+        holder.wind.setText(windText);
 
-        String pressure = res.getString(R.string.pressure) + ": ";
-        pressure += mHours.get(position).getPressure() == null ? "" :
-                mHours.get(position).getPressure().toString();
-        holder.pressure.setText(pressure);
+        String humidityText = res.getString(R.string.humidity, mHours.get(position).getHumidity());
+        holder.humidity.setText(humidityText);
+
+        String pressureText = res.getString(R.string.pressure, mHours.get(position).getPressure());
+        holder.pressure.setText(pressureText);
 
         Drawable img = ContextCompat.getDrawable(holder.view.getContext(),
                 getIcon(mHours.get(position).getIcon()));

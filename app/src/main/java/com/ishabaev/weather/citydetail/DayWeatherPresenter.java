@@ -8,9 +8,6 @@ import rx.Scheduler;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-/**
- * Created by ishabaev on 25.06.16.
- */
 public class DayWeatherPresenter implements DayWeatherContract.Presenter {
 
     private RepositoryDataSource mRepository;

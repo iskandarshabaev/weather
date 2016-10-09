@@ -20,9 +20,6 @@ import rx.schedulers.Schedulers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by ishabaev on 28.07.16.
- */
 public class DayWeatherPresenterTest {
 
     private static List<OrmWeather> WEATHER_LIST;

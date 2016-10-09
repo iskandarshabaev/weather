@@ -9,9 +9,6 @@ import rx.Scheduler;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-/**
- * Created by ishabaev on 28.06.16.
- */
 public class AddCityPresenter implements AddCityContract.Presenter {
 
     private AddCityContract.View mView;

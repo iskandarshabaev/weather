@@ -5,7 +5,10 @@ ext{
     rxandroidVersion = '1.2.1'
     rxjavaVersion = '1.1.10'
     greenDaoVersion = '2.2.0'
+    picassoVersion = '2.5.2'
+    picassoDownloaderVersion = '1.0.2'
 
     junitVersion = '4.12'
     espressoVersion = '2.2.1'
+
 }

@@ -11,9 +11,6 @@ import com.ishabaev.weather.data.source.remote.ApiClient;
 import com.ishabaev.weather.data.source.remote.OpenWeatherService;
 import com.ishabaev.weather.data.source.remote.RemoteDataSource;
 
-/**
- * Created by ishabaev on 25.06.16.
- */
 public class Injection {
 
     public static Repository provideRepository(@NonNull Context context) {

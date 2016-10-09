@@ -1,7 +1,6 @@
 package com.ishabaev.weather.citydetail;
 
 import android.annotation.TargetApi;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,7 +13,7 @@ import android.transition.Transition;
 import android.widget.ImageView;
 
 import com.ishabaev.weather.R;
-import com.ishabaev.weather.util.ImageUtils;
+import com.ishabaev.weather.util.ImageHelper;
 
 public class CityDetailActivity extends AppCompatActivity {
 
@@ -44,14 +43,10 @@ public class CityDetailActivity extends AppCompatActivity {
         }
 
         String imageName = getIntent().getStringExtra(IMAGE_NAME);
-        ImageUtils imageUtils = new ImageUtils(this);
         ImageView imageView = (ImageView) findViewById(R.id.backdrop);
         if (imageView != null && !TextUtils.isEmpty(imageName)) {
-            Bitmap bitmap = imageUtils.decodeSampledBitmapFromAssets(imageName + ".jpg", 200, 200);
-            if (bitmap != null) {
-                imageView.setImageBitmap(bitmap);
-                //imageView.setImageBitmap(blur(bitmap));
-            }
+            String fileName = imageName + ".jpg";
+            ImageHelper.load("file:///android_asset/" + fileName, imageView);
         }
         boolean waitAnimations = false;
 

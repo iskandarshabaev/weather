@@ -16,9 +16,6 @@ import java.util.List;
 
 import rx.Observable;
 
-/**
- * Created by ishabaev on 24.06.16.
- */
 public class LocalDataSource implements ILocalDataSource {
 
     private static ILocalDataSource INSTANCE;

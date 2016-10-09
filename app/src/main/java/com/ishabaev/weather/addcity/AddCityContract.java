@@ -8,9 +8,6 @@ import com.ishabaev.weather.dao.OrmCity;
 
 import java.util.List;
 
-/**
- * Created by ishabaev on 19.06.16.
- */
 public interface AddCityContract {
 
     interface View extends BaseView {

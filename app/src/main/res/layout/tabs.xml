@@ -12,6 +12,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/hour_forecast"
-        android:layout_marginBottom="5dp"/>
+        tools:listitem="@layout/hour_forecast"/>
 </RelativeLayout>

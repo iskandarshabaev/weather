@@ -11,9 +11,6 @@ import java.util.List;
 
 import rx.Observable;
 
-/**
- * Created by ishabaev on 24.06.16.
- */
 public class Repository implements RepositoryDataSource {
 
     private static Repository INSTANCE;
@@ -40,9 +37,7 @@ public class Repository implements RepositoryDataSource {
         if (isNetworkAvailable) {
             return mLocalDataSource.getForecast(cityId, date)
                     .flatMap(Observable::from)
-                    .toSortedList((ormWeather1, ormWeather2) -> {
-                        return ormWeather1.getDt().compareTo(ormWeather2.getDt());
-                    })
+                    .toSortedList((ormWeather1, ormWeather2) -> ormWeather1.getDt().compareTo(ormWeather2.getDt()))
                     .flatMap(ormWeathers -> {
                         if (ormWeathers.size() == 0) {
                             return getForecastFromRemoteDataSource(cityId);
@@ -65,9 +60,7 @@ public class Repository implements RepositoryDataSource {
         if (isNetworkAvailable) {
             return mLocalDataSource.getForecast(cityId)
                     .flatMap(Observable::from)
-                    .toSortedList((ormWeather1, ormWeather2) -> {
-                        return ormWeather1.getDt().compareTo(ormWeather2.getDt());
-                    })
+                    .toSortedList((ormWeather1, ormWeather2) -> ormWeather1.getDt().compareTo(ormWeather2.getDt()))
                     .flatMap(ormWeathers -> {
                         if (ormWeathers.size() == 0) {
                             return getForecastFromRemoteDataSource(cityId);

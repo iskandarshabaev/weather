@@ -6,9 +6,6 @@ import com.ishabaev.weather.data.model.CityWithWeather;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by ishabaev on 25.06.16.
- */
 public class DataSort {
     public static void sortWeatherHour(List<OrmWeather> forecast) {
         Collections.sort(forecast, (o1, o2) -> o1.getDt().compareTo(o2.getDt()));

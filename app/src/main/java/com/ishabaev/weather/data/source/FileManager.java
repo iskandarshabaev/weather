@@ -11,9 +11,6 @@ import java.util.Scanner;
 import rx.Observable;
 import rx.Subscription;
 
-/**
- * Created by ishabaev on 21.07.16.
- */
 public class FileManager implements FileSource {
 
     private static FileManager INSTANCE;
@@ -35,11 +32,9 @@ public class FileManager implements FileSource {
     @Override
     public Observable<OrmCity> searchCity(String cityName) {
         return Observable.create(
-                (Observable.OnSubscribe<OrmCity>) sub -> {
+                sub -> {
                     sub.add(new Subscription() {
-
                         boolean unsubscribed = false;
-
                         @Override
                         public void unsubscribe() {
                             unsubscribed = true;

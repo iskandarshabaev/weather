@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by ishabaev on 17.06.16.
- */
 public class WeatherResponse {
 
     @SerializedName("coord")

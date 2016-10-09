@@ -10,9 +10,6 @@ import org.hamcrest.Matcher;
 
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkNotNull;
 
-/**
- * Created by ishabaev on 02.08.16.
- */
 public class Matchers {
 
     public static Matcher<View> atPosition(final int position,

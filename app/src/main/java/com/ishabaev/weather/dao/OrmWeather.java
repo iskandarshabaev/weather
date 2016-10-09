@@ -79,7 +79,7 @@ public class OrmWeather {
         this.dt = dt;
     }
 
-    public Double getTemp() {
+    public double getTemp() {
         return temp;
     }
 
@@ -87,7 +87,7 @@ public class OrmWeather {
         this.temp = temp;
     }
 
-    public Double getTemp_min() {
+    public double getTemp_min() {
         return temp_min;
     }
 
@@ -95,7 +95,7 @@ public class OrmWeather {
         this.temp_min = temp_min;
     }
 
-    public Double getTemp_max() {
+    public double getTemp_max() {
         return temp_max;
     }
 
@@ -103,7 +103,7 @@ public class OrmWeather {
         this.temp_max = temp_max;
     }
 
-    public Double getPressure() {
+    public double getPressure() {
         return pressure;
     }
 
@@ -111,7 +111,7 @@ public class OrmWeather {
         this.pressure = pressure;
     }
 
-    public Double getHumidity() {
+    public double getHumidity() {
         return humidity;
     }
 
@@ -119,7 +119,7 @@ public class OrmWeather {
         this.humidity = humidity;
     }
 
-    public Double getClouds() {
+    public double getClouds() {
         return clouds;
     }
 
@@ -127,7 +127,7 @@ public class OrmWeather {
         this.clouds = clouds;
     }
 
-    public Double getWind_speed() {
+    public double getWind_speed() {
         return wind_speed;
     }
 
@@ -135,7 +135,7 @@ public class OrmWeather {
         this.wind_speed = wind_speed;
     }
 
-    public Double getWind_deg() {
+    public double getWind_deg() {
         return wind_deg;
     }
 
@@ -143,7 +143,7 @@ public class OrmWeather {
         this.wind_deg = wind_deg;
     }
 
-    public Double getRain() {
+    public double getRain() {
         return rain;
     }
 
@@ -151,7 +151,7 @@ public class OrmWeather {
         this.rain = rain;
     }
 
-    public Double getSnow() {
+    public double getSnow() {
         return snow;
     }
 

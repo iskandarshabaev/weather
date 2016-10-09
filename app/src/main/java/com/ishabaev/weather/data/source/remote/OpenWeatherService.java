@@ -8,9 +8,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
 
-/**
- * Created by ishabaev on 17.06.16.
- */
 public interface OpenWeatherService {
 
     @GET("data/2.5/weather")

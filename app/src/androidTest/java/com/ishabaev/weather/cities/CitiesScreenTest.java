@@ -23,10 +23,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.ishabaev.weather.cities.utils.Actions.swipeRight;
 import static com.ishabaev.weather.cities.utils.Actions.waitId;
 
-/**
- * Created by ishabaev on 28.07.16.
- */
-
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest

@@ -7,9 +7,6 @@ import java.util.List;
 
 import rx.Observable;
 
-/**
- * Created by ishabaev on 24.06.16.
- */
 public interface IRemoteDataSource {
 
     Observable<List<OrmWeather>> getForecast(int cityId);

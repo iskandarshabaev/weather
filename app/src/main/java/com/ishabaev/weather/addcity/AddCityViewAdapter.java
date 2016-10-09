@@ -13,9 +13,6 @@ import com.ishabaev.weather.dao.OrmCity;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by ishabaev on 20.06.16.
- */
 public class AddCityViewAdapter extends RecyclerView.Adapter<AddCityViewAdapter.ViewHolder> {
 
     private Random mRandom = new Random();

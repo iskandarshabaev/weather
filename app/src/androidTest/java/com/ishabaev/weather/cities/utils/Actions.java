@@ -15,9 +15,6 @@ import org.hamcrest.Matcher;
 
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 
-/**
- * Created by ishabaev on 02.08.16.
- */
 public class Actions {
 
     public static ViewAction waitId(final int viewId, final long millis) {

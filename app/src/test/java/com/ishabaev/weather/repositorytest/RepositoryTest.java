@@ -19,9 +19,6 @@ import rx.observers.TestSubscriber;
 
 import static org.mockito.Mockito.when;
 
-/**
- * Created by ishabaev on 03.07.16.
- */
 public class RepositoryTest {
 
     private static List<OrmCity> CITIES;

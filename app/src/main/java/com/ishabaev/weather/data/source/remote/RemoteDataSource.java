@@ -9,9 +9,6 @@ import java.util.List;
 
 import rx.Observable;
 
-/**
- * Created by ishabaev on 24.06.16.
- */
 public class RemoteDataSource implements IRemoteDataSource {
 
     private static RemoteDataSource INSTANCE;

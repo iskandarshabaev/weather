@@ -10,9 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by ishabaev on 18.06.16.
- */
 public class DaysViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<Day> mDays;

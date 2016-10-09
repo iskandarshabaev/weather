@@ -4,12 +4,13 @@
     <string name="could_not_find_a_city">Не удалось найти такой город. Попробуйте другое название</string>
     <string name="start_typing">Начните вводить название города</string>
     <string name="select_city">Для просмотра погоды выберите город</string>
-    <string name="temperature">Температура</string>
-    <string name="wind">Ветер</string>
-    <string name="km_h">км/ч</string>
-    <string name="humidity">Влажность</string>
-    <string name="windless">Безветренно</string>
-    <string name="pressure">Давление</string>
+
+    <string name="wind">Ветер: %.2f км/ч</string>
+    <string name="temperature_plus">Температура: +%d °C</string>
+    <string name="temperature_minus">Температура: %d °C</string>
+    <string name="humidity">Влажность: %.2f</string>
+    <string name="pressure">Давление: %.2f</string>
+
     <string name="error">Ошибка</string>
     <string name="failed_to_load_weather">Не удалось загрузить погоду</string>
     <string name="city_caption">Город: </string>

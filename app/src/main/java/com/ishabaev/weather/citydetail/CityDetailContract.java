@@ -1,7 +1,7 @@
 package com.ishabaev.weather.citydetail;
 
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 import com.ishabaev.weather.BasePresenter;
 import com.ishabaev.weather.BaseView;
@@ -9,38 +9,33 @@ import com.ishabaev.weather.data.model.Day;
 
 import java.util.List;
 
-/**
- * Created by ishabaev on 18.06.16.
- */
 public interface CityDetailContract {
 
     interface View extends BaseView<Presenter> {
 
         void showProgressBar(boolean show);
 
-        void setTemp(String temperature);
+        void setTemp(int temperature);
 
-        void setHumidity(String humidity);
+        void setHumidity(double humidity);
 
-        void setWindSpeed(String windSpeed);
+        void setWindSpeed(double windSpeed);
 
-        void setPressure(String pressure);
+        void setPressure(double pressure);
 
-        void setDate(String date);
+        void setDate(@NonNull String date);
 
-        void setImage(Drawable drawable);
+        void setImage(@NonNull Drawable drawable);
 
-        void setImage(String assetName);
+        void setImage(@NonNull String assetName);
 
-        void addDays(List<Day> days);
+        void addDays(@NonNull List<Day> days);
 
         boolean isNetworkAvailable();
 
-        Resources getResources();
-
         void showNoForecast();
 
-        void showSnackBar(String text);
+        void showError();
 
         boolean isActive();
     }
