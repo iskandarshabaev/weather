@@ -1,4 +1,0 @@
-ext{
-    API_ENDPOINT = 'http://api.openweathermap.org/'
-    API_KEY = '6bbd25b118c08120fa006fbab6f7e97b'
-}
