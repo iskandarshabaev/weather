@@ -20,7 +20,7 @@
     <string name="country_caption">Country: </string>
     <string name="image_view_content_description">Image</string>
     <string name="about">About</string>
-    <string name="about_content">
+    <string name="about_content" translatable="false">
         <![CDATA[
         API:
         <br><a href="https://openweathermap.org/api">https://openweathermap.org/api</a>
