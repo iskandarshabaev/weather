@@ -21,11 +21,15 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.ishabaev.weather.Injection;
 import com.ishabaev.weather.R;
+import com.ishabaev.weather.about.AboutActivity;
 import com.ishabaev.weather.addcity.AddCityActivity;
 import com.ishabaev.weather.citydetail.CityDetailActivity;
 import com.ishabaev.weather.citydetail.CityDetailFragment;
@@ -245,4 +249,23 @@ public class CitiesActivity extends AppCompatActivity implements CitiesContract.
             Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

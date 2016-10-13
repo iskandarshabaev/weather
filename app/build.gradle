@@ -11,8 +11,8 @@ android {
         applicationId "com.ishabaev.weather"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 2
-        versionName "2.0"
+        versionCode 3
+        versionName "2.3"
 
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
@@ -24,6 +24,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
         }
     }
 

@@ -53,6 +53,8 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Resources res = holder.view.getResources();
 
+        holder.time.setText(mFormat.format(mHours.get(position).getDt()));
+
         String temperatureText = mHours.get(position).getTemp() > 0 ?
                 res.getString(R.string.temp_plus, (int)mHours.get(position).getTemp()) :
                 res.getString(R.string.temp_minus, (int)mHours.get(position).getTemp());

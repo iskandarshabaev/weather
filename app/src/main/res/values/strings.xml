@@ -11,7 +11,7 @@
     <string name="pressure">Pressure: %.2f</string>
 
     <string name="temp_plus" translatable="false">+%d °C</string>
-    <string name="temp_minus"  translatable="false">%d °C</string>
+    <string name="temp_minus" translatable="false">%d °C</string>
 
     <string name="image_description" translatable="false">Image</string>
     <string name="error">Error</string>
@@ -19,4 +19,28 @@
     <string name="city_caption">City: </string>
     <string name="country_caption">Country: </string>
     <string name="image_view_content_description">Image</string>
+    <string name="about">About</string>
+    <string name="about_content">
+        <![CDATA[
+        API:
+        <br><a href="https://openweathermap.org/api">https://openweathermap.org/api</a>
+        <br><br>Images:
+        <br>Icon weather set made by Madebyoliver from <a href="http://www.flaticon.com">www.flaticon.com</a>
+        <br>City vector designed by <a href="http://www.freepik.com/free-photos-vectors/city">Freepik</a>
+        <br><br>Libraries:
+        <br><a href="https://square.github.io/retrofit/">retrofit2</a>
+        <br> <a href="https://github.com/square/okhttp">okhttp3</a>
+        <br> <a href="http://greenrobot.org/greendao/">greendao</a>
+        <br> <a href="https://github.com/ReactiveX/RxJava">rxjava</a>
+        <br> <a href="https://github.com/ReactiveX/RxAndroid">rxandroid</a>
+        <br> <a href="http://square.github.io/picasso/">picasso</a>
+        <br> <a href="https://developer.android.com/training/testing/ui-testing/espresso-testing.html">espresso</a>
+        <br> <a href="https://developer.android.com/topic/libraries/support-library/index.html">support</a>
+        <br> <a href="http://www.vogella.com/tutorials/Mockito/article.html">mockito</a>
+        <br> <a href="http://www.vogella.com/tutorials/Hamcrest/article.html">hamcrest</a>
+        <br> <a href="https://github.com/crittercism/dexmaker">dexmaker</a>
+        <br><br>Source code:
+        <br> <a href="https://github.com/iskandarshabaev/weather">https://github.com/iskandarshabaev/weather</a>
+        ]]>
+    </string>
 </resources>

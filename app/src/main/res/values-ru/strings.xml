@@ -16,4 +16,5 @@
     <string name="city_caption">Город: </string>
     <string name="country_caption">Страна: </string>
     <string name="image_view_content_description">Картинка</string>
+    <string name="about">О приложении</string>
 </resources>
